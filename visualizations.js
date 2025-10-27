@@ -217,24 +217,142 @@ class LaserTagVisualizations {
     }
 
     /**
-     * Create simple score progression chart
+     * Create score progression visualization showing PlayerScore events
      */
     createScoreChart(events) {
         const container = document.getElementById('scoreChart');
-        container.innerHTML = '<p style="text-align: center; color: #7f8c8d; padding: 20px;">Score progression visualization will be implemented here</p>';
-        
-        // Filter score events
-        const scoreEvents = events.filter(event => 
-            event.eventName === 'PlayerScore' || event.eventName === 'TeamPointsChange'
-        );
+        container.innerHTML = '';
 
+        // Filter for PlayerScore events
+        const scoreEvents = events.filter(event => event.eventName === "PlayerScore");
+        
         if (scoreEvents.length === 0) {
-            container.innerHTML = '<p style="text-align: center; color: #7f8c8d; padding: 20px;">No score data available</p>';
+            container.innerHTML = '<p style="text-align: center; color: #7f8c8d; padding: 20px;">No score events found</p>';
             return;
         }
 
-        // Simple implementation - could be expanded
-        container.innerHTML = `<p style="text-align: center; color: #2c3e50; padding: 20px;">Found ${scoreEvents.length} score events</p>`;
+        // Sort events by game time
+        scoreEvents.sort((a, b) => (a.matchState?.gameTime || 0) - (b.matchState?.gameTime || 0));
+
+        // Create the score progression list
+        const progressionContainer = document.createElement('div');
+        progressionContainer.style.cssText = 'max-height: 400px; overflow-y: auto; padding: 15px;';
+
+        const title = document.createElement('h3');
+        title.textContent = `Score Progression (${scoreEvents.length} events)`;
+        title.style.cssText = 'margin: 0 0 15px 0; color: #2c3e50; text-align: center;';
+        progressionContainer.appendChild(title);
+
+        scoreEvents.forEach((event, index) => {
+            const eventItem = document.createElement('div');
+            eventItem.style.cssText = `
+                background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
+                border-left: 4px solid #3498db;
+                margin: 8px 0;
+                padding: 12px 15px;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+                position: relative;
+            `;
+
+            // Add hover effect
+            eventItem.addEventListener('mouseenter', () => {
+                eventItem.style.transform = 'translateX(5px)';
+                eventItem.style.boxShadow = '0 4px 15px rgba(52, 152, 219, 0.2)';
+            });
+            eventItem.addEventListener('mouseleave', () => {
+                eventItem.style.transform = 'translateX(0)';
+                eventItem.style.boxShadow = 'none';
+            });
+
+            const eventData = event.data || {};
+            const matchState = event.matchState || {};
+            
+            // Extract player info
+            const playerId = eventData.ID || 'Unknown';
+            const oldScore = eventData.oldScore || 0;
+            const newScore = eventData.newScore || 0;
+            const scoreDiff = newScore - oldScore;
+            const hitId = eventData.HitID !== undefined ? eventData.HitID : '';
+            const gameTime = matchState.gameTime || 0;
+            const roundTime = matchState.roundTime || 0;
+
+            // Create event header
+            const eventHeader = document.createElement('div');
+            eventHeader.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;';
+
+            const playerInfo = document.createElement('span');
+            playerInfo.textContent = `Player ${playerId}`;
+            playerInfo.style.cssText = 'font-weight: bold; color: #2c3e50; font-size: 1.1em;';
+
+            const timeInfo = document.createElement('span');
+            timeInfo.textContent = `${gameTime.toFixed(1)}s`;
+            timeInfo.style.cssText = 'color: #7f8c8d; font-size: 0.9em;';
+
+            eventHeader.appendChild(playerInfo);
+            eventHeader.appendChild(timeInfo);
+
+            // Create score details
+            const scoreDetails = document.createElement('div');
+            scoreDetails.style.cssText = 'display: flex; justify-content: space-between; align-items: center;';
+
+            const scoreChange = document.createElement('div');
+            const scoreColor = scoreDiff > 0 ? '#27ae60' : scoreDiff < 0 ? '#e74c3c' : '#7f8c8d';
+            const scoreSymbol = scoreDiff > 0 ? '+' : '';
+            scoreChange.innerHTML = `
+                <span style="color: #34495e;">${oldScore} → </span>
+                <span style="color: ${scoreColor}; font-weight: bold;">${newScore}</span>
+                <span style="color: ${scoreColor}; margin-left: 8px;">(${scoreSymbol}${scoreDiff})</span>
+            `;
+
+            const hitInfo = document.createElement('span');
+            if (hitId !== '') {
+                hitInfo.textContent = `Hit #${hitId}`;
+                hitInfo.style.cssText = 'background: rgba(52, 152, 219, 0.2); padding: 2px 8px; border-radius: 12px; font-size: 0.8em; color: #2980b9;';
+            }
+
+            scoreDetails.appendChild(scoreChange);
+            if (hitInfo.textContent) {
+                scoreDetails.appendChild(hitInfo);
+            }
+
+            // Add round info if different from game time
+            if (Math.abs(roundTime - gameTime) > 0.1) {
+                const roundInfo = document.createElement('div');
+                roundInfo.textContent = `Round time: ${roundTime.toFixed(1)}s`;
+                roundInfo.style.cssText = 'font-size: 0.8em; color: #95a5a6; margin-top: 4px;';
+                eventItem.appendChild(roundInfo);
+            }
+
+            eventItem.appendChild(eventHeader);
+            eventItem.appendChild(scoreDetails);
+
+            progressionContainer.appendChild(eventItem);
+        });
+
+        // Add summary at the bottom
+        const summary = document.createElement('div');
+        summary.style.cssText = `
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 15px;
+            text-align: center;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+        `;
+
+        const uniquePlayers = [...new Set(scoreEvents.map(e => e.data?.ID))].filter(id => id !== undefined);
+        const totalScoreChanges = scoreEvents.reduce((sum, e) => sum + Math.abs((e.data?.newScore || 0) - (e.data?.oldScore || 0)), 0);
+        
+        summary.innerHTML = `
+            <strong style="color: #2c3e50;">Summary:</strong><br>
+            <span style="color: #7f8c8d;">
+                ${uniquePlayers.length} players • ${scoreEvents.length} score events • ${totalScoreChanges} total points awarded
+            </span>
+        `;
+
+        progressionContainer.appendChild(summary);
+        container.appendChild(progressionContainer);
     }
 
     /**
@@ -243,19 +361,23 @@ class LaserTagVisualizations {
     createTargetChart(hits) {
         const container = document.getElementById('targetChart');
         
-        // Count different target types
+        // Count different target types from the new data structure
         const targetCounts = {};
         hits.forEach(hit => {
             if (hit.hitComponent) {
                 const component = hit.hitComponent;
                 let targetType = 'Unknown';
                 
-                if (component.includes('Sensor_Reflective_Big_DemoDay_NotReflective_C')) {
-                    targetType = 'Non-Reflective Sensor';
-                } else if (component.includes('Sensor_Reflective_Big_DemoDay_C')) {
-                    targetType = 'Reflective Sensor (Big)';
-                } else if (component.includes('Sensor_Reflective_Big_C')) {
-                    targetType = 'Reflective Sensor';
+                if (component.includes('Sensor_Rectangle')) {
+                    targetType = 'Rectangle Sensor';
+                } else if (component.includes('Sensor_')) {
+                    // Extract sensor number for more specific targeting
+                    const sensorMatch = component.match(/Sensor_(\d+)/);
+                    if (sensorMatch) {
+                        targetType = `Sensor ${sensorMatch[1]}`;
+                    } else {
+                        targetType = 'Round Sensor';
+                    }
                 }
                 
                 targetCounts[targetType] = (targetCounts[targetType] || 0) + 1;
@@ -300,6 +422,61 @@ class LaserTagVisualizations {
     }
 
     /**
+     * Create team performance chart
+     */
+    createTeamChart(teamData) {
+        const container = document.getElementById('scoreChart');
+        container.innerHTML = '';
+
+        console.log('Team data received:', teamData);
+
+        const teams = Object.values(teamData);
+        const activeTeams = teams.filter(team => team.hits > 0 || team.points > 0);
+        
+        if (activeTeams.length === 0) {
+            container.innerHTML = '<p style="text-align: center; color: #7f8c8d; padding: 20px;">No active team data available</p>';
+            return;
+        }
+
+        // Create team comparison chart
+        const chartContainer = document.createElement('div');
+        chartContainer.style.cssText = 'padding: 20px;';
+
+        activeTeams.forEach((team, index) => {
+            const teamContainer = document.createElement('div');
+            teamContainer.style.cssText = 'margin: 15px 0; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 10px;';
+            
+            const teamHeader = document.createElement('div');
+            teamHeader.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;';
+            
+            const teamName = document.createElement('h3');
+            teamName.textContent = team.name || `Team ${index + 1}`;
+            const color = team.color || { r: 0.5, g: 0.5, b: 0.5 }; // Default gray if no color
+            teamName.style.cssText = `color: rgb(${color.r * 255}, ${color.g * 255}, ${color.b * 255}); margin: 0;`;
+            
+            const teamScore = document.createElement('span');
+            teamScore.textContent = `${team.points || 0} points`;
+            teamScore.style.cssText = 'font-size: 1.2em; font-weight: bold; color: #2c3e50;';
+            
+            teamHeader.appendChild(teamName);
+            teamHeader.appendChild(teamScore);
+            
+            const teamStats = document.createElement('div');
+            teamStats.innerHTML = `
+                <div style="font-size: 0.9em; color: #7f8c8d;">
+                    Hits: ${team.hits || 0} | Avg Range: ${(team.avgRange || 0).toFixed(0)} units
+                </div>
+            `;
+            
+            teamContainer.appendChild(teamHeader);
+            teamContainer.appendChild(teamStats);
+            chartContainer.appendChild(teamContainer);
+        });
+
+        container.appendChild(chartContainer);
+    }
+
+    /**
      * Update all visualizations with new data
      */
     updateAll(processor) {
@@ -307,7 +484,7 @@ class LaserTagVisualizations {
         
         this.createHexagonChart(metricsInfo);
         this.createTimelineChart(processor.hits);
-        this.createScoreChart(processor.events);
+        this.createScoreChart(processor.events); // Use score progression chart
         this.createTargetChart(processor.hits);
     }
 }
