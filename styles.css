@@ -1,228 +1,3147 @@
-/* Global Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #333;
-    min-height: 100vh;
-}
-
-.container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* Header Styles */
-header {
-    text-align: center;
-    margin-bottom: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-}
-
-header h1 {
-    font-size: 2.5rem;
-    color: #2c3e50;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-header p {
-    font-size: 1.1rem;
-    color: #7f8c8d;
-}
-
-/* Dashboard Layout */
-.dashboard {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 25px;
-    margin-bottom: 40px;
-}
-
-.chart-container {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.chart-container:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-}
-
-.chart-container h2 {
-    font-size: 1.5rem;
-    color: #2c3e50;
-    margin-bottom: 20px;
-    text-align: center;
-    border-bottom: 2px solid #3498db;
-    padding-bottom: 10px;
-}
-
-/* Canvas styling for Chart.js */
-#hexChart {
-    max-width: 100%;
-    height: auto;
-    margin: 0 auto;
-    display: block;
-}
-
-/* Metrics Panel */
-.metrics-panel {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.metrics-panel h2 {
-    font-size: 1.8rem;
-    color: #2c3e50;
-    margin-bottom: 25px;
-    text-align: center;
-    border-bottom: 2px solid #e74c3c;
-    padding-bottom: 10px;
-}
-
-.metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-}
-
-.metric-card {
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    padding: 20px;
-    border-radius: 12px;
-    text-align: center;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.metric-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #3498db, #9b59b6, #e74c3c, #f39c12, #2ecc71, #1abc9c);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.metric-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    border-color: #3498db;
-}
-
-.metric-card:hover::before {
-    opacity: 1;
-}
-
-.metric-card h3 {
-    font-size: 1.2rem;
-    color: #2c3e50;
-    margin-bottom: 10px;
-    font-weight: 600;
-}
-
-.metric-card span {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #3498db;
-    display: block;
-    margin-bottom: 8px;
-}
-
-.metric-card p {
-    font-size: 0.9rem;
-    color: #7f8c8d;
-    line-height: 1.4;
-}
-
-/* Specific metric colors */
-.metric-card:nth-child(1) span { color: #e74c3c; } /* Trickshot */
-.metric-card:nth-child(2) span { color: #9b59b6; } /* Stealth */
-.metric-card:nth-child(3) span { color: #f39c12; } /* Speed */
-.metric-card:nth-child(4) span { color: #e67e22; } /* RPM */
-.metric-card:nth-child(5) span { color: #2ecc71; } /* Range */
-.metric-card:nth-child(6) span { color: #1abc9c; } /* Accuracy */
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .container {
-        padding: 15px;
+{
+    "MatchData": {
+        "gameTypeName": "Team Tag Match",
+        "bFreeForAll": false,
+        "teamData": {},
+        "hits": [
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_53.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_7'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 2982,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 22.49708941206336,
+                    "gameTime": 22.49708941206336,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.99928140640258789,
+                    "distance": 2982.42041015625,
+                    "location": {
+                        "x": -337.52534078865779,
+                        "y": 989.52171938291076,
+                        "z": 288.37179118854783
+                    },
+                    "impactPoint": {
+                        "x": -337.76393462700997,
+                        "y": 987.66304410223302,
+                        "z": 289.06976534081491
+                    },
+                    "normal": {
+                        "x": 0.11930681491026239,
+                        "y": 0.92951722431526662,
+                        "z": -0.34894643373619816
+                    },
+                    "impactNormal": {
+                        "x": 0.11930681491044237,
+                        "y": 0.92951722422693417,
+                        "z": -0.34894643367949513
+                    },
+                    "traceStart": {
+                        "x": 83.996935435653413,
+                        "y": 3940.6197368715057,
+                        "z": 197.97225565365395
+                    },
+                    "traceEnd": {
+                        "x": -337.82846181835032,
+                        "y": 987.3995542679437,
+                        "z": 288.43679842977957
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "/Script/PhysicsCore.PhysicalMaterial'/Engine/EngineMaterials/DefaultPhysicalMaterial.DefaultPhysicalMaterial'",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_53'"
+                    },
+                    "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_53.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 7
+                },
+                "hitStateId": {
+                    "index": 10
+                },
+                "hitIndex": 0
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_Rectangle_15.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_10'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 1131,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 31.130314312875271,
+                    "gameTime": 31.130314312875271,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.99565112590789795,
+                    "distance": 1131.8896484375,
+                    "location": {
+                        "x": 23.355466621323373,
+                        "y": 3376.3100919647723,
+                        "z": 146.14842723070157
+                    },
+                    "impactPoint": {
+                        "x": 23.42452532239334,
+                        "y": 3375.8517644363819,
+                        "z": 144.20289765853772
+                    },
+                    "normal": {
+                        "x": -0.034524943434647751,
+                        "y": 0.22920555228303965,
+                        "z": 0.97276556429771988
+                    },
+                    "impactNormal": {
+                        "x": -0.03452494749585,
+                        "y": 0.22920554319610342,
+                        "z": 0.9727656116528639
+                    },
+                    "traceStart": {
+                        "x": 55.459533764959687,
+                        "y": 4488.1083218221565,
+                        "z": 356.02545964176062
+                    },
+                    "traceEnd": {
+                        "x": 23.215240248632085,
+                        "y": 3371.4539024907108,
+                        "z": 145.23171176176919
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "/Script/PhysicsCore.PhysicalMaterial'/Engine/EngineMaterials/DefaultPhysicalMaterial.DefaultPhysicalMaterial'",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor_Rectangle'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_Rectangle_15'"
+                    },
+                    "component": "/Script/Engine.BoxComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_Rectangle_15.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 10
+                },
+                "hitStateId": {
+                    "index": 7
+                },
+                "hitIndex": 1
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_45.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_10'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 2153,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 33.272482611238956,
+                    "gameTime": 33.272482611238956,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.82398533821105957,
+                    "distance": 2153.790283203125,
+                    "location": {
+                        "x": -11.421891757252929,
+                        "y": 2387.6657618781555,
+                        "z": 161.06168564065175
+                    },
+                    "impactPoint": {
+                        "x": -11.930427123206009,
+                        "y": 2387.1591263447881,
+                        "z": 159.19485463761472
+                    },
+                    "normal": {
+                        "x": 0.25424204711705467,
+                        "y": 0.25325251049137615,
+                        "z": 0.93339388652783917
+                    },
+                    "impactNormal": {
+                        "x": 0.25424206155643136,
+                        "y": 0.25325250068583771,
+                        "z": 0.933393922611093
+                    },
+                    "traceStart": {
+                        "x": 2.0411806536530408,
+                        "y": 4530.157055225246,
+                        "z": 380.97680262309359
+                    },
+                    "traceEnd": {
+                        "x": -14.297790183055554,
+                        "y": 1929.999996607411,
+                        "z": 114.08477580633519
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "/Script/PhysicsCore.PhysicalMaterial'/Engine/EngineMaterials/DefaultPhysicalMaterial.DefaultPhysicalMaterial'",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_45'"
+                    },
+                    "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_45.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 10
+                },
+                "hitStateId": {
+                    "index": 9
+                },
+                "hitIndex": 2
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_42.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_10'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 2481,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 38.505335610359907,
+                    "gameTime": 38.505335610359907,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.99795281887054443,
+                    "distance": 2481.443603515625,
+                    "location": {
+                        "x": -30.007978158348607,
+                        "y": 1064.7965765305862,
+                        "z": 123.33902292661362
+                    },
+                    "impactPoint": {
+                        "x": -29.507706560313579,
+                        "y": 1064.232300674536,
+                        "z": 125.19139381907873
+                    },
+                    "normal": {
+                        "x": -0.25013517055574969,
+                        "y": 0.28212795393044615,
+                        "z": -0.92619447961109447
+                    },
+                    "impactNormal": {
+                        "x": -0.25013517089557635,
+                        "y": 0.28212795889089404,
+                        "z": -0.92619448720361697
+                    },
+                    "traceStart": {
+                        "x": -203.5370873261183,
+                        "y": 3540.0800343541923,
+                        "z": 143.8820251177043
+                    },
+                    "traceEnd": {
+                        "x": -29.652003896858428,
+                        "y": 1059.7188278744468,
+                        "z": 123.29688140886576
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "None",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_42'"
+                    },
+                    "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_42.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 10
+                },
+                "hitStateId": {
+                    "index": 8
+                },
+                "hitIndex": 3
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_35.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_10'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 779,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 41.282621011137962,
+                    "gameTime": 41.282621011137962,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.99647617340087891,
+                    "distance": 779.27191162109375,
+                    "location": {
+                        "x": 5.3532086164042596,
+                        "y": 3064.6089918553807,
+                        "z": 162.43276427798133
+                    },
+                    "impactPoint": {
+                        "x": 5.535029530460589,
+                        "y": 3062.9372990894303,
+                        "z": 161.35002501082047
+                    },
+                    "normal": {
+                        "x": -0.090905239318177344,
+                        "y": 0.83585273166689023,
+                        "z": 0.5413745915994792
+                    },
+                    "impactNormal": {
+                        "x": -0.090905232402374025,
+                        "y": 0.83585273998326937,
+                        "z": 0.54137458804070937
+                    },
+                    "traceStart": {
+                        "x": -80.483218805124821,
+                        "y": 3839.1376248018696,
+                        "z": 160.9549550173063
+                    },
+                    "traceEnd": {
+                        "x": 5.6567509330150116,
+                        "y": 3061.8700356500931,
+                        "z": 162.43799023693569
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "/Script/PhysicsCore.PhysicalMaterial'/Engine/EngineMaterials/DefaultPhysicalMaterial.DefaultPhysicalMaterial'",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_35'"
+                    },
+                    "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_35.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 10
+                },
+                "hitStateId": {
+                    "index": 7
+                },
+                "hitIndex": 4
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_50.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_5'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 779,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 42.277260210365057,
+                    "gameTime": 42.277260210365057,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.57401227951049805,
+                    "distance": 779.7821044921875,
+                    "location": {
+                        "x": -86.206551765620077,
+                        "y": 3945.5224994217824,
+                        "z": 182.81511148398423
+                    },
+                    "impactPoint": {
+                        "x": -84.815989820090849,
+                        "y": 3946.5368454855302,
+                        "z": 181.79652421339847
+                    },
+                    "normal": {
+                        "x": -0.69527316728983735,
+                        "y": -0.50717509073725409,
+                        "z": 0.50928248564270895
+                    },
+                    "impactNormal": {
+                        "x": -0.69527309275479388,
+                        "y": -0.50717501335903981,
+                        "z": 0.50928252797277795
+                    },
+                    "traceStart": {
+                        "x": -93.766086239030528,
+                        "y": 3166.5089720713286,
+                        "z": 149.03754283378558
+                    },
+                    "traceEnd": {
+                        "x": -80.596447290091987,
+                        "y": 4523.6463629556756,
+                        "z": 207.88222239186618
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "/Script/PhysicsCore.PhysicalMaterial'/Engine/EngineMaterials/DefaultPhysicalMaterial.DefaultPhysicalMaterial'",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_50'"
+                    },
+                    "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_50.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 5
+                },
+                "hitStateId": {
+                    "index": 10
+                },
+                "hitIndex": 5
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_Rectangle_18.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_1'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 45,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 55.483371511101723,
+                    "gameTime": 55.483371511101723,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.93527424335479736,
+                    "distance": 45.961097717285156,
+                    "location": {
+                        "x": 398.64032019429288,
+                        "y": 102.84666325005381,
+                        "z": 541.98428091178027
+                    },
+                    "impactPoint": {
+                        "x": 398.38609263938201,
+                        "y": 103.16824140652615,
+                        "z": 543.9418203662666
+                    },
+                    "normal": {
+                        "x": 0.12711472690268605,
+                        "y": -0.1607888221471715,
+                        "z": -0.97876902325164594
+                    },
+                    "impactNormal": {
+                        "x": 0.11406462214077351,
+                        "y": 0.063381217385995114,
+                        "z": -0.99144943524660789
+                    },
+                    "traceStart": {
+                        "x": 416.89834808852169,
+                        "y": 92.715740337324448,
+                        "z": 501.04003156143085
+                    },
+                    "traceEnd": {
+                        "x": 397.37677137029851,
+                        "y": 103.54777488196248,
+                        "z": 544.8178321811547
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "/Script/PhysicsCore.PhysicalMaterial'/Engine/EngineMaterials/DefaultPhysicalMaterial.DefaultPhysicalMaterial'",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor_Rectangle'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_Rectangle_18'"
+                    },
+                    "component": "/Script/Engine.BoxComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_Rectangle_18.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 1
+                },
+                "hitStateId": {
+                    "index": 9
+                },
+                "hitIndex": 6
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_53.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_9'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 501,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 21.634911596775055,
+                    "gameTime": 11.627961300313473,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.99401456117630005,
+                    "distance": 501.41812133789062,
+                    "location": {
+                        "x": -178.77667274339029,
+                        "y": 1656.8249155933136,
+                        "z": 201.54132465920199
+                    },
+                    "impactPoint": {
+                        "x": -179.52717136100793,
+                        "y": 1658.2702810634498,
+                        "z": 200.38047392755163
+                    },
+                    "normal": {
+                        "x": 0.37525374566614689,
+                        "y": -0.72269966875379477,
+                        "z": 0.58042210084272472
+                    },
+                    "impactNormal": {
+                        "x": 0.37525374719405258,
+                        "y": -0.7226996602267417,
+                        "z": 0.58042210387995019
+                    },
+                    "traceStart": {
+                        "x": 68.760799615831573,
+                        "y": 1223.6469138462635,
+                        "z": 151.5197724243034
+                    },
+                    "traceEnd": {
+                        "x": -180.26721468839568,
+                        "y": 1659.4332882776748,
+                        "z": 201.84252843675449
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "/Script/PhysicsCore.PhysicalMaterial'/Engine/EngineMaterials/DefaultPhysicalMaterial.DefaultPhysicalMaterial'",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_53'"
+                    },
+                    "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_53.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 9
+                },
+                "hitStateId": {
+                    "index": 10
+                },
+                "hitIndex": 7
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_35.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_1'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 0,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 33.381075698882341,
+                    "gameTime": 23.374125402420759,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0,
+                    "distance": 0,
+                    "location": {
+                        "x": 229.64776446104901,
+                        "y": -877.4811464231459,
+                        "z": 557.4081626943771
+                    },
+                    "impactPoint": {
+                        "x": 231.11488775280961,
+                        "y": -877.19077548932819,
+                        "z": 557.61642456973425
+                    },
+                    "normal": {
+                        "x": -0.97159654955531027,
+                        "y": -0.19229692720212832,
+                        "z": -0.13792039979943052
+                    },
+                    "impactNormal": {
+                        "x": -0.97159654955531027,
+                        "y": -0.19229692720212832,
+                        "z": -0.13792039979943052
+                    },
+                    "traceStart": {
+                        "x": 229.64776446104901,
+                        "y": -877.4811464231459,
+                        "z": 557.4081626943771
+                    },
+                    "traceEnd": {
+                        "x": 272.0816936970345,
+                        "y": 4125.0989579529823,
+                        "z": 1155
+                    },
+                    "penetrationDepth": 0.48998785018920898,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": true,
+                    "physMaterial": "/Script/PhysicsCore.PhysicalMaterial'/Engine/EngineMaterials/DefaultPhysicalMaterial.DefaultPhysicalMaterial'",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_35'"
+                    },
+                    "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_35.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 1
+                },
+                "hitStateId": {
+                    "index": 7
+                },
+                "hitIndex": 8
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_49.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_10'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 296,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 34.558639999479055,
+                    "gameTime": 24.551689703017473,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.75732928514480591,
+                    "distance": 296.9937744140625,
+                    "location": {
+                        "x": 1990.2377829339207,
+                        "y": 524.53680240073311,
+                        "z": 157.37149002317034
+                    },
+                    "impactPoint": {
+                        "x": 1991.6968586179162,
+                        "y": 525.69839405932908,
+                        "z": 156.64910567300569
+                    },
+                    "normal": {
+                        "x": -0.72952961122034976,
+                        "y": -0.58079790009789756,
+                        "z": 0.3611929478748967
+                    },
+                    "impactNormal": {
+                        "x": -0.72952971089985619,
+                        "y": -0.58079795921913524,
+                        "z": 0.36119302888702531
+                    },
+                    "traceStart": {
+                        "x": 1701.5358904848774,
+                        "y": 592.93460225204569,
+                        "z": 144.02033013621323
+                    },
+                    "traceEnd": {
+                        "x": 2082.7464129247192,
+                        "y": 502.62012320976953,
+                        "z": 161.64959675622023
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "/Script/PhysicsCore.PhysicalMaterial'/Engine/EngineMaterials/DefaultPhysicalMaterial.DefaultPhysicalMaterial'",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_49'"
+                    },
+                    "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_49.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 10
+                },
+                "hitStateId": {
+                    "index": 9
+                },
+                "hitIndex": 9
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_Rectangle_3.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_5'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 498,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 37.866869896650314,
+                    "gameTime": 27.859919600188732,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.99314671754837036,
+                    "distance": 498.28494262695312,
+                    "location": {
+                        "x": 42.345827617665208,
+                        "y": -797.02309191715722,
+                        "z": 579.99976450277757
+                    },
+                    "impactPoint": {
+                        "x": 44.330769564424941,
+                        "y": -797.26821076551551,
+                        "z": 579.99492725055211
+                    },
+                    "normal": {
+                        "x": -0.99245828351843923,
+                        "y": 0.12255901179314237,
+                        "z": 0.00241745815307007
+                    },
+                    "impactNormal": {
+                        "x": -0.9924582967346538,
+                        "y": 0.12255906137137251,
+                        "z": 0.0024175454026280629
+                    },
+                    "traceStart": {
+                        "x": -195.8715585147533,
+                        "y": -360.58197622542451,
+                        "z": 547.44947977031916
+                    },
+                    "traceEnd": {
+                        "x": 43.989664326992965,
+                        "y": -800.034786147717,
+                        "z": 580.22438015242017
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "/Script/PhysicsCore.PhysicalMaterial'/Engine/EngineMaterials/DefaultPhysicalMaterial.DefaultPhysicalMaterial'",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor_Rectangle'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_Rectangle_3'"
+                    },
+                    "component": "/Script/Engine.BoxComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_Rectangle_3.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 5
+                },
+                "hitStateId": {
+                    "index": 1
+                },
+                "hitIndex": 10
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_34.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_10'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 932,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 42.705117996782064,
+                    "gameTime": 32.698167700320482,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.52949142456054688,
+                    "distance": 932.9708251953125,
+                    "location": {
+                        "x": -75.489457155651621,
+                        "y": 1153.8480957945878,
+                        "z": 181.98936399012962
+                    },
+                    "impactPoint": {
+                        "x": -75.881788875881597,
+                        "y": 1155.7880834633247,
+                        "z": 181.70232065374768
+                    },
+                    "normal": {
+                        "x": 0.19618749022692997,
+                        "y": -0.97000630688911549,
+                        "z": 0.14352084612974347
+                    },
+                    "impactNormal": {
+                        "x": 0.19618748813836484,
+                        "y": -0.97000631591669428,
+                        "z": 0.1435208487885663
+                    },
+                    "traceStart": {
+                        "x": 739.73302143004014,
+                        "y": 701.45584223298522,
+                        "z": 147.51984189633913
+                    },
+                    "traceEnd": {
+                        "x": -799.89999389648438,
+                        "y": 1555.8459845040654,
+                        "z": 212.619143782859
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "/Script/PhysicsCore.PhysicalMaterial'/Engine/EngineMaterials/DefaultPhysicalMaterial.DefaultPhysicalMaterial'",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_34'"
+                    },
+                    "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_34.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 10
+                },
+                "hitStateId": {
+                    "index": 6
+                },
+                "hitIndex": 11
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_5.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_5'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 0,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 48.513314798474312,
+                    "gameTime": 38.50636450201273,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0,
+                    "distance": 0,
+                    "location": {
+                        "x": 358.30940728673494,
+                        "y": -1337.969598103688,
+                        "z": 561.85652248378005
+                    },
+                    "impactPoint": {
+                        "x": 359.40634398401102,
+                        "y": -1337.4025998551106,
+                        "z": 560.62980876924655
+                    },
+                    "normal": {
+                        "x": -0.63021703991876366,
+                        "y": -0.32575426601614277,
+                        "z": 0.70477701492622169
+                    },
+                    "impactNormal": {
+                        "x": -0.63021703991876366,
+                        "y": -0.32575426601614277,
+                        "z": 0.70477701492622169
+                    },
+                    "traceStart": {
+                        "x": 358.30940728673494,
+                        "y": -1337.969598103688,
+                        "z": 561.85652248378005
+                    },
+                    "traceEnd": {
+                        "x": -1.2839002509549773e-06,
+                        "y": -1292.7574067265791,
+                        "z": 645.74416961095721
+                    },
+                    "penetrationDepth": 0.259429931640625,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": true,
+                    "physMaterial": "/Script/PhysicsCore.PhysicalMaterial'/Engine/EngineMaterials/DefaultPhysicalMaterial.DefaultPhysicalMaterial'",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_5'"
+                    },
+                    "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_5.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 5
+                },
+                "hitStateId": {
+                    "index": 1
+                },
+                "hitIndex": 12
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_Rectangle_3.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_6'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 12,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 58.606698296964169,
+                    "gameTime": 48.599748000502586,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.01588868536055088,
+                    "distance": 12.11549186706543,
+                    "location": {
+                        "x": 423.32192327176438,
+                        "y": -1217.8024528566627,
+                        "z": 549.98533037833499
+                    },
+                    "impactPoint": {
+                        "x": 422.98646516351818,
+                        "y": -1219.6514877344316,
+                        "z": 549.30083014742934
+                    },
+                    "normal": {
+                        "x": 0.16772901540176854,
+                        "y": 0.92451709886135158,
+                        "z": 0.34225007130071328
+                    },
+                    "impactNormal": {
+                        "x": 0.20131938893462298,
+                        "y": 0.97557135876971524,
+                        "z": -0.087925991929004521
+                    },
+                    "traceStart": {
+                        "x": 424.89414427544244,
+                        "y": -1205.8195164222755,
+                        "z": 549.13532922961122
+                    },
+                    "traceEnd": {
+                        "x": 325.94190448965935,
+                        "y": -1960.0000016208271,
+                        "z": 602.6325902952841
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "/Script/PhysicsCore.PhysicalMaterial'/Engine/EngineMaterials/DefaultPhysicalMaterial.DefaultPhysicalMaterial'",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor_Rectangle'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_Rectangle_3'"
+                    },
+                    "component": "/Script/Engine.BoxComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_Rectangle_3.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 6
+                },
+                "hitStateId": {
+                    "index": 1
+                },
+                "hitIndex": 13
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_Rectangle_3.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_8'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 11,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 66.448347598314285,
+                    "gameTime": 56.441397301852703,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.040050163865089417,
+                    "distance": 11.888599395751953,
+                    "location": {
+                        "x": 439.68253416350171,
+                        "y": -955.84960286574119,
+                        "z": 556.66908171728346
+                    },
+                    "impactPoint": {
+                        "x": 438.34848529566341,
+                        "y": -957.33913038781589,
+                        "z": 556.62880168602601
+                    },
+                    "normal": {
+                        "x": 0.66702439118983525,
+                        "y": 0.74476361416753101,
+                        "z": 0.02014002408009484
+                    },
+                    "impactNormal": {
+                        "x": 0.66794272947789679,
+                        "y": 0.74321410694138024,
+                        "z": 0.038539813856559135
+                    },
+                    "traceStart": {
+                        "x": 445.49425810719487,
+                        "y": -945.66755631662488,
+                        "z": 554.69713283149122
+                    },
+                    "traceEnd": {
+                        "x": 300.38314287505273,
+                        "y": -1199.8998881346647,
+                        "z": 603.93410705299129
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "None",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor_Rectangle'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_Rectangle_3'"
+                    },
+                    "component": "/Script/Engine.BoxComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_Rectangle_3.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 8
+                },
+                "hitStateId": {
+                    "index": 1
+                },
+                "hitIndex": 14
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_32.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_10'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 2725,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 80.763567999005318,
+                    "gameTime": 70.756617702543736,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.99525493383407593,
+                    "distance": 2725.968994140625,
+                    "location": {
+                        "x": -133.64856785241159,
+                        "y": -872.69756776003214,
+                        "z": 524.08456699413739
+                    },
+                    "impactPoint": {
+                        "x": -133.73953938485067,
+                        "y": -873.75795452821285,
+                        "z": 525.77779953429672
+                    },
+                    "normal": {
+                        "x": 0.045603223319281398,
+                        "y": 0.53024760682253147,
+                        "z": -0.84661550982832212
+                    },
+                    "impactNormal": {
+                        "x": 0.045603224988725932,
+                        "y": 0.53024755579248528,
+                        "z": -0.84661540868155161
+                    },
+                    "traceStart": {
+                        "x": 1696.4685867483065,
+                        "y": 1147.4926051544014,
+                        "z": 544.3397198385868
+                    },
+                    "traceEnd": {
+                        "x": -142.37399758378618,
+                        "y": -882.32920656166084,
+                        "z": 523.98799672135556
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "/Script/PhysicsCore.PhysicalMaterial'/Engine/EngineMaterials/DefaultPhysicalMaterial.DefaultPhysicalMaterial'",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_32'"
+                    },
+                    "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_32.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 10
+                },
+                "hitStateId": {
+                    "index": 6
+                },
+                "hitIndex": 15
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_37.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_0'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 247,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 81.982883799821138,
+                    "gameTime": 71.975933503359556,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.99149447679519653,
+                    "distance": 247.47317504882812,
+                    "location": {
+                        "x": -370.84104984288149,
+                        "y": -31.627161675177973,
+                        "z": 531.12895199870093
+                    },
+                    "impactPoint": {
+                        "x": -369.66673416222739,
+                        "y": -33.185082700608703,
+                        "z": 531.56930770357872
+                    },
+                    "normal": {
+                        "x": -0.58715572895004908,
+                        "y": 0.77895461695620904,
+                        "z": -0.22017687136423383
+                    },
+                    "impactNormal": {
+                        "x": -0.5871557702059933,
+                        "y": 0.77895465004497555,
+                        "z": -0.2201768894101237
+                    },
+                    "traceStart": {
+                        "x": -461.35414165039089,
+                        "y": 197.85983709399835,
+                        "z": 511.48030374027917
+                    },
+                    "traceEnd": {
+                        "x": -370.064584395292,
+                        "y": -33.595813078603925,
+                        "z": 531.2975076867217
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "/Script/PhysicsCore.PhysicalMaterial'/Engine/EngineMaterials/DefaultPhysicalMaterial.DefaultPhysicalMaterial'",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_37'"
+                    },
+                    "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_37.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 0
+                },
+                "hitStateId": {
+                    "index": 7
+                },
+                "hitIndex": 16
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_28.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_10'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 2350,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 86.773837499320507,
+                    "gameTime": 76.766887202858925,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.99913579225540161,
+                    "distance": 2350.10595703125,
+                    "location": {
+                        "x": -361.75187799515766,
+                        "y": 212.74006612405219,
+                        "z": 539.83117087753271
+                    },
+                    "impactPoint": {
+                        "x": -363.48240696651283,
+                        "y": 211.75321944191151,
+                        "z": 539.65422317867922
+                    },
+                    "normal": {
+                        "x": 0.86529070590283674,
+                        "y": 0.49339897072144767,
+                        "z": 0.088484179202763205
+                    },
+                    "impactNormal": {
+                        "x": 0.86529069718181018,
+                        "y": 0.49339896046577914,
+                        "z": 0.088484184993586013
+                    },
+                    "traceStart": {
+                        "x": 1802.5032539859174,
+                        "y": 1128.6921972539953,
+                        "z": 545.23279190202175
+                    },
+                    "traceEnd": {
+                        "x": -363.62386182442521,
+                        "y": 211.9478085234941,
+                        "z": 539.8264987170927
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "None",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_28'"
+                    },
+                    "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_28.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 10
+                },
+                "hitStateId": {
+                    "index": 5
+                },
+                "hitIndex": 17
+            },
+            {
+                "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_49.Tag Component'",
+                "shotActor": "None",
+                "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_10'",
+                "basePointValue": 100,
+                "pointMultiplier": 1,
+                "distance": 245,
+                "distanceMultiplier": 0.0099999997764825821,
+                "hitMatchState": {
+                    "roundNum": 1,
+                    "roundTime": 102.93268239870667,
+                    "gameTime": 92.925732102245092,
+                    "state": ""
+                },
+                "hitResult": {
+                    "faceIndex": -1,
+                    "time": 0.77302110195159912,
+                    "distance": 245.35772705078125,
+                    "location": {
+                        "x": 4117.3486293854639,
+                        "y": 105.28966265943112,
+                        "z": 148.21812402349096
+                    },
+                    "impactPoint": {
+                        "x": 4118.4231014344959,
+                        "y": 104.86467939509592,
+                        "z": 146.58566236144219
+                    },
+                    "normal": {
+                        "x": -0.53723428990990363,
+                        "y": 0.21248018354049006,
+                        "z": 0.81623004682969225
+                    },
+                    "impactNormal": {
+                        "x": -0.5372342138210684,
+                        "y": 0.21248021265361261,
+                        "z": 0.81623000541806057
+                    },
+                    "traceStart": {
+                        "x": 4012.1195897797656,
+                        "y": 326.78115668532229,
+                        "z": 139.9245905864959
+                    },
+                    "traceEnd": {
+                        "x": 4148.2465846833111,
+                        "y": 40.254057403420234,
+                        "z": 150.65331896927469
+                    },
+                    "penetrationDepth": 0,
+                    "myItem": -1,
+                    "item": -1,
+                    "elementIndex": 0,
+                    "bBlockingHit": true,
+                    "bStartPenetrating": false,
+                    "physMaterial": "/Script/PhysicsCore.PhysicalMaterial'/Engine/EngineMaterials/DefaultPhysicalMaterial.DefaultPhysicalMaterial'",
+                    "hitObjectHandle": {
+                        "referenceObject": "/Script/LaserTag.Sensor'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_49'"
+                    },
+                    "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.Sensor_49.CollisionMesh'",
+                    "boneName": "None",
+                    "myBoneName": "None"
+                },
+                "hitTags": [],
+                "instigatorStateId": {
+                    "index": 10
+                },
+                "hitStateId": {
+                    "index": 9
+                },
+                "hitIndex": 18
+            }
+        ],
+        "events": [
+            {
+                "eventName": "TeamChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 0,
+                    "old": -1,
+                    "new": 1
+                }
+            },
+            {
+                "eventName": "TeamChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 0,
+                    "old": -1,
+                    "new": 1
+                }
+            },
+            {
+                "eventName": "TeamChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 0,
+                    "old": -1,
+                    "new": 1
+                }
+            },
+            {
+                "eventName": "TeamChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 0,
+                    "old": -1,
+                    "new": 1
+                }
+            },
+            {
+                "eventName": "TeamChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 0,
+                    "old": -1,
+                    "new": 1
+                }
+            },
+            {
+                "eventName": "TeamChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 0,
+                    "old": -1,
+                    "new": 2
+                }
+            },
+            {
+                "eventName": "TeamChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 0,
+                    "old": -1,
+                    "new": 2
+                }
+            },
+            {
+                "eventName": "TeamChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 0,
+                    "old": -1,
+                    "new": 2
+                }
+            },
+            {
+                "eventName": "TeamChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 0,
+                    "old": -1,
+                    "new": 2
+                }
+            },
+            {
+                "eventName": "TeamChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 0,
+                    "old": -1,
+                    "new": 2
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 181478,
+                    "Distance": 0,
+                    "NumShots": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 181138,
+                    "Distance": 0,
+                    "NumShots": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 180979,
+                    "Distance": 0,
+                    "NumShots": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 180820,
+                    "Distance": 0,
+                    "NumShots": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 179260,
+                    "Distance": 0,
+                    "NumShots": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 179100,
+                    "Distance": 0,
+                    "NumShots": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 178941,
+                    "Distance": 0,
+                    "NumShots": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 178782,
+                    "Distance": 0,
+                    "NumShots": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 178623,
+                    "Distance": 0,
+                    "NumShots": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.0083336979150772095,
+                    "gameTime": 0.0083336979150772095,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 178151,
+                    "Distance": 0,
+                    "NumShots": 0
+                }
+            },
+            {
+                "eventName": "TeamChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0.40833370387554169,
+                    "gameTime": 0.40833370387554169,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 261,
+                    "old": -1,
+                    "new": 1
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 22.49708941206336,
+                    "gameTime": 22.49708941206336,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 0
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 22.49708941206336,
+                    "gameTime": 22.49708941206336,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 0,
+                    "ID": 7,
+                    "oldScore": 0,
+                    "newScore": 129
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 22.49708941206336,
+                    "gameTime": 22.49708941206336,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 0,
+                    "old": 0,
+                    "new": 129
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 31.130314312875271,
+                    "gameTime": 31.130314312875271,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 1
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 31.130314312875271,
+                    "gameTime": 31.130314312875271,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 1,
+                    "ID": 10,
+                    "oldScore": 0,
+                    "newScore": 111
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 31.130314312875271,
+                    "gameTime": 31.130314312875271,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 1,
+                    "old": 0,
+                    "new": 111
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 33.272482611238956,
+                    "gameTime": 33.272482611238956,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 2
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 33.272482611238956,
+                    "gameTime": 33.272482611238956,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 2,
+                    "ID": 10,
+                    "oldScore": 111,
+                    "newScore": 232
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 33.272482611238956,
+                    "gameTime": 33.272482611238956,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 2,
+                    "old": 111,
+                    "new": 232
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 38.505335610359907,
+                    "gameTime": 38.505335610359907,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 3
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 38.505335610359907,
+                    "gameTime": 38.505335610359907,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 3,
+                    "ID": 10,
+                    "oldScore": 232,
+                    "newScore": 356
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 38.505335610359907,
+                    "gameTime": 38.505335610359907,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 3,
+                    "old": 232,
+                    "new": 356
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 41.282621011137962,
+                    "gameTime": 41.282621011137962,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 4
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 41.282621011137962,
+                    "gameTime": 41.282621011137962,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 4,
+                    "ID": 10,
+                    "oldScore": 356,
+                    "newScore": 463
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 41.282621011137962,
+                    "gameTime": 41.282621011137962,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 4,
+                    "old": 356,
+                    "new": 463
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 42.277260210365057,
+                    "gameTime": 42.277260210365057,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 5
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 42.277260210365057,
+                    "gameTime": 42.277260210365057,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 5,
+                    "ID": 5,
+                    "oldScore": 0,
+                    "newScore": 107
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 42.277260210365057,
+                    "gameTime": 42.277260210365057,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 5,
+                    "old": 129,
+                    "new": 236
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 55.483371511101723,
+                    "gameTime": 55.483371511101723,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 6
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 55.483371511101723,
+                    "gameTime": 55.483371511101723,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 6,
+                    "ID": 1,
+                    "oldScore": 0,
+                    "newScore": 100
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 55.483371511101723,
+                    "gameTime": 55.483371511101723,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 6,
+                    "old": 463,
+                    "new": 563
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 181605,
+                    "Distance": 1787078.0855229432,
+                    "NumShots": 21
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 10,
+                    "oldScore": 463,
+                    "newScore": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 181478,
+                    "Distance": 1332369.3308805127,
+                    "NumShots": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 181138,
+                    "Distance": 1226865.3348928438,
+                    "NumShots": 19
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 1,
+                    "oldScore": 100,
+                    "newScore": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 180979,
+                    "Distance": 957161.69044571591,
+                    "NumShots": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 180820,
+                    "Distance": 456102.67184797308,
+                    "NumShots": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 179260,
+                    "Distance": 496128.37411955674,
+                    "NumShots": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 179100,
+                    "Distance": 1027754.458141358,
+                    "NumShots": 44
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 5,
+                    "oldScore": 107,
+                    "newScore": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 178941,
+                    "Distance": 1169904.0315803564,
+                    "NumShots": 50
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 178782,
+                    "Distance": 1317626.5537883372,
+                    "NumShots": 18
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 7,
+                    "oldScore": 129,
+                    "newScore": 0
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 178623,
+                    "Distance": 1038843.2205238036,
+                    "NumShots": 18
+                }
+            },
+            {
+                "eventName": "PlayerDataReset",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "PlayerID": 178151,
+                    "Distance": 1064014.5165843682,
+                    "NumShots": 18
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "old": 563,
+                    "new": 0
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 0,
+                    "gameTime": 60.026661213487387,
+                    "state": ""
+                },
+                "data": {
+                    "old": 236,
+                    "new": 0
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 21.634911596775055,
+                    "gameTime": 11.627961300313473,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 7
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 21.634911596775055,
+                    "gameTime": 11.627961300313473,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 7,
+                    "ID": 9,
+                    "oldScore": 0,
+                    "newScore": 105
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 21.634911596775055,
+                    "gameTime": 11.627961300313473,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 7,
+                    "old": 0,
+                    "new": 105
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 33.381075698882341,
+                    "gameTime": 23.374125402420759,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 8
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 33.381075698882341,
+                    "gameTime": 23.374125402420759,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 8,
+                    "ID": 1,
+                    "oldScore": 0,
+                    "newScore": 100
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 33.381075698882341,
+                    "gameTime": 23.374125402420759,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 8,
+                    "old": 0,
+                    "new": 100
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 34.558639999479055,
+                    "gameTime": 24.551689703017473,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 9
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 34.558639999479055,
+                    "gameTime": 24.551689703017473,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 9,
+                    "ID": 10,
+                    "oldScore": 0,
+                    "newScore": 102
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 34.558639999479055,
+                    "gameTime": 24.551689703017473,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 9,
+                    "old": 100,
+                    "new": 202
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 37.866869896650314,
+                    "gameTime": 27.859919600188732,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 10
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 37.866869896650314,
+                    "gameTime": 27.859919600188732,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 10,
+                    "ID": 5,
+                    "oldScore": 0,
+                    "newScore": 104
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 37.866869896650314,
+                    "gameTime": 27.859919600188732,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 10,
+                    "old": 105,
+                    "new": 209
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 42.705117996782064,
+                    "gameTime": 32.698167700320482,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 11
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 42.705117996782064,
+                    "gameTime": 32.698167700320482,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 11,
+                    "ID": 10,
+                    "oldScore": 102,
+                    "newScore": 211
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 42.705117996782064,
+                    "gameTime": 32.698167700320482,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 11,
+                    "old": 202,
+                    "new": 311
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 48.513314798474312,
+                    "gameTime": 38.50636450201273,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 12
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 48.513314798474312,
+                    "gameTime": 38.50636450201273,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 12,
+                    "ID": 5,
+                    "oldScore": 104,
+                    "newScore": 204
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 48.513314798474312,
+                    "gameTime": 38.50636450201273,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 12,
+                    "old": 209,
+                    "new": 309
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 58.606698296964169,
+                    "gameTime": 48.599748000502586,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 13
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 58.606698296964169,
+                    "gameTime": 48.599748000502586,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 13,
+                    "ID": 6,
+                    "oldScore": 0,
+                    "newScore": 100
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 58.606698296964169,
+                    "gameTime": 48.599748000502586,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 13,
+                    "old": 309,
+                    "new": 409
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 66.448347598314285,
+                    "gameTime": 56.441397301852703,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 14
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 66.448347598314285,
+                    "gameTime": 56.441397301852703,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 14,
+                    "ID": 8,
+                    "oldScore": 0,
+                    "newScore": 100
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 66.448347598314285,
+                    "gameTime": 56.441397301852703,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 14,
+                    "old": 409,
+                    "new": 509
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 80.763567999005318,
+                    "gameTime": 70.756617702543736,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 15
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 80.763567999005318,
+                    "gameTime": 70.756617702543736,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 15,
+                    "ID": 10,
+                    "oldScore": 211,
+                    "newScore": 338
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 80.763567999005318,
+                    "gameTime": 70.756617702543736,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 15,
+                    "old": 311,
+                    "new": 438
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 81.982883799821138,
+                    "gameTime": 71.975933503359556,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 16
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 81.982883799821138,
+                    "gameTime": 71.975933503359556,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 16,
+                    "ID": 0,
+                    "oldScore": 0,
+                    "newScore": 102
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 81.982883799821138,
+                    "gameTime": 71.975933503359556,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 16,
+                    "old": 438,
+                    "new": 540
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 86.773837499320507,
+                    "gameTime": 76.766887202858925,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 17
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 86.773837499320507,
+                    "gameTime": 76.766887202858925,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 17,
+                    "ID": 10,
+                    "oldScore": 338,
+                    "newScore": 461
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 86.773837499320507,
+                    "gameTime": 76.766887202858925,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 17,
+                    "old": 540,
+                    "new": 663
+                }
+            },
+            {
+                "eventName": "HitEvent",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 102.93268239870667,
+                    "gameTime": 92.925732102245092,
+                    "state": ""
+                },
+                "data": {
+                    "ID": 18
+                }
+            },
+            {
+                "eventName": "PlayerScore",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 102.93268239870667,
+                    "gameTime": 92.925732102245092,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 18,
+                    "ID": 10,
+                    "oldScore": 461,
+                    "newScore": 563
+                }
+            },
+            {
+                "eventName": "TeamPointsChange",
+                "matchState": {
+                    "roundNum": 1,
+                    "roundTime": 102.93268239870667,
+                    "gameTime": 92.925732102245092,
+                    "state": ""
+                },
+                "data": {
+                    "HitID": 18,
+                    "old": 663,
+                    "new": 765
+                }
+            }
+        ]
+    },
+    "TeamData": {
+        "0": {
+            "teamName": "Default Spectator",
+            "playerStartTag": "None",
+            "primaryColor": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 0
+            },
+            "secondaryColor": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 0
+            },
+            "bPreferTeamColors": true,
+            "bTeamIsSpectator": true,
+            "bAllowHumanPlayers": true,
+            "bAutoAddAI": true,
+            "aiAutofillAmount": 0,
+            "bAllowViewSwitch": true,
+            "bObeyPlayerCameraView": true,
+            "bFirstPersonDefault": true,
+            "defaultThirdPersonDistance": 1000,
+            "bDisableTaggedFriendlyFire": false,
+            "bDisableTaggingFriendlyFire": false,
+            "bAnnounceFriendlyFire": false,
+            "bDisableSelfFriendlyFire": true,
+            "teamScoreModSelfTag": 0,
+            "selfScoreModSelfTag": 0,
+            "teamScoreModFriendlyFire": 0,
+            "teamScoreModFriendlyTagged": 0,
+            "teamScoreModFriendlyTagging": 0,
+            "defaultClass": "/Script/CoreUObject.Class'/Script/LaserTag.UserSpectatorPawn'",
+            "defaultAIControllerClass": "/Script/CoreUObject.Class'/Script/LaserTag.BaseAIController'",
+            "points": 0,
+            "maxPlayerCount": 10,
+            "minPlayerCount": 0,
+            "defaultPlayerGameData": "/Script/CoreUObject.Class'/Script/LaserTag.PlayerDataGameAssetBase'",
+            "defaultAIPlayerGameData": "None",
+            "defaultTeamWidget": "None",
+            "defaultWidget": "/Script/UMG.WidgetBlueprintGeneratedClass'/Game/UI/ingame/PlayerUI/UI_DefaultSpectator.UI_DefaultSpectator_C'",
+            "nameWidget": "None",
+            "bAllowPlayersToSwitchOffTeam": true,
+            "bAllowPlayersToSwitchToTeam": true,
+            "bAllowPlayersToJoinTeam": true,
+            "defaultTeamRelation": {
+                "targetTeamId": 0,
+                "attitude": "Hostile"
+            },
+            "teamRelations": [],
+            "hits": []
+        },
+        "1": {
+            "teamName": "Team 1",
+            "playerStartTag": "Team1",
+            "primaryColor": {
+                "r": 1,
+                "g": 0,
+                "b": 0,
+                "a": 1
+            },
+            "secondaryColor": {
+                "r": 1,
+                "g": 0.5,
+                "b": 0.5,
+                "a": 1
+            },
+            "bPreferTeamColors": true,
+            "bTeamIsSpectator": false,
+            "bAllowHumanPlayers": true,
+            "bAutoAddAI": true,
+            "aiAutofillAmount": 5,
+            "bAllowViewSwitch": true,
+            "bObeyPlayerCameraView": true,
+            "bFirstPersonDefault": true,
+            "defaultThirdPersonDistance": 1000,
+            "bDisableTaggedFriendlyFire": false,
+            "bDisableTaggingFriendlyFire": false,
+            "bAnnounceFriendlyFire": false,
+            "bDisableSelfFriendlyFire": true,
+            "teamScoreModSelfTag": 0,
+            "selfScoreModSelfTag": 0,
+            "teamScoreModFriendlyFire": 0,
+            "teamScoreModFriendlyTagged": 0,
+            "teamScoreModFriendlyTagging": 0,
+            "defaultClass": "/Script/CoreUObject.Class'/Script/LaserTag.PlayerCharacter'",
+            "defaultAIControllerClass": "/Script/CoreUObject.Class'/Script/LaserTag.BaseAIController'",
+            "points": 765,
+            "maxPlayerCount": 20,
+            "minPlayerCount": 5,
+            "defaultPlayerGameData": "/Script/CoreUObject.Class'/Script/LaserTag.PlayerDataGameAssetBase'",
+            "defaultAIPlayerGameData": "None",
+            "defaultTeamWidget": "/Script/UMG.WidgetBlueprintGeneratedClass'/Game/UI/ingame/ScoringUI/UI_TeamScoreCounter.UI_TeamScoreCounter_C'",
+            "defaultWidget": "/Script/UMG.WidgetBlueprintGeneratedClass'/Game/UI/ingame/PlayerUI/UI_PlayerCharacter.UI_PlayerCharacter_C'",
+            "nameWidget": "None",
+            "bAllowPlayersToSwitchOffTeam": true,
+            "bAllowPlayersToSwitchToTeam": true,
+            "bAllowPlayersToJoinTeam": true,
+            "defaultTeamRelation": {
+                "targetTeamId": 0,
+                "attitude": "Hostile"
+            },
+            "teamRelations": [
+                {
+                    "targetTeamId": 1,
+                    "attitude": "Friendly"
+                },
+                {
+                    "targetTeamId": 2,
+                    "attitude": "Hostile"
+                }
+            ],
+            "hits": []
+        },
+        "2": {
+            "teamName": "Team 2",
+            "playerStartTag": "Team2",
+            "primaryColor": {
+                "r": 0,
+                "g": 0,
+                "b": 1,
+                "a": 1
+            },
+            "secondaryColor": {
+                "r": 0.5,
+                "g": 0.5,
+                "b": 1,
+                "a": 1
+            },
+            "bPreferTeamColors": true,
+            "bTeamIsSpectator": false,
+            "bAllowHumanPlayers": true,
+            "bAutoAddAI": true,
+            "aiAutofillAmount": 5,
+            "bAllowViewSwitch": true,
+            "bObeyPlayerCameraView": true,
+            "bFirstPersonDefault": true,
+            "defaultThirdPersonDistance": 1000,
+            "bDisableTaggedFriendlyFire": false,
+            "bDisableTaggingFriendlyFire": false,
+            "bAnnounceFriendlyFire": false,
+            "bDisableSelfFriendlyFire": true,
+            "teamScoreModSelfTag": 0,
+            "selfScoreModSelfTag": 0,
+            "teamScoreModFriendlyFire": 0,
+            "teamScoreModFriendlyTagged": 0,
+            "teamScoreModFriendlyTagging": 0,
+            "defaultClass": "/Script/CoreUObject.Class'/Script/LaserTag.PlayerCharacter'",
+            "defaultAIControllerClass": "/Script/CoreUObject.Class'/Script/LaserTag.BaseAIController'",
+            "points": 509,
+            "maxPlayerCount": 20,
+            "minPlayerCount": 5,
+            "defaultPlayerGameData": "/Script/CoreUObject.Class'/Script/LaserTag.PlayerDataGameAssetBase'",
+            "defaultAIPlayerGameData": "None",
+            "defaultTeamWidget": "/Script/UMG.WidgetBlueprintGeneratedClass'/Game/UI/ingame/ScoringUI/UI_TeamScoreCounter.UI_TeamScoreCounter_C'",
+            "defaultWidget": "/Script/UMG.WidgetBlueprintGeneratedClass'/Game/UI/ingame/PlayerUI/UI_PlayerCharacter.UI_PlayerCharacter_C'",
+            "nameWidget": "None",
+            "bAllowPlayersToSwitchOffTeam": true,
+            "bAllowPlayersToSwitchToTeam": true,
+            "bAllowPlayersToJoinTeam": true,
+            "defaultTeamRelation": {
+                "targetTeamId": 0,
+                "attitude": "Hostile"
+            },
+            "teamRelations": [
+                {
+                    "targetTeamId": 1,
+                    "attitude": "Hostile"
+                },
+                {
+                    "targetTeamId": 2,
+                    "attitude": "Friendly"
+                }
+            ],
+            "hits": []
+        }
+    },
+    "PlayerData": {
+        "10": {
+            "bPreferredLeftHand": true,
+            "bPreferredThirdPerson": false,
+            "preferredThirdPersonDistance": 75,
+            "preferredPrimaryColor": {
+                "r": 1,
+                "g": 1,
+                "b": 1,
+                "a": 1
+            },
+            "preferredSecondaryColor": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+            },
+            "emoteAsset": "/Script/LaserTag.EmoteDataAsset'/Game/data/Emotes/TestEmote.TestEmote'",
+            "preferredNameWidget": "/Script/UMG.WidgetBlueprintGeneratedClass'/Game/UI/ingame/UI_PlayerNameWidget.UI_PlayerNameWidget_C'",
+            "pointsEarned": 0,
+            "distanceTraveled": 0,
+            "gamesPlayed": 0,
+            "playersTagged": 0,
+            "timesTagged": 0,
+            "highestScore": 0,
+            "playerName": "AndyPCv2-5B72D0924F8",
+            "netId": "AndyPCv2-5B72D0924F8B00E8C39F58AA7D7AAEE7"
+        },
+        "0": {
+            "bPreferredLeftHand": true,
+            "bPreferredThirdPerson": false,
+            "preferredThirdPersonDistance": 75,
+            "preferredPrimaryColor": {
+                "r": 0.72581321001052856,
+                "g": 0.89411771297454834,
+                "b": 0.89017313718795776,
+                "a": 1
+            },
+            "preferredSecondaryColor": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+            },
+            "emoteAsset": "/Script/LaserTag.EmoteDataAsset'/Game/data/Emotes/TestEmote.TestEmote'",
+            "preferredNameWidget": "/Script/UMG.WidgetBlueprintGeneratedClass'/Game/UI/ingame/UI_PlayerNameWidget.UI_PlayerNameWidget_C'",
+            "pointsEarned": 0,
+            "distanceTraveled": 0,
+            "gamesPlayed": 0,
+            "playersTagged": 0,
+            "timesTagged": 0,
+            "highestScore": 0,
+            "playerName": "Bot 0",
+            "netId": ""
+        },
+        "1": {
+            "bPreferredLeftHand": true,
+            "bPreferredThirdPerson": false,
+            "preferredThirdPersonDistance": 75,
+            "preferredPrimaryColor": {
+                "r": 0.95950412750244141,
+                "g": 0.9647059440612793,
+                "b": 0.29886966943740845,
+                "a": 1
+            },
+            "preferredSecondaryColor": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+            },
+            "emoteAsset": "/Script/LaserTag.EmoteDataAsset'/Game/data/Emotes/TestEmote.TestEmote'",
+            "preferredNameWidget": "/Script/UMG.WidgetBlueprintGeneratedClass'/Game/UI/ingame/UI_PlayerNameWidget.UI_PlayerNameWidget_C'",
+            "pointsEarned": 0,
+            "distanceTraveled": 0,
+            "gamesPlayed": 0,
+            "playersTagged": 0,
+            "timesTagged": 0,
+            "highestScore": 0,
+            "playerName": "Bot 1",
+            "netId": ""
+        },
+        "2": {
+            "bPreferredLeftHand": true,
+            "bPreferredThirdPerson": false,
+            "preferredThirdPersonDistance": 75,
+            "preferredPrimaryColor": {
+                "r": 0.80784320831298828,
+                "g": 0.5322260856628418,
+                "b": 0.70663988590240479,
+                "a": 1
+            },
+            "preferredSecondaryColor": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+            },
+            "emoteAsset": "/Script/LaserTag.EmoteDataAsset'/Game/data/Emotes/TestEmote.TestEmote'",
+            "preferredNameWidget": "/Script/UMG.WidgetBlueprintGeneratedClass'/Game/UI/ingame/UI_PlayerNameWidget.UI_PlayerNameWidget_C'",
+            "pointsEarned": 0,
+            "distanceTraveled": 0,
+            "gamesPlayed": 0,
+            "playersTagged": 0,
+            "timesTagged": 0,
+            "highestScore": 0,
+            "playerName": "Bot 2",
+            "netId": ""
+        },
+        "3": {
+            "bPreferredLeftHand": true,
+            "bPreferredThirdPerson": false,
+            "preferredThirdPersonDistance": 75,
+            "preferredPrimaryColor": {
+                "r": 0.68458318710327148,
+                "g": 0.18909645080566406,
+                "b": 0.90980398654937744,
+                "a": 1
+            },
+            "preferredSecondaryColor": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+            },
+            "emoteAsset": "/Script/LaserTag.EmoteDataAsset'/Game/data/Emotes/TestEmote.TestEmote'",
+            "preferredNameWidget": "/Script/UMG.WidgetBlueprintGeneratedClass'/Game/UI/ingame/UI_PlayerNameWidget.UI_PlayerNameWidget_C'",
+            "pointsEarned": 0,
+            "distanceTraveled": 0,
+            "gamesPlayed": 0,
+            "playersTagged": 0,
+            "timesTagged": 0,
+            "highestScore": 0,
+            "playerName": "Bot 3",
+            "netId": ""
+        },
+        "4": {
+            "bPreferredLeftHand": true,
+            "bPreferredThirdPerson": false,
+            "preferredThirdPersonDistance": 75,
+            "preferredPrimaryColor": {
+                "r": 0.7725490927696228,
+                "g": 0.50897347927093506,
+                "b": 0.52132850885391235,
+                "a": 1
+            },
+            "preferredSecondaryColor": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+            },
+            "emoteAsset": "/Script/LaserTag.EmoteDataAsset'/Game/data/Emotes/TestEmote.TestEmote'",
+            "preferredNameWidget": "/Script/UMG.WidgetBlueprintGeneratedClass'/Game/UI/ingame/UI_PlayerNameWidget.UI_PlayerNameWidget_C'",
+            "pointsEarned": 0,
+            "distanceTraveled": 0,
+            "gamesPlayed": 0,
+            "playersTagged": 0,
+            "timesTagged": 0,
+            "highestScore": 0,
+            "playerName": "Bot 4",
+            "netId": ""
+        },
+        "5": {
+            "bPreferredLeftHand": true,
+            "bPreferredThirdPerson": false,
+            "preferredThirdPersonDistance": 75,
+            "preferredPrimaryColor": {
+                "r": 0.31132641434669495,
+                "g": 0.94509810209274292,
+                "b": 0.42520725727081299,
+                "a": 1
+            },
+            "preferredSecondaryColor": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+            },
+            "emoteAsset": "/Script/LaserTag.EmoteDataAsset'/Game/data/Emotes/TestEmote.TestEmote'",
+            "preferredNameWidget": "/Script/UMG.WidgetBlueprintGeneratedClass'/Game/UI/ingame/UI_PlayerNameWidget.UI_PlayerNameWidget_C'",
+            "pointsEarned": 0,
+            "distanceTraveled": 0,
+            "gamesPlayed": 0,
+            "playersTagged": 0,
+            "timesTagged": 0,
+            "highestScore": 0,
+            "playerName": "Bot 0",
+            "netId": ""
+        },
+        "6": {
+            "bPreferredLeftHand": true,
+            "bPreferredThirdPerson": false,
+            "preferredThirdPersonDistance": 75,
+            "preferredPrimaryColor": {
+                "r": 0.4705016016960144,
+                "g": 0.98823535442352295,
+                "b": 0.11626292020082474,
+                "a": 1
+            },
+            "preferredSecondaryColor": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+            },
+            "emoteAsset": "/Script/LaserTag.EmoteDataAsset'/Game/data/Emotes/TestEmote.TestEmote'",
+            "preferredNameWidget": "/Script/UMG.WidgetBlueprintGeneratedClass'/Game/UI/ingame/UI_PlayerNameWidget.UI_PlayerNameWidget_C'",
+            "pointsEarned": 0,
+            "distanceTraveled": 0,
+            "gamesPlayed": 0,
+            "playersTagged": 0,
+            "timesTagged": 0,
+            "highestScore": 0,
+            "playerName": "Bot 1",
+            "netId": ""
+        },
+        "7": {
+            "bPreferredLeftHand": true,
+            "bPreferredThirdPerson": false,
+            "preferredThirdPersonDistance": 75,
+            "preferredPrimaryColor": {
+                "r": 0.71224957704544067,
+                "g": 0.0088580865412950516,
+                "b": 0.75294125080108643,
+                "a": 1
+            },
+            "preferredSecondaryColor": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+            },
+            "emoteAsset": "/Script/LaserTag.EmoteDataAsset'/Game/data/Emotes/TestEmote.TestEmote'",
+            "preferredNameWidget": "/Script/UMG.WidgetBlueprintGeneratedClass'/Game/UI/ingame/UI_PlayerNameWidget.UI_PlayerNameWidget_C'",
+            "pointsEarned": 0,
+            "distanceTraveled": 0,
+            "gamesPlayed": 0,
+            "playersTagged": 0,
+            "timesTagged": 0,
+            "highestScore": 0,
+            "playerName": "Bot 2",
+            "netId": ""
+        },
+        "8": {
+            "bPreferredLeftHand": true,
+            "bPreferredThirdPerson": false,
+            "preferredThirdPersonDistance": 75,
+            "preferredPrimaryColor": {
+                "r": 0.17975477874279022,
+                "g": 0.89411771297454834,
+                "b": 0.11921563744544983,
+                "a": 1
+            },
+            "preferredSecondaryColor": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+            },
+            "emoteAsset": "/Script/LaserTag.EmoteDataAsset'/Game/data/Emotes/TestEmote.TestEmote'",
+            "preferredNameWidget": "/Script/UMG.WidgetBlueprintGeneratedClass'/Game/UI/ingame/UI_PlayerNameWidget.UI_PlayerNameWidget_C'",
+            "pointsEarned": 0,
+            "distanceTraveled": 0,
+            "gamesPlayed": 0,
+            "playersTagged": 0,
+            "timesTagged": 0,
+            "highestScore": 0,
+            "playerName": "Bot 3",
+            "netId": ""
+        },
+        "9": {
+            "bPreferredLeftHand": true,
+            "bPreferredThirdPerson": false,
+            "preferredThirdPersonDistance": 75,
+            "preferredPrimaryColor": {
+                "r": 0.93333339691162109,
+                "g": 0.47215685248374939,
+                "b": 0.70995074510574341,
+                "a": 1
+            },
+            "preferredSecondaryColor": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+            },
+            "emoteAsset": "/Script/LaserTag.EmoteDataAsset'/Game/data/Emotes/TestEmote.TestEmote'",
+            "preferredNameWidget": "/Script/UMG.WidgetBlueprintGeneratedClass'/Game/UI/ingame/UI_PlayerNameWidget.UI_PlayerNameWidget_C'",
+            "pointsEarned": 0,
+            "distanceTraveled": 0,
+            "gamesPlayed": 0,
+            "playersTagged": 0,
+            "timesTagged": 0,
+            "highestScore": 0,
+            "playerName": "Bot 4",
+            "netId": ""
+        }
     }
-    
-    header h1 {
-        font-size: 2rem;
-    }
-    
-    .dashboard {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
-    .chart-container {
-        padding: 20px;
-    }
-    
-    .metrics-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 15px;
-    }
-    
-    .metric-card {
-        padding: 15px;
-    }
-    
-    .metric-card span {
-        font-size: 1.5rem;
-    }
-}
-
-@media (max-width: 480px) {
-    header h1 {
-        font-size: 1.5rem;
-    }
-    
-    .metrics-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-/* Loading animation */
-.loading {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
 }
