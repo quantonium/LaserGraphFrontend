@@ -1,0 +1,1891 @@
+{
+    "gameTypeName": "The Challenge",
+    "bFreeForAll": true,
+    "teamData":
+    {
+    },
+    "hits": [
+        {
+            "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_31.Tag Component'",
+            "shotActor": "None",
+            "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_0'",
+            "basePointValue": 500,
+            "pointMultiplier": 2,
+            "distance": 635,
+            "distanceMultiplier": 0.0099999997764825821,
+            "hitMatchState":
+            {
+                "roundNum": 1,
+                "roundTime": 11.287288494408131,
+                "gameTime": 1.255715399980545,
+                "state": ""
+            },
+            "hitResult":
+            {
+                "faceIndex": -1,
+                "time": 0.063573822379112244,
+                "distance": 635.73822021484375,
+                "location":
+                {
+                    "x": 3142.0628412707256,
+                    "y": -1397.4082080274679,
+                    "z": 1119.1434608093366
+                },
+                "impactPoint":
+                {
+                    "x": 3140.8296508789062,
+                    "y": -1397.507910490036,
+                    "z": 1120.7148704528809
+                },
+                "normal":
+                {
+                    "x": 0.61659189507339029,
+                    "y": 0.049853683387868296,
+                    "z": -0.78570289879983757
+                },
+                "impactNormal":
+                {
+                    "x": 0.61659189507339029,
+                    "y": 0.049853683387868296,
+                    "z": -0.78570289879983757
+                },
+                "traceStart":
+                {
+                    "x": 3275.6168403970378,
+                    "y": -822.09999995039345,
+                    "z": 883.88427559947831
+                },
+                "traceEnd":
+                {
+                    "x": 1174.8465212885794,
+                    "y": -9871.5512763942861,
+                    "z": 4584.4512134646911
+                },
+                "penetrationDepth": 0,
+                "myItem": -1,
+                "item": -1,
+                "elementIndex": 0,
+                "bBlockingHit": true,
+                "bStartPenetrating": false,
+                "physMaterial": "/Script/LaserTag.ReflectivePhysicalMaterial'/Game/materials/physical/MirrorPhysMat_Reflective.MirrorPhysMat_Reflective'",
+                "hitObjectHandle":
+                {
+                    "referenceObject": "/Game/blueprints/Props/sensors/Sensor_Reflective_Big_DemoDay.Sensor_Reflective_Big_DemoDay_C'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_31'"
+                },
+                "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_31.CollisionMesh'",
+                "boneName": "None",
+                "myBoneName": "None"
+            },
+            "hitTags": [],
+            "instigatorStateId":
+            {
+                "index": 0
+            },
+            "hitStateId":
+            {
+                "index": -1
+            },
+            "hitIndex": 0
+        },
+        {
+            "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_11.Tag Component'",
+            "shotActor": "None",
+            "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_0'",
+            "basePointValue": 500,
+            "pointMultiplier": 1,
+            "distance": 595,
+            "distanceMultiplier": 0.0099999997764825821,
+            "hitMatchState":
+            {
+                "roundNum": 1,
+                "roundTime": 14.261589102447033,
+                "gameTime": 4.2300160080194473,
+                "state": ""
+            },
+            "hitResult":
+            {
+                "faceIndex": -1,
+                "time": 0.99437892436981201,
+                "distance": 595.18621826171875,
+                "location":
+                {
+                    "x": 4204.9985783156944,
+                    "y": -1101.3192143038464,
+                    "z": 843.26787022268081
+                },
+                "impactPoint":
+                {
+                    "x": 4205.1915326118469,
+                    "y": -1099.3454933166504,
+                    "z": 843.52708101272583
+                },
+                "normal":
+                {
+                    "x": -0.096483468934540434,
+                    "y": -0.98686021489823117,
+                    "z": -0.12960654487090778
+                },
+                "impactNormal":
+                {
+                    "x": -0.096483468934540434,
+                    "y": -0.98686021489823117,
+                    "z": -0.12960654487090778
+                },
+                "traceStart":
+                {
+                    "x": 3749.8279164871642,
+                    "y": -1395.8510990506336,
+                    "z": 597.67210519018238
+                },
+                "traceEnd":
+                {
+                    "x": 4207.5715901244494,
+                    "y": -1099.6542695236533,
+                    "z": 844.65618642274148
+                },
+                "penetrationDepth": 0,
+                "myItem": -1,
+                "item": -1,
+                "elementIndex": 0,
+                "bBlockingHit": true,
+                "bStartPenetrating": false,
+                "physMaterial": "/Script/LaserTag.ReflectivePhysicalMaterial'/Game/materials/physical/MirrorPhysMat_Reflective.MirrorPhysMat_Reflective'",
+                "hitObjectHandle":
+                {
+                    "referenceObject": "/Game/blueprints/Props/sensors/Sensor_Reflective_Big_DemoDay.Sensor_Reflective_Big_DemoDay_C'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_11'"
+                },
+                "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_11.CollisionMesh'",
+                "boneName": "None",
+                "myBoneName": "None"
+            },
+            "hitTags": [],
+            "instigatorStateId":
+            {
+                "index": 0
+            },
+            "hitStateId":
+            {
+                "index": -1
+            },
+            "hitIndex": 1
+        },
+        {
+            "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_46.Tag Component'",
+            "shotActor": "None",
+            "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_0'",
+            "basePointValue": 500,
+            "pointMultiplier": 1,
+            "distance": 3081,
+            "distanceMultiplier": 0.0099999997764825821,
+            "hitMatchState":
+            {
+                "roundNum": 1,
+                "roundTime": 15.561002902686596,
+                "gameTime": 5.5294298082590103,
+                "state": ""
+            },
+            "hitResult":
+            {
+                "faceIndex": -1,
+                "time": 0.99930083751678467,
+                "distance": 3081.789306640625,
+                "location":
+                {
+                    "x": 4378.7866997548663,
+                    "y": 2069.3466228673396,
+                    "z": 367.81038681612961
+                },
+                "impactPoint":
+                {
+                    "x": 4378.4487361907959,
+                    "y": 2071.2946548461914,
+                    "z": 367.5099949836731
+                },
+                "normal":
+                {
+                    "x": 0.16897299403028165,
+                    "y": -0.97410890657414551,
+                    "z": 0.15019975173536504
+                },
+                "impactNormal":
+                {
+                    "x": 0.16897299403028165,
+                    "y": -0.97410890657414551,
+                    "z": 0.15019975173536504
+                },
+                "traceStart":
+                {
+                    "x": 3787.107737795488,
+                    "y": -950.28084365035897,
+                    "z": 538.6666465538417
+                },
+                "traceEnd":
+                {
+                    "x": 4379.2006689188847,
+                    "y": 2071.4593102169488,
+                    "z": 367.69084695150991
+                },
+                "penetrationDepth": 0,
+                "myItem": -1,
+                "item": -1,
+                "elementIndex": 0,
+                "bBlockingHit": true,
+                "bStartPenetrating": false,
+                "physMaterial": "/Script/LaserTag.ReflectivePhysicalMaterial'/Game/materials/physical/MirrorPhysMat_Reflective.MirrorPhysMat_Reflective'",
+                "hitObjectHandle":
+                {
+                    "referenceObject": "/Game/blueprints/Props/sensors/Sensor_Reflective_Big_DemoDay.Sensor_Reflective_Big_DemoDay_C'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_46'"
+                },
+                "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_46.CollisionMesh'",
+                "boneName": "None",
+                "myBoneName": "None"
+            },
+            "hitTags": [],
+            "instigatorStateId":
+            {
+                "index": 0
+            },
+            "hitStateId":
+            {
+                "index": -1
+            },
+            "hitIndex": 2
+        },
+        {
+            "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_NotReflective_C_37.Tag Component'",
+            "shotActor": "None",
+            "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_0'",
+            "basePointValue": 600,
+            "pointMultiplier": 1,
+            "distance": 4039,
+            "distanceMultiplier": 0.0099999997764825821,
+            "hitMatchState":
+            {
+                "roundNum": 1,
+                "roundTime": 16.612554099410772,
+                "gameTime": 6.5809810049831867,
+                "state": ""
+            },
+            "hitResult":
+            {
+                "faceIndex": -1,
+                "time": 0.99945789575576782,
+                "distance": 4039.2470703125,
+                "location":
+                {
+                    "x": 4966.9747355361496,
+                    "y": 3180.0724164627409,
+                    "z": 334.37372828047194
+                },
+                "impactPoint":
+                {
+                    "x": 4968.2447490692139,
+                    "y": 3181.6084403991699,
+                    "z": 334.20553922653198
+                },
+                "normal":
+                {
+                    "x": -0.63494745178903222,
+                    "y": -0.76796446215943337,
+                    "z": 0.084097076802866835
+                },
+                "impactNormal":
+                {
+                    "x": -0.63494745178903222,
+                    "y": -0.76796446215943337,
+                    "z": 0.084097076802866835
+                },
+                "traceStart":
+                {
+                    "x": 3853.2612962330209,
+                    "y": -697.1780147592882,
+                    "z": 539.53086070869381
+                },
+                "traceEnd":
+                {
+                    "x": 4967.5788117907559,
+                    "y": 3182.1754304302549,
+                    "z": 334.26245140458138
+                },
+                "penetrationDepth": 0,
+                "myItem": -1,
+                "item": -1,
+                "elementIndex": 0,
+                "bBlockingHit": true,
+                "bStartPenetrating": false,
+                "physMaterial": "None",
+                "hitObjectHandle":
+                {
+                    "referenceObject": "/Game/blueprints/Props/sensors/Sensor_Reflective_Big_DemoDay_NotReflective.Sensor_Reflective_Big_DemoDay_NotReflective_C'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_NotReflective_C_37'"
+                },
+                "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_NotReflective_C_37.CollisionMesh'",
+                "boneName": "None",
+                "myBoneName": "None"
+            },
+            "hitTags": [],
+            "instigatorStateId":
+            {
+                "index": 0
+            },
+            "hitStateId":
+            {
+                "index": -1
+            },
+            "hitIndex": 3
+        },
+        {
+            "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_8.Tag Component'",
+            "shotActor": "None",
+            "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_0'",
+            "basePointValue": 500,
+            "pointMultiplier": 1,
+            "distance": 6051,
+            "distanceMultiplier": 0.0099999997764825821,
+            "hitMatchState":
+            {
+                "roundNum": 1,
+                "roundTime": 18.304437000304461,
+                "gameTime": 8.2728639058768749,
+                "state": ""
+            },
+            "hitResult":
+            {
+                "faceIndex": -1,
+                "time": 0.99951207637786865,
+                "distance": 6051.62744140625,
+                "location":
+                {
+                    "x": 4765.6523947588812,
+                    "y": 5259.4657524217009,
+                    "z": 1122.0783478805618
+                },
+                "impactPoint":
+                {
+                    "x": 4765.4350681304932,
+                    "y": 5261.0249557495117,
+                    "z": 1120.8447341918945
+                },
+                "normal":
+                {
+                    "x": 0.10866840191510678,
+                    "y": -0.7795685596841595,
+                    "z": 0.61681767093459805
+                },
+                "impactNormal":
+                {
+                    "x": 0.10866840191510678,
+                    "y": -0.7795685596841595,
+                    "z": 0.61681767093459805
+                },
+                "traceStart":
+                {
+                    "x": 3840.2692508100918,
+                    "y": -693.99504232124275,
+                    "z": 554.48509766419943
+                },
+                "traceEnd":
+                {
+                    "x": 4766.1041314673475,
+                    "y": 5262.3720046059816,
+                    "z": 1122.3554252276874
+                },
+                "penetrationDepth": 0,
+                "myItem": -1,
+                "item": -1,
+                "elementIndex": 0,
+                "bBlockingHit": true,
+                "bStartPenetrating": false,
+                "physMaterial": "None",
+                "hitObjectHandle":
+                {
+                    "referenceObject": "/Game/blueprints/Props/sensors/Sensor_Reflective_Big_DemoDay.Sensor_Reflective_Big_DemoDay_C'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_8'"
+                },
+                "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_8.CollisionMesh'",
+                "boneName": "None",
+                "myBoneName": "None"
+            },
+            "hitTags": [],
+            "instigatorStateId":
+            {
+                "index": 0
+            },
+            "hitStateId":
+            {
+                "index": -1
+            },
+            "hitIndex": 4
+        },
+        {
+            "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_24.Tag Component'",
+            "shotActor": "None",
+            "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_0'",
+            "basePointValue": 500,
+            "pointMultiplier": 1,
+            "distance": 4849,
+            "distanceMultiplier": 0.0099999997764825821,
+            "hitMatchState":
+            {
+                "roundNum": 1,
+                "roundTime": 20.931786201894283,
+                "gameTime": 10.900213107466698,
+                "state": ""
+            },
+            "hitResult":
+            {
+                "faceIndex": -1,
+                "time": 0.99797552824020386,
+                "distance": 4849.34814453125,
+                "location":
+                {
+                    "x": 3341.9680534330737,
+                    "y": 4100.283603004671,
+                    "z": 1151.8007074328641
+                },
+                "impactPoint":
+                {
+                    "x": 3339.9692764282227,
+                    "y": 4100.2730244398117,
+                    "z": 1151.7314929962158
+                },
+                "normal":
+                {
+                    "x": 0.99938653801289645,
+                    "y": 0.0053334766412747739,
+                    "z": 0.034613605208277359
+                },
+                "impactNormal":
+                {
+                    "x": 0.99938653801289645,
+                    "y": 0.0053334766412747739,
+                    "z": 0.034613605208277359
+                },
+                "traceStart":
+                {
+                    "x": 3812.7991383192489,
+                    "y": -689.4737211152227,
+                    "z": 557.89727272148195
+                },
+                "traceEnd":
+                {
+                    "x": 3341.0129355889849,
+                    "y": 4110.00000201904,
+                    "z": 1153.005487207113
+                },
+                "penetrationDepth": 0,
+                "myItem": -1,
+                "item": -1,
+                "elementIndex": 0,
+                "bBlockingHit": true,
+                "bStartPenetrating": false,
+                "physMaterial": "/Script/LaserTag.ReflectivePhysicalMaterial'/Game/materials/physical/MirrorPhysMat_Reflective.MirrorPhysMat_Reflective'",
+                "hitObjectHandle":
+                {
+                    "referenceObject": "/Game/blueprints/Props/sensors/Sensor_Reflective_Big_DemoDay.Sensor_Reflective_Big_DemoDay_C'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_24'"
+                },
+                "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_24.CollisionMesh'",
+                "boneName": "None",
+                "myBoneName": "None"
+            },
+            "hitTags": [],
+            "instigatorStateId":
+            {
+                "index": 0
+            },
+            "hitStateId":
+            {
+                "index": -1
+            },
+            "hitIndex": 5
+        },
+        {
+            "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_13.Tag Component'",
+            "shotActor": "None",
+            "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_0'",
+            "basePointValue": 500,
+            "pointMultiplier": 1,
+            "distance": 4904,
+            "distanceMultiplier": 0.0099999997764825821,
+            "hitMatchState":
+            {
+                "roundNum": 1,
+                "roundTime": 22.647638600319624,
+                "gameTime": 12.616065505892038,
+                "state": ""
+            },
+            "hitResult":
+            {
+                "faceIndex": -1,
+                "time": 0.99939340353012085,
+                "distance": 4904.75537109375,
+                "location":
+                {
+                    "x": 2552.8128554703949,
+                    "y": 4055.9899634536678,
+                    "z": 475.28648622288483
+                },
+                "impactPoint":
+                {
+                    "x": 2553.8586349487305,
+                    "y": 4057.6824607849121,
+                    "z": 475.08315801620483
+                },
+                "normal":
+                {
+                    "x": -0.52282295682598623,
+                    "y": -0.84635737396448141,
+                    "z": 0.10166293007620981
+                },
+                "impactNormal":
+                {
+                    "x": -0.52282295682598623,
+                    "y": -0.84635737396448141,
+                    "z": 0.10166293007620981
+                },
+                "traceStart":
+                {
+                    "x": 3796.4887327156202,
+                    "y": -687.99315697045608,
+                    "z": 542.51222421775117
+                },
+                "traceEnd":
+                {
+                    "x": 2552.0579881737467,
+                    "y": 4058.8693935197971,
+                    "z": 475.24568257618409
+                },
+                "penetrationDepth": 0,
+                "myItem": -1,
+                "item": -1,
+                "elementIndex": 0,
+                "bBlockingHit": true,
+                "bStartPenetrating": false,
+                "physMaterial": "None",
+                "hitObjectHandle":
+                {
+                    "referenceObject": "/Game/blueprints/Props/sensors/Sensor_Reflective_Big_DemoDay.Sensor_Reflective_Big_DemoDay_C'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_13'"
+                },
+                "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_13.CollisionMesh'",
+                "boneName": "None",
+                "myBoneName": "None"
+            },
+            "hitTags": [],
+            "instigatorStateId":
+            {
+                "index": 0
+            },
+            "hitStateId":
+            {
+                "index": -1
+            },
+            "hitIndex": 6
+        },
+        {
+            "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_26.Tag Component'",
+            "shotActor": "None",
+            "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_0'",
+            "basePointValue": 500,
+            "pointMultiplier": 1,
+            "distance": 6334,
+            "distanceMultiplier": 0.0099999997764825821,
+            "hitMatchState":
+            {
+                "roundNum": 1,
+                "roundTime": 23.823306001722813,
+                "gameTime": 13.791732907295227,
+                "state": ""
+            },
+            "hitResult":
+            {
+                "faceIndex": -1,
+                "time": 0.9996451735496521,
+                "distance": 6334.29443359375,
+                "location":
+                {
+                    "x": 1666.7024545039271,
+                    "y": 5248.361272188713,
+                    "z": 1146.0364238437396
+                },
+                "impactPoint":
+                {
+                    "x": 1665.6758594512939,
+                    "y": 5249.9627838134766,
+                    "z": 1145.4203939437866
+                },
+                "normal":
+                {
+                    "x": 0.51338825469143301,
+                    "y": -0.80097126959490106,
+                    "z": 0.30802195575708058
+                },
+                "impactNormal":
+                {
+                    "x": 0.51338825469143301,
+                    "y": -0.80097126959490106,
+                    "z": 0.30802195575708058
+                },
+                "traceStart":
+                {
+                    "x": 3788.3929562634385,
+                    "y": -690.55942964917153,
+                    "z": 553.633909542683
+                },
+                "traceEnd":
+                {
+                    "x": 1665.9493553749603,
+                    "y": 5250.469306326514,
+                    "z": 1146.2466985360888
+                },
+                "penetrationDepth": 0,
+                "myItem": -1,
+                "item": -1,
+                "elementIndex": 0,
+                "bBlockingHit": true,
+                "bStartPenetrating": false,
+                "physMaterial": "None",
+                "hitObjectHandle":
+                {
+                    "referenceObject": "/Game/blueprints/Props/sensors/Sensor_Reflective_Big_DemoDay.Sensor_Reflective_Big_DemoDay_C'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_26'"
+                },
+                "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_26.CollisionMesh'",
+                "boneName": "None",
+                "myBoneName": "None"
+            },
+            "hitTags": [],
+            "instigatorStateId":
+            {
+                "index": 0
+            },
+            "hitStateId":
+            {
+                "index": -1
+            },
+            "hitIndex": 7
+        },
+        {
+            "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_17.Tag Component'",
+            "shotActor": "None",
+            "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_0'",
+            "basePointValue": 500,
+            "pointMultiplier": 1,
+            "distance": 5198,
+            "distanceMultiplier": 0.0099999997764825821,
+            "hitMatchState":
+            {
+                "roundNum": 1,
+                "roundTime": 24.559062499552965,
+                "gameTime": 14.52748940512538,
+                "state": ""
+            },
+            "hitResult":
+            {
+                "faceIndex": -1,
+                "time": 0.99937766790390015,
+                "distance": 5198.09423828125,
+                "location":
+                {
+                    "x": 1758.109484568859,
+                    "y": 4085.222736737684,
+                    "z": 876.91869221880029
+                },
+                "impactPoint":
+                {
+                    "x": 1756.2591781616211,
+                    "y": 4085.7916164398193,
+                    "z": 877.4217472076416
+                },
+                "normal":
+                {
+                    "x": 0.92509845303775451,
+                    "y": -0.28448031393473616,
+                    "z": -0.25152296748159564
+                },
+                "impactNormal":
+                {
+                    "x": 0.92509845303775451,
+                    "y": -0.28448031393473616,
+                    "z": -0.25152296748159564
+                },
+                "traceStart":
+                {
+                    "x": 3782.355033449755,
+                    "y": -691.51522830921056,
+                    "z": 552.28463212115878
+                },
+                "traceEnd":
+                {
+                    "x": 1756.8489471204907,
+                    "y": 4088.197305257454,
+                    "z": 877.12084822205543
+                },
+                "penetrationDepth": 0,
+                "myItem": -1,
+                "item": -1,
+                "elementIndex": 0,
+                "bBlockingHit": true,
+                "bStartPenetrating": false,
+                "physMaterial": "/Script/LaserTag.ReflectivePhysicalMaterial'/Game/materials/physical/MirrorPhysMat_Reflective.MirrorPhysMat_Reflective'",
+                "hitObjectHandle":
+                {
+                    "referenceObject": "/Game/blueprints/Props/sensors/Sensor_Reflective_Big_DemoDay.Sensor_Reflective_Big_DemoDay_C'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_17'"
+                },
+                "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_17.CollisionMesh'",
+                "boneName": "None",
+                "myBoneName": "None"
+            },
+            "hitTags": [],
+            "instigatorStateId":
+            {
+                "index": 0
+            },
+            "hitStateId":
+            {
+                "index": -1
+            },
+            "hitIndex": 8
+        },
+        {
+            "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_28.Tag Component'",
+            "shotActor": "None",
+            "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_0'",
+            "basePointValue": 500,
+            "pointMultiplier": 1,
+            "distance": 2109,
+            "distanceMultiplier": 0.0099999997764825821,
+            "hitMatchState":
+            {
+                "roundNum": 1,
+                "roundTime": 25.808272801339626,
+                "gameTime": 15.776699706912041,
+                "state": ""
+            },
+            "hitResult":
+            {
+                "faceIndex": -1,
+                "time": 0.56583040952682495,
+                "distance": 2109.68994140625,
+                "location":
+                {
+                    "x": 2955.2547007752983,
+                    "y": 1244.3278353885321,
+                    "z": 365.24446393958232
+                },
+                "impactPoint":
+                {
+                    "x": 2953.5139045715332,
+                    "y": 1244.1626362800598,
+                    "z": 364.27361679077148
+                },
+                "normal":
+                {
+                    "x": 0.87036719757304259,
+                    "y": 0.082622320343785985,
+                    "z": 0.48542197474965754
+                },
+                "impactNormal":
+                {
+                    "x": 0.87036719757304259,
+                    "y": 0.082622320343785985,
+                    "z": 0.48542197474965754
+                },
+                "traceStart":
+                {
+                    "x": 3813.1873400905024,
+                    "y": -675.85220108287183,
+                    "z": 531.53262248616863
+                },
+                "traceEnd":
+                {
+                    "x": 2296.9509822166838,
+                    "y": 2717.7088450212996,
+                    "z": 237.64923314050833
+                },
+                "penetrationDepth": 0,
+                "myItem": -1,
+                "item": -1,
+                "elementIndex": 0,
+                "bBlockingHit": true,
+                "bStartPenetrating": false,
+                "physMaterial": "/Script/LaserTag.ReflectivePhysicalMaterial'/Game/materials/physical/MirrorPhysMat_Reflective.MirrorPhysMat_Reflective'",
+                "hitObjectHandle":
+                {
+                    "referenceObject": "/Game/blueprints/Props/sensors/Sensor_Reflective_Big_DemoDay.Sensor_Reflective_Big_DemoDay_C'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_28'"
+                },
+                "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_C_28.CollisionMesh'",
+                "boneName": "None",
+                "myBoneName": "None"
+            },
+            "hitTags": [],
+            "instigatorStateId":
+            {
+                "index": 0
+            },
+            "hitStateId":
+            {
+                "index": -1
+            },
+            "hitIndex": 9
+        },
+        {
+            "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_NotReflective_C_1.Tag Component'",
+            "shotActor": "None",
+            "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_0'",
+            "basePointValue": 600,
+            "pointMultiplier": 1,
+            "distance": 3300,
+            "distanceMultiplier": 0.0099999997764825821,
+            "hitMatchState":
+            {
+                "roundNum": 1,
+                "roundTime": 28.344147101044655,
+                "gameTime": 18.312574006617069,
+                "state": ""
+            },
+            "hitResult":
+            {
+                "faceIndex": -1,
+                "time": 0.99899393320083618,
+                "distance": 3300.93212890625,
+                "location":
+                {
+                    "x": 905.5927044921259,
+                    "y": 845.52624615695254,
+                    "z": 1116.8501030438595
+                },
+                "impactPoint":
+                {
+                    "x": 904.99210929870605,
+                    "y": 846.46784973144531,
+                    "z": 1118.509407043457
+                },
+                "normal":
+                {
+                    "x": 0.30021000084385219,
+                    "y": -0.47074109591749824,
+                    "z": -0.82962447891062552
+                },
+                "impactNormal":
+                {
+                    "x": 0.30021000084385219,
+                    "y": -0.47074109591749824,
+                    "z": -0.82962447891062552
+                },
+                "traceStart":
+                {
+                    "x": 3760.3139391470418,
+                    "y": -715.12365500139799,
+                    "z": 559.09496331698858
+                },
+                "traceEnd":
+                {
+                    "x": 902.7177718628036,
+                    "y": 847.09794544209535,
+                    "z": 1117.4118070837872
+                },
+                "penetrationDepth": 0,
+                "myItem": -1,
+                "item": -1,
+                "elementIndex": 0,
+                "bBlockingHit": true,
+                "bStartPenetrating": false,
+                "physMaterial": "None",
+                "hitObjectHandle":
+                {
+                    "referenceObject": "/Game/blueprints/Props/sensors/Sensor_Reflective_Big_DemoDay_NotReflective.Sensor_Reflective_Big_DemoDay_NotReflective_C'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_NotReflective_C_1'"
+                },
+                "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_DemoDay_NotReflective_C_1.CollisionMesh'",
+                "boneName": "None",
+                "myBoneName": "None"
+            },
+            "hitTags": [],
+            "instigatorStateId":
+            {
+                "index": 0
+            },
+            "hitStateId":
+            {
+                "index": -1
+            },
+            "hitIndex": 10
+        },
+        {
+            "hitComponent": "/Script/LaserTag.TagComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_C_0.Tag Component'",
+            "shotActor": "None",
+            "instigator": "/Script/LaserTag.PlayerCharacter'/Game/maps/gameMaps/UEDPIE_0_LaserArena.LaserArena:PersistentLevel.PlayerCharacter_0'",
+            "basePointValue": 500,
+            "pointMultiplier": 1,
+            "distance": 2231,
+            "distanceMultiplier": 0.0099999997764825821,
+            "hitMatchState":
+            {
+                "roundNum": 1,
+                "roundTime": 29.630658000707626,
+                "gameTime": 19.599084906280041,
+                "state": ""
+            },
+            "hitResult":
+            {
+                "faceIndex": -1,
+                "time": 0.99910086393356323,
+                "distance": 2231.613525390625,
+                "location":
+                {
+                    "x": 1620.4516801124073,
+                    "y": -112.33605552936547,
+                    "z": 242.53878832449993
+                },
+                "impactPoint":
+                {
+                    "x": 1618.5113182067871,
+                    "y": -111.86127758026123,
+                    "z": 242.44054818153381
+                },
+                "normal":
+                {
+                    "x": 0.97017151719376382,
+                    "y": -0.23739095179530917,
+                    "z": 0.049119886315704575
+                },
+                "impactNormal":
+                {
+                    "x": 0.97017151719376382,
+                    "y": -0.23739095179530917,
+                    "z": 0.049119886315704575
+                },
+                "traceStart":
+                {
+                    "x": 3745.4711410135637,
+                    "y": -732.56890101460544,
+                    "z": 524.85497186388443
+                },
+                "traceEnd":
+                {
+                    "x": 1618.5392789643852,
+                    "y": -111.77787993259051,
+                    "z": 242.2847192190448
+                },
+                "penetrationDepth": 0,
+                "myItem": -1,
+                "item": -1,
+                "elementIndex": 0,
+                "bBlockingHit": true,
+                "bStartPenetrating": false,
+                "physMaterial": "None",
+                "hitObjectHandle":
+                {
+                    "referenceObject": "/Game/blueprints/Props/sensors/Sensor_Reflective_Big_DemoDay.Sensor_Reflective_Big_DemoDay_C'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_C_0'"
+                },
+                "component": "/Script/Engine.SphereComponent'/Game/maps/gameMaps/Singleplayer/ChallengeLevels/UEDPIE_0_LaserArena_Challenge.LaserArena_Challenge:PersistentLevel.Sensor_Reflective_Big_C_0.CollisionMesh'",
+                "boneName": "None",
+                "myBoneName": "None"
+            },
+            "hitTags": [],
+            "instigatorStateId":
+            {
+                "index": 0
+            },
+            "hitStateId":
+            {
+                "index": -1
+            },
+            "hitIndex": 11
+        }
+    ],
+    "events": [
+        {
+            "eventName": "TeamChange",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 0.685977503657341,
+                "gameTime": 0.685977503657341,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "PlayerID",
+                "old",
+                "new"
+            ],
+            "dataValues": [
+                "257",
+                "-1",
+                "0"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "TeamChange",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 0,
+                "gameTime": 2.3359506018459797,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "PlayerID",
+                "old",
+                "new"
+            ],
+            "dataValues": [
+                "257",
+                "0",
+                "1"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "PlayerDataReset",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 0,
+                "gameTime": 2.3359506018459797,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "PlayerID",
+                "Distance",
+                "NumShots"
+            ],
+            "dataValues": [
+                "0.000000",
+                "0.000000",
+                "0"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "PlayerDataReset",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 0,
+                "gameTime": 2.3359506018459797,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "PlayerID",
+                "Distance",
+                "NumShots"
+            ],
+            "dataValues": [
+                "0.000000",
+                "0.000000",
+                "0"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "HitEvent",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 11.287288494408131,
+                "gameTime": 1.255715399980545,
+                "state": ""
+            },
+            "dataKeys": [
+                "ID"
+            ],
+            "dataValues": [
+                "0"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "PlayerScore",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 11.287288494408131,
+                "gameTime": 1.255715399980545,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "ID",
+                "oldScore",
+                "newScore"
+            ],
+            "dataValues": [
+                "0",
+                "0",
+                "0",
+                "-1610612736"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "TeamPointsChange",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 11.287288494408131,
+                "gameTime": 1.255715399980545,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "old",
+                "new"
+            ],
+            "dataValues": [
+                "0",
+                "0",
+                "1012"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "HitEvent",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 14.261589102447033,
+                "gameTime": 4.2300160080194473,
+                "state": ""
+            },
+            "dataKeys": [
+                "ID"
+            ],
+            "dataValues": [
+                "1"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "PlayerScore",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 14.261589102447033,
+                "gameTime": 4.2300160080194473,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "ID",
+                "oldScore",
+                "newScore"
+            ],
+            "dataValues": [
+                "1",
+                "0",
+                "-1610612736",
+                "-1610612736"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "TeamPointsChange",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 14.261589102447033,
+                "gameTime": 4.2300160080194473,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "old",
+                "new"
+            ],
+            "dataValues": [
+                "1",
+                "1012",
+                "1517"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "HitEvent",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 15.561002902686596,
+                "gameTime": 5.5294298082590103,
+                "state": ""
+            },
+            "dataKeys": [
+                "ID"
+            ],
+            "dataValues": [
+                "2"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "PlayerScore",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 15.561002902686596,
+                "gameTime": 5.5294298082590103,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "ID",
+                "oldScore",
+                "newScore"
+            ],
+            "dataValues": [
+                "2",
+                "0",
+                "-1610612736",
+                "-2147483648"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "TeamPointsChange",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 15.561002902686596,
+                "gameTime": 5.5294298082590103,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "old",
+                "new"
+            ],
+            "dataValues": [
+                "2",
+                "1517",
+                "2047"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "HitEvent",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 16.612554099410772,
+                "gameTime": 6.5809810049831867,
+                "state": ""
+            },
+            "dataKeys": [
+                "ID"
+            ],
+            "dataValues": [
+                "3"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "PlayerScore",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 16.612554099410772,
+                "gameTime": 6.5809810049831867,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "ID",
+                "oldScore",
+                "newScore"
+            ],
+            "dataValues": [
+                "3",
+                "0",
+                "-2147483648",
+                "1073741824"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "TeamPointsChange",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 16.612554099410772,
+                "gameTime": 6.5809810049831867,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "old",
+                "new"
+            ],
+            "dataValues": [
+                "3",
+                "2047",
+                "2687"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "HitEvent",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 18.304437000304461,
+                "gameTime": 8.2728639058768749,
+                "state": ""
+            },
+            "dataKeys": [
+                "ID"
+            ],
+            "dataValues": [
+                "4"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "PlayerScore",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 18.304437000304461,
+                "gameTime": 8.2728639058768749,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "ID",
+                "oldScore",
+                "newScore"
+            ],
+            "dataValues": [
+                "4",
+                "0",
+                "1073741824",
+                "1610612736"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "TeamPointsChange",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 18.304437000304461,
+                "gameTime": 8.2728639058768749,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "old",
+                "new"
+            ],
+            "dataValues": [
+                "4",
+                "2687",
+                "3247"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "HitEvent",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 20.931786201894283,
+                "gameTime": 10.900213107466698,
+                "state": ""
+            },
+            "dataKeys": [
+                "ID"
+            ],
+            "dataValues": [
+                "5"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "PlayerScore",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 20.931786201894283,
+                "gameTime": 10.900213107466698,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "ID",
+                "oldScore",
+                "newScore"
+            ],
+            "dataValues": [
+                "5",
+                "0",
+                "1610612736",
+                "1073741824"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "TeamPointsChange",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 20.931786201894283,
+                "gameTime": 10.900213107466698,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "old",
+                "new"
+            ],
+            "dataValues": [
+                "5",
+                "3247",
+                "3795"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "HitEvent",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 22.647638600319624,
+                "gameTime": 12.616065505892038,
+                "state": ""
+            },
+            "dataKeys": [
+                "ID"
+            ],
+            "dataValues": [
+                "6"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "PlayerScore",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 22.647638600319624,
+                "gameTime": 12.616065505892038,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "ID",
+                "oldScore",
+                "newScore"
+            ],
+            "dataValues": [
+                "6",
+                "0",
+                "1073741824",
+                "-536870912"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "TeamPointsChange",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 22.647638600319624,
+                "gameTime": 12.616065505892038,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "old",
+                "new"
+            ],
+            "dataValues": [
+                "6",
+                "3795",
+                "4344"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "HitEvent",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 23.823306001722813,
+                "gameTime": 13.791732907295227,
+                "state": ""
+            },
+            "dataKeys": [
+                "ID"
+            ],
+            "dataValues": [
+                "7"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "PlayerScore",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 23.823306001722813,
+                "gameTime": 13.791732907295227,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "ID",
+                "oldScore",
+                "newScore"
+            ],
+            "dataValues": [
+                "7",
+                "0",
+                "-536870912",
+                "-536870912"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "TeamPointsChange",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 23.823306001722813,
+                "gameTime": 13.791732907295227,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "old",
+                "new"
+            ],
+            "dataValues": [
+                "7",
+                "4344",
+                "4907"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "HitEvent",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 24.559062499552965,
+                "gameTime": 14.52748940512538,
+                "state": ""
+            },
+            "dataKeys": [
+                "ID"
+            ],
+            "dataValues": [
+                "8"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "PlayerScore",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 24.559062499552965,
+                "gameTime": 14.52748940512538,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "ID",
+                "oldScore",
+                "newScore"
+            ],
+            "dataValues": [
+                "8",
+                "0",
+                "-536870912",
+                "-1073741824"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "TeamPointsChange",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 24.559062499552965,
+                "gameTime": 14.52748940512538,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "old",
+                "new"
+            ],
+            "dataValues": [
+                "8",
+                "4907",
+                "5458"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "HitEvent",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 25.808272801339626,
+                "gameTime": 15.776699706912041,
+                "state": ""
+            },
+            "dataKeys": [
+                "ID"
+            ],
+            "dataValues": [
+                "9"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "PlayerScore",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 25.808272801339626,
+                "gameTime": 15.776699706912041,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "ID",
+                "oldScore",
+                "newScore"
+            ],
+            "dataValues": [
+                "9",
+                "0",
+                "-1073741824",
+                "-1073741824"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "TeamPointsChange",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 25.808272801339626,
+                "gameTime": 15.776699706912041,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "old",
+                "new"
+            ],
+            "dataValues": [
+                "9",
+                "5458",
+                "5979"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "HitEvent",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 28.344147101044655,
+                "gameTime": 18.312574006617069,
+                "state": ""
+            },
+            "dataKeys": [
+                "ID"
+            ],
+            "dataValues": [
+                "10"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "PlayerScore",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 28.344147101044655,
+                "gameTime": 18.312574006617069,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "ID",
+                "oldScore",
+                "newScore"
+            ],
+            "dataValues": [
+                "10",
+                "0",
+                "-1073741824",
+                "-1073741824"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "TeamPointsChange",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 28.344147101044655,
+                "gameTime": 18.312574006617069,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "old",
+                "new"
+            ],
+            "dataValues": [
+                "10",
+                "5979",
+                "6612"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "HitEvent",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 29.630658000707626,
+                "gameTime": 19.599084906280041,
+                "state": ""
+            },
+            "dataKeys": [
+                "ID"
+            ],
+            "dataValues": [
+                "11"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "PlayerScore",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 29.630658000707626,
+                "gameTime": 19.599084906280041,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "ID",
+                "oldScore",
+                "newScore"
+            ],
+            "dataValues": [
+                "11",
+                "0",
+                "-1073741824",
+                "536870912"
+            ],
+            "data":
+            {
+            }
+        },
+        {
+            "eventName": "TeamPointsChange",
+            "matchState":
+            {
+                "roundNum": 1,
+                "roundTime": 29.630658000707626,
+                "gameTime": 19.599084906280041,
+                "state": "PRE_MATCH"
+            },
+            "dataKeys": [
+                "HitID",
+                "old",
+                "new"
+            ],
+            "dataValues": [
+                "11",
+                "6612",
+                "7134"
+            ],
+            "data":
+            {
+            }
+        }
+    ]
+}

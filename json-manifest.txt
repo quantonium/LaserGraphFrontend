@@ -1,0 +1,145 @@
+LASER TAG GAME DATA MANIFEST
+========================================
+
+This document describes the structure of JSON data for a laser tag video game match.
+The data format appears to be from an Unreal Engine-based laser tag game system.
+
+ROOT STRUCTURE
+--------------
+{
+  "gameTypeName": string,     // Name of the game mode (e.g., "The Challenge")
+  "bFreeForAll": boolean,     // Whether the game is free-for-all or team-based
+  "teamData": object,         // Team information (empty in this sample)
+  "hits": array,              // Array of hit events during the match
+  "events": array             // Array of game events (scores, team changes, etc.)
+}
+
+HITS ARRAY STRUCTURE
+--------------------
+Each hit object contains detailed information about a laser hit event:
+
+{
+  "hitComponent": string,           // Unreal Engine component path of the hit target
+  "shotActor": string,              // Actor that fired the shot ("None" if not applicable)
+  "instigator": string,             // Player character who fired the shot (UE path)
+  "basePointValue": number,         // Base score value for the hit (500 or 600)
+  "pointMultiplier": number,        // Multiplier applied to base points (1 or 2)
+  "distance": number,               // Distance to target in game units
+  "distanceMultiplier": number,     // Distance-based scoring multiplier (~0.01)
+  
+  "hitMatchState": {
+    "roundNum": number,             // Current round number
+    "roundTime": number,            // Time elapsed in current round (seconds)
+    "gameTime": number,             // Total game time elapsed (seconds)
+    "state": string                 // Current game state (often empty)
+  },
+  
+  "hitResult": {
+    "faceIndex": number,            // Face index of hit geometry (-1 if not applicable)
+    "time": number,                 // Time of impact calculation
+    "distance": number,             // Precise distance measurement
+    "location": {x, y, z},          // 3D world position where hit was detected
+    "impactPoint": {x, y, z},       // 3D world position of actual impact
+    "normal": {x, y, z},            // Surface normal vector at hit location
+    "impactNormal": {x, y, z},      // Surface normal vector at impact point
+    "traceStart": {x, y, z},        // 3D starting position of the laser trace
+    "traceEnd": {x, y, z},          // 3D ending position of the laser trace
+    "penetrationDepth": number,     // How deep the hit penetrated (usually 0)
+    "myItem": number,               // Item index for shooter (-1 if not applicable)
+    "item": number,                 // Item index for target (-1 if not applicable)
+    "elementIndex": number,         // Element index in hit object
+    "bBlockingHit": boolean,        // Whether this hit blocked further tracing
+    "bStartPenetrating": boolean,   // Whether trace started inside the object
+    "physMaterial": string,         // Physical material of hit surface (UE path)
+    "hitObjectHandle": {
+      "referenceObject": string     // Reference to the hit object blueprint
+    },
+    "component": string,            // Specific component that was hit (UE path)
+    "boneName": string,             // Bone name if hit on skeletal mesh ("None")
+    "myBoneName": string            // Shooter's bone name ("None")
+  },
+  
+  "hitTags": array,                 // Additional tags for the hit (usually empty)
+  "instigatorStateId": {
+    "index": number                 // State index of the player who shot
+  },
+  "hitStateId": {
+    "index": number                 // State index of hit target (-1 for objects)
+  },
+  "hitIndex": number                // Sequential index of this hit in the match
+}
+
+EVENTS ARRAY STRUCTURE
+----------------------
+Game events track various match activities:
+
+{
+  "eventName": string,              // Type of event (see Event Types below)
+  "matchState": {
+    "roundNum": number,             // Round number when event occurred
+    "roundTime": number,            // Round time when event occurred
+    "gameTime": number,             // Game time when event occurred
+    "state": string                 // Game state ("PRE_MATCH", "", etc.)
+  },
+  "dataKeys": array,                // Array of data field names
+  "dataValues": array,              // Array of corresponding data values
+  "data": object                    // Additional event data (usually empty)
+}
+
+EVENT TYPES
+-----------
+- "TeamChange": Player switched teams
+  - dataKeys: ["PlayerID", "old", "new"]
+  - dataValues: [player_id, old_team, new_team]
+
+- "PlayerDataReset": Player statistics reset
+  - dataKeys: ["PlayerID", "StatName"]
+  - dataValues: [player_id, stat_value]
+
+- "HitEvent": Hit was registered
+  - dataKeys: ["ID"]
+  - dataValues: [hit_index]
+
+- "PlayerScore": Player's score changed
+  - dataKeys: ["PlayerID", "oldScore", "newScore"]
+  - dataValues: [player_id, old_score, new_score]
+
+- "TeamPointsChange": Team score changed
+  - dataKeys: ["TeamID", "old", "new"]
+  - dataValues: [team_id, old_points, new_points]
+
+TARGET TYPES
+------------
+Based on component paths, there are different target types:
+- "Sensor_Reflective_Big_DemoDay_C": Reflective sensors (500 base points)
+- "Sensor_Reflective_Big_DemoDay_NotReflective_C": Non-reflective sensors (600 base points)
+- "Sensor_Reflective_Big_C": Another reflective sensor type (500 base points)
+
+SCORING SYSTEM
+--------------
+Final score calculation appears to be:
+finalScore = basePointValue * pointMultiplier * distanceMultiplier * distance
+
+Distance multiplier appears to reward longer shots (distance * ~0.01).
+Point multipliers can provide bonus scoring (2x for certain hits).
+Different sensor types have different base point values.
+
+COORDINATE SYSTEM
+-----------------
+The game uses a 3D coordinate system with X, Y, Z values.
+Coordinates appear to be in Unreal Engine units (centimeters).
+Normal vectors are unit vectors indicating surface orientation.
+
+GAME STATES
+-----------
+- "PRE_MATCH": Before the match officially begins
+- "" (empty): During active gameplay
+- Other states may exist but are not present in this sample
+
+NOTES
+-----
+- All Unreal Engine paths follow the format: /Script/Package.Class'Path'
+- Player characters are referenced by their persistent level paths
+- Hit detection uses ray tracing from traceStart to traceEnd
+- Physical materials affect hit behavior (reflective vs non-reflective)
+- The system tracks both the geometric hit location and the actual impact point
