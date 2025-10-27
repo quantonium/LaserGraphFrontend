@@ -6,8 +6,13 @@
 class LaserTagDataProcessor {
     constructor(matchData) {
         this.data = matchData;
-        this.hits = matchData.hits || [];
-        this.events = matchData.events || [];
+        // Handle new nested structure
+        this.matchData = matchData.MatchData || matchData;
+        this.hits = this.matchData.hits || [];
+        this.events = this.matchData.events || [];
+        // Team data is at root level, not nested in MatchData
+        this.teamData = matchData.TeamData || matchData.teamData || {};
+        this.playerData = matchData.PlayerData || matchData.playerData || {};
         this.metrics = {};
     }
 
@@ -27,28 +32,32 @@ class LaserTagDataProcessor {
     }
 
     /**
-     * Trickshot = bounces per hit / multiplier value
-     * Since we don't have explicit bounce data, we'll use reflective hits as proxy
+     * Trickshot = complex shots ratio based on distance and target type
      */
     calculateTrickshot() {
         if (this.hits.length === 0) return 0;
 
-        let reflectiveHits = 0;
+        let complexShots = 0;
         let totalMultiplier = 0;
 
         this.hits.forEach(hit => {
-            // Check if hit involves reflective material
-            if (hit.hitResult && hit.hitResult.physMaterial && 
-                hit.hitResult.physMaterial.includes('Reflective')) {
-                reflectiveHits++;
+            // Check for long-range shots or difficult targets as "trick shots"
+            const distance = hit.distance || 0;
+            const isLongRange = distance > 2000; // Long range shots
+            const hasReflectiveMaterial = hit.hitResult && hit.hitResult.physMaterial && 
+                hit.hitResult.physMaterial.includes('Reflective');
+            const isRectangleTarget = hit.hitComponent && hit.hitComponent.includes('Rectangle');
+            
+            if (isLongRange || hasReflectiveMaterial || isRectangleTarget || (hit.pointMultiplier > 1)) {
+                complexShots++;
             }
             totalMultiplier += hit.pointMultiplier || 1;
         });
 
-        const bouncesPerHit = reflectiveHits / this.hits.length;
+        const trickshotRatio = complexShots / this.hits.length;
         const avgMultiplier = totalMultiplier / this.hits.length;
         
-        return avgMultiplier > 0 ? (bouncesPerHit / avgMultiplier) * 100 : 0;
+        return (trickshotRatio * avgMultiplier) * 100;
     }
 
     /**
@@ -130,19 +139,22 @@ class LaserTagDataProcessor {
 
     /**
      * Accuracy = shots hit / shots fired
-     * We'll estimate shots fired from events or use hits as successful shots
+     * We'll estimate shots fired from hit events and calculate accuracy per player
      */
     calculateAccuracy() {
-        // Count hit events
+        // Count hit events from the events array
         const hitEvents = this.events.filter(event => event.eventName === "HitEvent");
         const shotsHit = hitEvents.length;
 
-        // For now, we'll assume 100% accuracy since we only have hit data
-        // In a real scenario, we'd need miss data or total shots fired
-        // We can estimate based on the assumption that rapid fire might have misses
-        const estimatedShotsFired = Math.max(shotsHit, Math.ceil(shotsHit * 1.2));
+        // Estimate total shots fired - in team matches, assume some misses
+        // Use player data and hit distribution to estimate
+        const uniquePlayers = [...new Set(this.hits.map(hit => hit.instigatorStateId?.index))].filter(id => id !== undefined);
+        const avgHitsPerPlayer = this.hits.length / uniquePlayers.length;
         
-        return estimatedShotsFired > 0 ? (shotsHit / estimatedShotsFired) * 100 : 0;
+        // Estimate that accuracy decreases with more active players (more chaos)
+        const estimatedAccuracy = Math.min(95, Math.max(60, 100 - (avgHitsPerPlayer * 2)));
+        
+        return estimatedAccuracy;
     }
 
     /**
@@ -192,7 +204,7 @@ class LaserTagDataProcessor {
                 value: raw.trickshot.toFixed(2),
                 normalized: normalized.trickshot,
                 unit: '%',
-                description: 'Reflective hits efficiency'
+                description: 'Complex shot efficiency'
             },
             stealth: {
                 value: raw.stealth.toFixed(2),
@@ -203,19 +215,19 @@ class LaserTagDataProcessor {
             speed: {
                 value: raw.speed.toFixed(0),
                 normalized: normalized.speed,
-                unit: 'units',
+                unit: ' units',
                 description: 'Movement between shots'
             },
             rpm: {
                 value: raw.rpm.toFixed(1),
                 normalized: normalized.rpm,
-                unit: 'shots/min',
+                unit: ' shots/min',
                 description: 'Rate of fire'
             },
             range: {
                 value: raw.range.toFixed(0),
                 normalized: normalized.range,
-                unit: 'units',
+                unit: ' units',
                 description: 'Average shot distance'
             },
             accuracy: {
@@ -225,6 +237,80 @@ class LaserTagDataProcessor {
                 description: 'Hit percentage'
             }
         };
+    }
+
+    /**
+     * Get team performance data
+     */
+    getTeamPerformance() {
+        const teams = {};
+        
+        Object.keys(this.teamData).forEach(teamId => {
+            const team = this.teamData[teamId];
+            
+            // Skip spectator teams
+            if (team.bTeamIsSpectator) return;
+            
+            const teamHits = this.hits.filter(hit => {
+                // Find hits by players on this team
+                const playerId = hit.instigatorStateId?.index;
+                return this.getPlayerTeam(playerId) === parseInt(teamId);
+            });
+
+            teams[teamId] = {
+                name: team.teamName,
+                points: team.points,
+                hits: teamHits.length,
+                avgRange: teamHits.length > 0 ? teamHits.reduce((sum, hit) => sum + (hit.distance || 0), 0) / teamHits.length : 0,
+                color: team.primaryColor || { r: 0.5, g: 0.5, b: 0.5 } // Default color if missing
+            };
+        });
+
+        return teams;
+    }
+
+    /**
+     * Get player team assignment by looking at team change events
+     */
+    getPlayerTeam(playerId) {
+        if (playerId === undefined || playerId === null) return 0;
+        
+        // Look through team change events to find current team
+        const teamChangeEvents = this.events.filter(event => 
+            event.eventName === "TeamChange" && 
+            event.data && event.data.PlayerID === playerId
+        );
+        
+        if (teamChangeEvents.length > 0) {
+            const lastChange = teamChangeEvents[teamChangeEvents.length - 1];
+            return parseInt(lastChange.data.new || 0);
+        }
+        
+        return 0; // Default team
+    }
+
+    /**
+     * Get player statistics
+     */
+    getPlayerStats() {
+        const players = {};
+        
+        Object.keys(this.playerData).forEach(playerId => {
+            const player = this.playerData[playerId];
+            const playerHits = this.hits.filter(hit => hit.instigatorStateId?.index === parseInt(playerId));
+            const playerGotHit = this.hits.filter(hit => hit.hitStateId?.index === parseInt(playerId));
+
+            players[playerId] = {
+                name: player.playerName,
+                hits: playerHits.length,
+                gotHit: playerGotHit.length,
+                avgRange: playerHits.length > 0 ? playerHits.reduce((sum, hit) => sum + (hit.distance || 0), 0) / playerHits.length : 0,
+                team: this.getPlayerTeam(parseInt(playerId)),
+                color: player.preferredPrimaryColor
+            };
+        });
+
+        return players;
     }
 }
 
