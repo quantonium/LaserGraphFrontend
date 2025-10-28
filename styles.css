@@ -208,6 +208,11 @@ p, body {
 	line-height: 1.4;
 }
 
+#scoreChartTemplate {
+	display: flex;
+	border: 2px double #808080;
+}
+
 /* Specific metric colors */
 .metric-card:nth-child(1) span { color: #e74c3c; } /* Trickshot */
 .metric-card:nth-child(2) span { color: #9b59b6; } /* Stealth */
