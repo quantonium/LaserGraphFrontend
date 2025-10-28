@@ -1,86 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laser Tag Data Visualization</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Laser Tag Data Visualization</title>
+	<link rel="stylesheet" href="styles.css">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Laser Tag Match Analytics</h1>
-            <p>Player metrics visualization dashboard</p>
-        </header>
+	<div class="container">
+		<header>
+			<h1>Laser Tag Match Analytics</h1>
+			<p>Player metrics visualization dashboard</p>
+		</header>
 
-        <main>
-            <div class="dashboard">
-                <!-- Hexagon Radar Chart -->
-                <div class="chart-container">
-                    <h2>Player Performance Hexagon</h2>
-                    <canvas id="hexChart" width="400" height="400"></canvas>
-                </div>
+		<main>
+			<div class="dashboard">
+				<div class="chart-container">
+					<h2>Score Progression</h2>
+					<div id="scoreChart"></div>
+				</div>
+				<!-- Hexagon Radar Chart -->
+				<div class="chart-container">
+					<h2>Player Performance Hexagon</h2>
+					<canvas id="hexChart" width="400" height="400"></canvas>
+				</div>
 
-                <!-- Additional visualization containers for future use -->
-                <div class="chart-container">
-                    <h2>Hit Timeline</h2>
-                    <div id="timelineChart"></div>
-                </div>
+				<!-- Additional visualization containers for future use -->
+				<div class="chart-container">
+					<h2>Hit Timeline</h2>
+					<div id="timelineChart"></div>
+				</div>
 
-                <div class="chart-container">
-                    <h2>Score Progression</h2>
-                    <div id="scoreChart"></div>
-                </div>
+				<div class="chart-container">
+					<h2>Target Distribution</h2>
+					<div id="targetChart"></div>
+				</div>
+			</div>
 
-                <div class="chart-container">
-                    <h2>Target Distribution</h2>
-                    <div id="targetChart"></div>
-                </div>
-            </div>
+			<!-- Metrics Display -->
+			<div class="metrics-panel">
+				<h2>Calculated Metrics</h2>
+				<div class="metrics-grid">
+					<div class="metric-card">
+						<h3>Trickshot</h3>
+						<span id="trickshotValue">-</span>
+						<p>Bounces per hit / multiplier value</p>
+					</div>
+					<div class="metric-card">
+						<h3>Stealth</h3>
+						<span id="stealthValue">-</span>
+						<p>Average time between hits</p>
+					</div>
+					<div class="metric-card">
+						<h3>Speed</h3>
+						<span id="speedValue">-</span>
+						<p>Average distance between shot locations</p>
+					</div>
+					<div class="metric-card">
+						<h3>RPM</h3>
+						<span id="rpmValue">-</span>
+						<p>Rounds per minute</p>
+					</div>
+					<div class="metric-card">
+						<h3>Range</h3>
+						<span id="rangeValue">-</span>
+						<p>Average range value for hits</p>
+					</div>
+					<div class="metric-card">
+						<h3>Accuracy</h3>
+						<span id="accuracyValue">-</span>
+						<p>Shots hit / shots fired</p>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
 
-            <!-- Metrics Display -->
-            <div class="metrics-panel">
-                <h2>Calculated Metrics</h2>
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <h3>Trickshot</h3>
-                        <span id="trickshotValue">-</span>
-                        <p>Bounces per hit / multiplier value</p>
-                    </div>
-                    <div class="metric-card">
-                        <h3>Stealth</h3>
-                        <span id="stealthValue">-</span>
-                        <p>Average time between hits</p>
-                    </div>
-                    <div class="metric-card">
-                        <h3>Speed</h3>
-                        <span id="speedValue">-</span>
-                        <p>Average distance between shot locations</p>
-                    </div>
-                    <div class="metric-card">
-                        <h3>RPM</h3>
-                        <span id="rpmValue">-</span>
-                        <p>Rounds per minute</p>
-                    </div>
-                    <div class="metric-card">
-                        <h3>Range</h3>
-                        <span id="rangeValue">-</span>
-                        <p>Average range value for hits</p>
-                    </div>
-                    <div class="metric-card">
-                        <h3>Accuracy</h3>
-                        <span id="accuracyValue">-</span>
-                        <p>Shots hit / shots fired</p>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <script src="dataProcessor.js"></script>
-    <script src="visualizations.js"></script>
-    <script src="app.js"></script>
+	<script src="dataProcessor.js"></script>
+	<script src="visualizations.js"></script>
+	<script src="app.js"></script>
 </body>
 </html>

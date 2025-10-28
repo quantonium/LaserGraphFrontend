@@ -1,163 +1,210 @@
 /* Global Styles */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Oxanium:wght@200..800&family=Saira:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: #333;
-    min-height: 100vh;
+	background: #1a0015;
+	min-height: 100vh;
 }
 
 .container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 20px;
 }
 
 /* Header Styles */
-header {
-    text-align: center;
-    margin-bottom: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
+.game-logo {
+	height: 20em;
+	width: 60em;
+	object-fit: cover;
+	object-position:0 -5em;
 }
 
-header h1 {
-    font-size: 2.5rem;
-    color: #2c3e50;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+h1 {
+	font-family: "Orbitron", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
+	margin-bottom: 10px;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-header p {
-    font-size: 1.1rem;
-    color: #7f8c8d;
+@keyframes rgbFade {
+	0% {
+		color: #FF8080;
+		border-color: #00FFFF;
+	}
+
+	16% {
+		color: #FFFF80;
+		border-color: #0808FF;
+	}
+
+	32% {
+		color: #80FF80;
+		border-color: #FF00FF;
+	}
+
+	48% {
+		color: #80FFFF;
+		border-color: #FF0808;
+	}
+
+	64% {
+		color: #8080FF;
+		border-color: #FFFF00;
+	}
+
+	80% {
+		color: #FF80FF;
+		border-color: #08FF08;
+	}
+
+	100% {
+		color: #FF8080;
+		border-color: #00FFFF;
+	}
+}
+
+h2, h3, h4 {
+	font-family: "Oxanium", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
+	animation: rgbFade 60s infinite;
+}
+
+p, body {
+	font-family: "Saira", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 400;
+	font-style: normal;
+	font-variation-settings:
+    	"wdth" 100;
+	color: #ffffff;
 }
 
 /* Dashboard Layout */
 .dashboard {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 25px;
-    margin-bottom: 40px;
+	display: grid;
+	grid-template-columns: 3fr 1fr;
+	grid-template-rows: 10em 4fr 1fr;
+	
+}
+
+.dashboard >* {
+	border: 2.5px double #444;
 }
 
 .chart-container {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.chart-container:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+	
+	padding: 5px;
+	border-radius: 15px;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(10px);
 }
 
 .chart-container h2 {
-    font-size: 1.5rem;
-    color: #2c3e50;
-    margin-bottom: 20px;
-    text-align: center;
-    border-bottom: 2px solid #3498db;
-    padding-bottom: 10px;
+	font-size: 1.5rem;
+	color: #2c3e50;
+	margin-bottom: 20px;
+	text-align: center;
+	border-bottom: 2px double #3498db;
+	padding-bottom: 10px;
 }
 
 /* Canvas styling for Chart.js */
 #hexChart {
-    max-width: 100%;
-    height: auto;
-    margin: 0 auto;
-    display: block;
+	max-width: 100%;
+	height: auto;
+	margin: 0 auto;
+	display: block;
 }
 
 /* Metrics Panel */
 .metrics-panel {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+	background: rgba(255, 255, 255, 0.95);
+	padding: 30px;
+	border-radius: 15px;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(10px);
+	border: 1px double rgba(255, 255, 255, 0.2);
 }
 
 .metrics-panel h2 {
-    font-size: 1.8rem;
-    color: #2c3e50;
-    margin-bottom: 25px;
-    text-align: center;
-    border-bottom: 2px solid #e74c3c;
-    padding-bottom: 10px;
+	font-size: 1.8rem;
+	color: #2c3e50;
+	margin-bottom: 25px;
+	text-align: center;
+	border-bottom: 2px double;
+	padding-bottom: 10px;
 }
 
 .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 20px;
 }
 
 .metric-card {
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    padding: 20px;
-    border-radius: 12px;
-    text-align: center;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+	background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+	padding: 20px;
+	border-radius: 12px;
+	text-align: center;
+	border: 2px solid transparent;
+	transition: all 0.3s ease;
+	position: relative;
+	overflow: hidden;
 }
 
 .metric-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #3498db, #9b59b6, #e74c3c, #f39c12, #2ecc71, #1abc9c);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 4px;
+	background: linear-gradient(90deg, #3498db, #9b59b6, #e74c3c, #f39c12, #2ecc71, #1abc9c);
+	opacity: 0;
+	transition: opacity 0.3s ease;
 }
 
 .metric-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    border-color: #3498db;
+	transform: translateY(-3px);
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+	border-color: #3498db;
 }
 
 .metric-card:hover::before {
-    opacity: 1;
+	opacity: 1;
 }
 
 .metric-card h3 {
-    font-size: 1.2rem;
-    color: #2c3e50;
-    margin-bottom: 10px;
-    font-weight: 600;
+	font-size: 1.2rem;
+	color: #2c3e50;
+	margin-bottom: 10px;
+	font-weight: 600;
 }
 
 .metric-card span {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #3498db;
-    display: block;
-    margin-bottom: 8px;
+	font-size: 2rem;
+	font-weight: bold;
+	color: #3498db;
+	display: block;
+	margin-bottom: 8px;
 }
 
 .metric-card p {
-    font-size: 0.9rem;
-    color: #7f8c8d;
-    line-height: 1.4;
+	font-size: 0.9rem;
+	color: #7f8c8d;
+	line-height: 1.4;
 }
 
 /* Specific metric colors */
@@ -170,59 +217,59 @@ header p {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .container {
-        padding: 15px;
-    }
-    
-    header h1 {
-        font-size: 2rem;
-    }
-    
-    .dashboard {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
-    .chart-container {
-        padding: 20px;
-    }
-    
-    .metrics-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 15px;
-    }
-    
-    .metric-card {
-        padding: 15px;
-    }
-    
-    .metric-card span {
-        font-size: 1.5rem;
-    }
+	.container {
+		padding: 15px;
+	}
+	
+	header h1 {
+		font-size: 2rem;
+	}
+	
+	.dashboard {
+		grid-template-columns: 1fr;
+		gap: 20px;
+	}
+	
+	.chart-container {
+		padding: 20px;
+	}
+	
+	.metrics-grid {
+		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+		gap: 15px;
+	}
+	
+	.metric-card {
+		padding: 15px;
+	}
+	
+	.metric-card span {
+		font-size: 1.5rem;
+	}
 }
 
 @media (max-width: 480px) {
-    header h1 {
-        font-size: 1.5rem;
-    }
-    
-    .metrics-grid {
-        grid-template-columns: 1fr 1fr;
-    }
+	header h1 {
+		font-size: 1.5rem;
+	}
+	
+	.metrics-grid {
+		grid-template-columns: 1fr 1fr;
+	}
 }
 
 /* Loading animation */
 .loading {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 3px solid #f3f3f3;
+	border-top: 3px solid #3498db;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
 }
