@@ -6,124 +6,638 @@
 class LaserTagVisualizations {
     constructor() {
         this.charts = {};
+        this.createModalStructure();
     }
 
     /**
-     * Create hexagon radar chart using Chart.js
+     * Create the modal structure for fullscreen chart viewing
      */
-    createHexagonChart(metricsInfo) {
-        const ctx = document.getElementById('hexChart').getContext('2d');
-        
-        // Destroy existing chart if it exists
-        if (this.charts.hexChart) {
-            this.charts.hexChart.destroy();
+    createModalStructure() {
+        // Create modal overlay
+        const modalOverlay = document.createElement('div');
+        modalOverlay.id = 'chartModal';
+        modalOverlay.className = 'chart-modal';
+        modalOverlay.innerHTML = `
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Chart Details</h2>
+                    <button class="modal-close" onclick="this.closest('.chart-modal').style.display='none'">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="modalChart"></div>
+                    <div id="modalDetails"></div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modalOverlay);
+
+        // Close modal when clicking outside
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.style.display = 'none';
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalOverlay.style.display === 'block') {
+                modalOverlay.style.display = 'none';
+            }
+        });
+    }
+
+    /**
+     * Open a chart in fullscreen modal
+     */
+    openFullscreen(chartType, data, title) {
+        const modal = document.getElementById('chartModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalChart = document.getElementById('modalChart');
+        const modalDetails = document.getElementById('modalDetails');
+
+        modalTitle.textContent = title;
+        modalChart.innerHTML = '';
+        modalDetails.innerHTML = '';
+
+        // Show modal
+        modal.style.display = 'block';
+
+        // Create fullscreen version based on chart type
+        switch (chartType) {
+            case 'hexagon':
+                this.createFullscreenHexagon(data, modalChart, modalDetails);
+                break;
+            case 'timeline':
+                this.createFullscreenTimeline(data, modalChart, modalDetails);
+                break;
+            case 'score':
+                this.createFullscreenScore(data, modalChart, modalDetails);
+                break;
+            case 'target':
+                this.createFullscreenTarget(data, modalChart, modalDetails);
+                break;
+        }
+    }
+
+    /**
+     * Create fullscreen hexagon chart with detailed metrics
+     */
+    createFullscreenHexagon(metricsInfo, container, detailsContainer) {
+        // Create larger hexagon chart
+        const width = 600;
+        const height = 600;
+        const radius = Math.min(width, height) / 2 - 80;
+        const centerX = width / 2;
+        const centerY = height / 2;
+
+        const svg = d3.select(container)
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+            .attr('class', 'hexagon-chart fullscreen');
+
+        const g = svg.append('g')
+            .attr('transform', `translate(${centerX},${centerY})`);
+
+        // Data preparation
+        const metrics = [
+            { name: 'Trickshot', value: metricsInfo.trickshot.normalized, color: '#e74c3c', info: metricsInfo.trickshot },
+            { name: 'Stealth', value: metricsInfo.stealth.normalized, color: '#9b59b6', info: metricsInfo.stealth },
+            { name: 'Speed', value: metricsInfo.speed.normalized, color: '#f39c12', info: metricsInfo.speed },
+            { name: 'RPM', value: metricsInfo.rpm.normalized, color: '#e67e22', info: metricsInfo.rpm },
+            { name: 'Range', value: metricsInfo.range.normalized, color: '#2ecc71', info: metricsInfo.range },
+            { name: 'Accuracy', value: metricsInfo.accuracy.normalized, color: '#1abc9c', info: metricsInfo.accuracy }
+        ];
+
+        const angleSlice = (Math.PI * 2) / metrics.length;
+        const radiusScale = d3.scaleLinear().domain([0, 100]).range([0, radius]);
+
+        // Create enhanced grid with more detail
+        const gridLevels = 10;
+        for (let level = 1; level <= gridLevels; level++) {
+            const levelRadius = (radius / gridLevels) * level;
+            
+            g.append('circle')
+                .attr('r', levelRadius)
+                .style('fill', 'none')
+                .style('stroke', level % 2 === 0 ? 'rgba(127, 140, 141, 0.4)' : 'rgba(127, 140, 141, 0.2)')
+                .style('stroke-width', level % 2 === 0 ? 1.5 : 1);
+
+            if (level % 2 === 0) {
+                g.append('text')
+                    .attr('x', 8)
+                    .attr('y', -levelRadius + 4)
+                    .text(level * 10)
+                    .style('font-size', '12px')
+                    .style('fill', '#7f8c8d');
+            }
         }
 
-        const data = {
-            labels: [
-                'Trickshot',
-                'Stealth', 
-                'Speed',
-                'RPM',
-                'Range',
-                'Accuracy'
-            ],
-            datasets: [{
-                label: 'Player Performance',
-                data: [
-                    metricsInfo.trickshot.normalized,
-                    metricsInfo.stealth.normalized,
-                    metricsInfo.speed.normalized,
-                    metricsInfo.rpm.normalized,
-                    metricsInfo.range.normalized,
-                    metricsInfo.accuracy.normalized
-                ],
-                backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                borderColor: 'rgba(52, 152, 219, 1)',
-                borderWidth: 3,
-                pointBackgroundColor: [
-                    '#e74c3c', // Trickshot
-                    '#9b59b6', // Stealth
-                    '#f39c12', // Speed
-                    '#e67e22', // RPM
-                    '#2ecc71', // Range
-                    '#1abc9c'  // Accuracy
-                ],
-                pointBorderColor: '#fff',
-                pointBorderWidth: 2,
-                pointRadius: 6,
-                pointHoverRadius: 8
-            }]
-        };
+        // Create axis lines
+        metrics.forEach((d, i) => {
+            const angle = i * angleSlice - Math.PI / 2;
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
 
-        const options = {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Performance Radar Chart',
-                    font: {
-                        size: 16,
-                        weight: 'bold'
-                    },
-                    color: '#2c3e50'
-                },
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const metricNames = ['trickshot', 'stealth', 'speed', 'rpm', 'range', 'accuracy'];
-                            const metricName = metricNames[context.dataIndex];
-                            const metricInfo = metricsInfo[metricName];
-                            return `${context.label}: ${metricInfo.value}${metricInfo.unit} (${context.parsed.r.toFixed(1)}/100)`;
-                        }
-                    }
-                }
-            },
-            scales: {
-                r: {
-                    beginAtZero: true,
-                    max: 100,
-                    min: 0,
-                    ticks: {
-                        stepSize: 20,
-                        color: '#7f8c8d',
-                        backdropColor: 'transparent'
-                    },
-                    grid: {
-                        color: 'rgba(127, 140, 141, 0.3)'
-                    },
-                    angleLines: {
-                        color: 'rgba(127, 140, 141, 0.3)'
-                    },
-                    pointLabels: {
-                        font: {
-                            size: 12,
-                            weight: 'bold'
-                        },
-                        color: '#2c3e50'
-                    }
-                }
-            },
-            elements: {
-                line: {
-                    tension: 0.2
-                }
-            },
-            animation: {
-                duration: 1500,
-                easing: 'easeInOutQuart'
-            }
-        };
-
-        this.charts.hexChart = new Chart(ctx, {
-            type: 'radar',
-            data: data,
-            options: options
+            g.append('line')
+                .attr('x1', 0).attr('y1', 0)
+                .attr('x2', x).attr('y2', y)
+                .style('stroke', 'rgba(127, 140, 141, 0.5)')
+                .style('stroke-width', 2);
         });
+
+        // Create the data polygon with animation
+        const lineGenerator = d3.line()
+            .x((d, i) => Math.cos(i * angleSlice - Math.PI / 2) * radiusScale(d.value))
+            .y((d, i) => Math.sin(i * angleSlice - Math.PI / 2) * radiusScale(d.value))
+            .curve(d3.curveLinearClosed);
+
+        g.append('path')
+            .datum(metrics)
+            .attr('d', lineGenerator)
+            .style('fill', 'rgba(52, 152, 219, 0.3)')
+            .style('stroke', 'rgba(52, 152, 219, 1)')
+            .style('stroke-width', 4);
+
+        // Add enhanced data points
+        g.selectAll('.data-point')
+            .data(metrics)
+            .enter().append('circle')
+            .attr('cx', (d, i) => Math.cos(i * angleSlice - Math.PI / 2) * radiusScale(d.value))
+            .attr('cy', (d, i) => Math.sin(i * angleSlice - Math.PI / 2) * radiusScale(d.value))
+            .attr('r', 8)
+            .style('fill', d => d.color)
+            .style('stroke', '#fff')
+            .style('stroke-width', 3)
+            .style('cursor', 'pointer');
+
+        // Add enhanced labels
+        metrics.forEach((d, i) => {
+            const angle = i * angleSlice - Math.PI / 2;
+            const labelRadius = radius + 40;
+            const x = Math.cos(angle) * labelRadius;
+            const y = Math.sin(angle) * labelRadius;
+
+            g.append('text')
+                .attr('x', x).attr('y', y + 4)
+                .style('text-anchor', 'middle')
+                .style('font-size', '16px')
+                .style('font-weight', 'bold')
+                .style('fill', d.color)
+                .text(d.name);
+
+            // Add value labels
+            g.append('text')
+                .attr('x', x).attr('y', y + 20)
+                .style('text-anchor', 'middle')
+                .style('font-size', '12px')
+                .style('fill', '#666')
+                .text(`${d.value.toFixed(1)}/100`);
+        });
+
+        // Create detailed metrics table
+        const metricsTable = document.createElement('div');
+        metricsTable.className = 'metrics-details';
+        metricsTable.innerHTML = `
+            <h3>Detailed Metrics</h3>
+            <table class="metrics-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Raw Value</th>
+                        <th>Normalized Score</th>
+                        <th>Performance Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${metrics.map(metric => `
+                        <tr>
+                            <td><span style="color: ${metric.color}; font-weight: bold;">${metric.name}</span></td>
+                            <td>${metric.info.value}${metric.info.unit}</td>
+                            <td>${metric.value.toFixed(1)}/100</td>
+                            <td><span class="performance-badge ${this.getPerformanceLevel(metric.value)}">${this.getPerformanceText(metric.value)}</span></td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+        detailsContainer.appendChild(metricsTable);
+    }
+
+    /**
+     * Create fullscreen timeline chart with enhanced details
+     */
+    createFullscreenTimeline(hits, container, detailsContainer) {
+        const margin = { top: 40, right: 60, bottom: 80, left: 80 };
+        const width = 800 - margin.left - margin.right;
+        const height = 500 - margin.top - margin.bottom;
+
+        const svg = d3.select(container)
+            .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom);
+
+        const g = svg.append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+
+        // Prepare enhanced timeline data
+        const timelineData = hits.map((hit, index) => ({
+            time: hit.hitMatchState?.gameTime || 0,
+            points: (hit.basePointValue || 0) * (hit.pointMultiplier || 1),
+            index: index,
+            component: hit.hitComponent || 'Unknown',
+            range: hit.hitRange || 0,
+            multiplier: hit.pointMultiplier || 1
+        })).sort((a, b) => a.time - b.time);
+
+        // Create scales
+        const xScale = d3.scaleLinear()
+            .domain(d3.extent(timelineData, d => d.time))
+            .range([0, width]);
+
+        const yScale = d3.scaleLinear()
+            .domain([0, d3.max(timelineData, d => d.points)])
+            .range([height, 0]);
+
+        // Enhanced axes
+        g.append('g')
+            .attr('transform', `translate(0,${height})`)
+            .call(d3.axisBottom(xScale).tickFormat(d => `${d}s`))
+            .append('text')
+            .attr('x', width / 2)
+            .attr('y', 50)
+            .attr('fill', '#2c3e50')
+            .style('text-anchor', 'middle')
+            .style('font-size', '14px')
+            .text('Game Time (seconds)');
+
+        g.append('g')
+            .call(d3.axisLeft(yScale))
+            .append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', -50)
+            .attr('x', -height / 2)
+            .attr('fill', '#2c3e50')
+            .style('text-anchor', 'middle')
+            .style('font-size', '14px')
+            .text('Points Earned');
+
+        // Enhanced line and area
+        const line = d3.line()
+            .x(d => xScale(d.time))
+            .y(d => yScale(d.points))
+            .curve(d3.curveMonotoneX);
+
+        const area = d3.area()
+            .x(d => xScale(d.time))
+            .y0(height)
+            .y1(d => yScale(d.points))
+            .curve(d3.curveMonotoneX);
+
+        g.append('path')
+            .datum(timelineData)
+            .attr('fill', 'rgba(52, 152, 219, 0.2)')
+            .attr('d', area);
+
+        g.append('path')
+            .datum(timelineData)
+            .attr('fill', 'none')
+            .attr('stroke', '#3498db')
+            .attr('stroke-width', 3)
+            .attr('d', line);
+
+        // Enhanced points with tooltips
+        g.selectAll('.dot')
+            .data(timelineData)
+            .enter().append('circle')
+            .attr('cx', d => xScale(d.time))
+            .attr('cy', d => yScale(d.points))
+            .attr('r', d => 3 + d.multiplier)
+            .attr('fill', d => d.multiplier > 1 ? '#e74c3c' : '#27ae60')
+            .attr('stroke', '#fff')
+            .attr('stroke-width', 2)
+            .style('cursor', 'pointer');
+
+        // Create hit details table
+        this.createHitDetailsTable(timelineData, detailsContainer);
+    }
+
+    /**
+     * Create hit details table
+     */
+    createHitDetailsTable(timelineData, container) {
+        const detailsDiv = document.createElement('div');
+        detailsDiv.className = 'hit-details';
+        detailsDiv.innerHTML = `
+            <h3>Hit Timeline Details (${timelineData.length} hits)</h3>
+            <div class="hit-stats">
+                <div class="stat-card">
+                    <h4>Total Points</h4>
+                    <span>${timelineData.reduce((sum, hit) => sum + hit.points, 0)}</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Average Points/Hit</h4>
+                    <span>${(timelineData.reduce((sum, hit) => sum + hit.points, 0) / timelineData.length).toFixed(1)}</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Max Hit Value</h4>
+                    <span>${Math.max(...timelineData.map(hit => hit.points))}</span>
+                </div>
+                <div class="stat-card">
+                    <h4>Game Duration</h4>
+                    <span>${Math.max(...timelineData.map(hit => hit.time)).toFixed(1)}s</span>
+                </div>
+            </div>
+        `;
+        container.appendChild(detailsDiv);
+    }
+
+    /**
+     * Create fullscreen score progression
+     */
+    createFullscreenScore(events, container, detailsContainer) {
+        // Enhanced score chart implementation
+        container.innerHTML = '<div class="enhanced-score-chart">Enhanced score progression will be displayed here</div>';
+        detailsContainer.innerHTML = '<div class="score-analysis">Detailed score analysis will be shown here</div>';
+    }
+
+    /**
+     * Create fullscreen target distribution
+     */
+    createFullscreenTarget(hits, container, detailsContainer) {
+        // Enhanced target chart implementation
+        container.innerHTML = '<div class="enhanced-target-chart">Enhanced target distribution will be displayed here</div>';
+        detailsContainer.innerHTML = '<div class="target-analysis">Detailed target analysis will be shown here</div>';
+    }
+
+    /**
+     * Helper methods for performance evaluation
+     */
+    getPerformanceLevel(value) {
+        if (value >= 80) return 'excellent';
+        if (value >= 60) return 'good';
+        if (value >= 40) return 'average';
+        if (value >= 20) return 'poor';
+        return 'very-poor';
+    }
+
+    getPerformanceText(value) {
+        if (value >= 80) return 'Excellent';
+        if (value >= 60) return 'Good';
+        if (value >= 40) return 'Average';
+        if (value >= 20) return 'Needs Improvement';
+        return 'Poor';
+    }
+
+    /**
+     * Create hexagon radar chart using D3.js
+     */
+    createHexagonChart(metricsInfo) {
+        const container = document.getElementById('hexChart');
+        container.innerHTML = ''; // Clear existing content
+
+        // Chart dimensions and setup
+        const width = 400;
+        const height = 400;
+        const radius = Math.min(width, height) / 2 - 50;
+        const centerX = width / 2;
+        const centerY = height / 2;
+
+        // Create SVG
+        const svg = d3.select('#hexChart')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+            .attr('class', 'hexagon-chart');
+
+        const g = svg.append('g')
+            .attr('transform', `translate(${centerX},${centerY})`);
+
+        // Data preparation
+        const metrics = [
+            { name: 'Trickshot', value: metricsInfo.trickshot.normalized, color: '#e74c3c', info: metricsInfo.trickshot },
+            { name: 'Stealth', value: metricsInfo.stealth.normalized, color: '#9b59b6', info: metricsInfo.stealth },
+            { name: 'Speed', value: metricsInfo.speed.normalized, color: '#f39c12', info: metricsInfo.speed },
+            { name: 'RPM', value: metricsInfo.rpm.normalized, color: '#e67e22', info: metricsInfo.rpm },
+            { name: 'Range', value: metricsInfo.range.normalized, color: '#2ecc71', info: metricsInfo.range },
+            { name: 'Accuracy', value: metricsInfo.accuracy.normalized, color: '#1abc9c', info: metricsInfo.accuracy }
+        ];
+
+        const angleSlice = (Math.PI * 2) / metrics.length;
+
+        // Create scales
+        const radiusScale = d3.scaleLinear()
+            .domain([0, 100])
+            .range([0, radius]);
+
+        // Create grid circles
+        const gridLevels = 5;
+        for (let level = 1; level <= gridLevels; level++) {
+            const levelRadius = (radius / gridLevels) * level;
+            
+            g.append('circle')
+                .attr('cx', 0)
+                .attr('cy', 0)
+                .attr('r', levelRadius)
+                .attr('class', 'grid-circle')
+                .style('fill', 'none')
+                .style('stroke', 'rgba(127, 140, 141, 0.3)')
+                .style('stroke-width', 1);
+
+            // Add level labels
+            if (level < gridLevels) {
+                g.append('text')
+                    .attr('x', 5)
+                    .attr('y', -levelRadius + 4)
+                    .text((100 / gridLevels) * level)
+                    .attr('class', 'grid-label')
+                    .style('font-size', '10px')
+                    .style('fill', '#7f8c8d');
+            }
+        }
+
+        // Create axis lines
+        metrics.forEach((d, i) => {
+            const angle = i * angleSlice - Math.PI / 2;
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+
+            g.append('line')
+                .attr('x1', 0)
+                .attr('y1', 0)
+                .attr('x2', x)
+                .attr('y2', y)
+                .attr('class', 'axis-line')
+                .style('stroke', 'rgba(127, 140, 141, 0.3)')
+                .style('stroke-width', 1);
+        });
+
+        // Create the data polygon
+        const lineGenerator = d3.line()
+            .x((d, i) => {
+                const angle = i * angleSlice - Math.PI / 2;
+                return Math.cos(angle) * radiusScale(d.value);
+            })
+            .y((d, i) => {
+                const angle = i * angleSlice - Math.PI / 2;
+                return Math.sin(angle) * radiusScale(d.value);
+            })
+            .curve(d3.curveLinearClosed);
+
+        // Add the filled area
+        g.append('path')
+            .datum(metrics)
+            .attr('d', lineGenerator)
+            .attr('class', 'data-area')
+            .style('fill', 'rgba(52, 152, 219, 0.2)')
+            .style('stroke', 'rgba(52, 152, 219, 1)')
+            .style('stroke-width', 3)
+            .style('opacity', 0)
+            .transition()
+            .duration(1500)
+            .ease(d3.easeBackOut)
+            .style('opacity', 1);
+
+        // Add data points
+        const dataPoints = g.selectAll('.data-point')
+            .data(metrics)
+            .enter().append('circle')
+            .attr('class', 'data-point')
+            .attr('cx', (d, i) => {
+                const angle = i * angleSlice - Math.PI / 2;
+                return Math.cos(angle) * radiusScale(d.value);
+            })
+            .attr('cy', (d, i) => {
+                const angle = i * angleSlice - Math.PI / 2;
+                return Math.sin(angle) * radiusScale(d.value);
+            })
+            .attr('r', 0)
+            .style('fill', d => d.color)
+            .style('stroke', '#fff')
+            .style('stroke-width', 2)
+            .style('cursor', 'pointer')
+            .on('mouseover', function(event, d) {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr('r', 8);
+
+                // Create tooltip
+                const tooltip = g.append('g')
+                    .attr('class', 'tooltip')
+                    .style('pointer-events', 'none');
+
+                const tooltipBg = tooltip.append('rect')
+                    .attr('class', 'tooltip-bg')
+                    .style('fill', 'rgba(44, 62, 80, 0.9)')
+                    .style('stroke', d.color)
+                    .style('stroke-width', 2)
+                    .style('rx', 5);
+
+                const tooltipText = tooltip.append('text')
+                    .attr('class', 'tooltip-text')
+                    .style('fill', '#fff')
+                    .style('font-size', '12px')
+                    .style('text-anchor', 'middle');
+
+                tooltipText.append('tspan')
+                    .attr('x', 0)
+                    .attr('dy', '0.8em')
+                    .style('font-weight', 'bold')
+                    .text(d.name);
+
+                tooltipText.append('tspan')
+                    .attr('x', 0)
+                    .attr('dy', '1.2em')
+                    .text(`${d.info.value}${d.info.unit}`);
+
+                tooltipText.append('tspan')
+                    .attr('x', 0)
+                    .attr('dy', '1.2em')
+                    .text(`(${d.value.toFixed(1)}/100)`);
+
+                // Position tooltip
+                const bbox = tooltipText.node().getBBox();
+                tooltipBg
+                    .attr('x', bbox.x - 8)
+                    .attr('y', bbox.y - 4)
+                    .attr('width', bbox.width + 16)
+                    .attr('height', bbox.height + 8);
+
+                const angle = metrics.indexOf(d) * angleSlice - Math.PI / 2;
+                const tooltipX = Math.cos(angle) * (radiusScale(d.value) + 40);
+                const tooltipY = Math.sin(angle) * (radiusScale(d.value) + 40);
+
+                tooltip.attr('transform', `translate(${tooltipX},${tooltipY})`);
+            })
+            .on('mouseout', function(event, d) {
+                d3.select(this)
+                    .transition()
+                    .duration(200)
+                    .attr('r', 6);
+
+                g.select('.tooltip').remove();
+            });
+
+        // Animate the data points
+        dataPoints
+            .transition()
+            .duration(1500)
+            .delay((d, i) => i * 100)
+            .ease(d3.easeBackOut)
+            .attr('r', 6);
+
+        // Add axis labels
+        metrics.forEach((d, i) => {
+            const angle = i * angleSlice - Math.PI / 2;
+            const labelRadius = radius + 25;
+            const x = Math.cos(angle) * labelRadius;
+            const y = Math.sin(angle) * labelRadius;
+
+            g.append('text')
+                .attr('x', x)
+                .attr('y', y + 4)
+                .attr('class', 'axis-label')
+                .style('text-anchor', 'middle')
+                .style('font-size', '12px')
+                .style('font-weight', 'bold')
+                .style('fill', '#2c3e50')
+                .style('opacity', 0)
+                .text(d.name)
+                .transition()
+                .duration(1500)
+                .delay(i * 100)
+                .style('opacity', 1);
+        });
+
+        // Add title
+        g.append('text')
+            .attr('x', 0)
+            .attr('y', -radius - 35)
+            .attr('class', 'chart-title')
+            .style('text-anchor', 'middle')
+            .style('font-size', '16px')
+            .style('font-weight', 'bold')
+            .style('fill', '#2c3e50')
+            .text('Performance Radar Chart');
+
+        // Add click handler for fullscreen
+        svg.style('cursor', 'pointer')
+            .on('click', () => {
+                this.openFullscreen('hexagon', metricsInfo, 'Player Performance Hexagon - Detailed View');
+            });
+
+        // Add fullscreen indicator
+        svg.append('text')
+            .attr('x', width - 20)
+            .attr('y', 20)
+            .attr('class', 'fullscreen-indicator')
+            .style('font-size', '16px')
+            .style('fill', '#3498db')
+            .style('cursor', 'pointer')
+            .text('🔍')
+            .append('title')
+            .text('Click to view in fullscreen');
     }
 
     /**
@@ -133,10 +647,11 @@ class LaserTagVisualizations {
         const container = document.getElementById('timelineChart');
         container.innerHTML = ''; // Clear existing content
 
-        // Simple timeline using D3.js
-        const margin = { top: 20, right: 30, bottom: 40, left: 50 };
-        const width = container.offsetWidth - margin.left - margin.right;
-        const height = 300 - margin.top - margin.bottom;
+        // Compact 1-dimensional preview timeline
+        // Preview shows hits along a single horizontal row (x = game time). The fullscreen modal keeps the 2D chart.
+        const margin = { top: 10, right: 20, bottom: 30, left: 40 };
+        const width = Math.max(300, container.offsetWidth) - margin.left - margin.right;
+        const height = 120 - margin.top - margin.bottom; // compact preview height
 
         const svg = d3.select('#timelineChart')
             .append('svg')
@@ -150,70 +665,105 @@ class LaserTagVisualizations {
         const timelineData = hits.map((hit, index) => ({
             time: hit.hitMatchState?.gameTime || 0,
             points: (hit.basePointValue || 0) * (hit.pointMultiplier || 1),
+            multiplier: hit.pointMultiplier || 1,
+            component: hit.hitComponent || 'Unknown',
             index: index
         })).sort((a, b) => a.time - b.time);
 
-        if (timelineData.length === 0) return;
+        if (timelineData.length === 0) {
+            container.innerHTML = '<p style="text-align:center;color:#7f8c8d;padding:10px;">No hits to display</p>';
+            return;
+        }
 
-        // Scales
+        // Scales (x = time). y is fixed to create a 1D layout.
         const xScale = d3.scaleLinear()
             .domain(d3.extent(timelineData, d => d.time))
+            .nice()
             .range([0, width]);
 
-        const yScale = d3.scaleLinear()
-            .domain([0, d3.max(timelineData, d => d.points)])
-            .range([height, 0]);
+        const rowY = height / 2; // single row
 
-        // Axes
+        // Draw baseline
+        g.append('line')
+            .attr('x1', 0)
+            .attr('y1', rowY)
+            .attr('x2', width)
+            .attr('y2', rowY)
+            .attr('stroke', '#ecf0f1')
+            .attr('stroke-width', 2);
+
+        // X axis
         g.append('g')
             .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(xScale))
-            .append('text')
-            .attr('x', width / 2)
-            .attr('y', 35)
-            .attr('fill', '#2c3e50')
-            .style('text-anchor', 'middle')
-            .text('Time (seconds)');
+            .call(d3.axisBottom(xScale).ticks(6).tickFormat(d => `${d}s`));
 
-        g.append('g')
-            .call(d3.axisLeft(yScale))
-            .append('text')
-            .attr('transform', 'rotate(-90)')
-            .attr('y', -35)
-            .attr('x', -height / 2)
-            .attr('fill', '#2c3e50')
-            .style('text-anchor', 'middle')
-            .text('Points');
+        // Draw hits as circles on a single horizontal line. Encode points by radius and multiplier by color.
+        const maxPoints = d3.max(timelineData, d => d.points) || 1;
+        const rScale = d3.scaleSqrt().domain([0, maxPoints]).range([3, 10]);
+        const colorScale = d3.scaleOrdinal().domain([1, 2, 3, 4]).range(['#27ae60', '#f1c40f', '#e67e22', '#e74c3c']);
 
-        // Line
-        const line = d3.line()
-            .x(d => xScale(d.time))
-            .y(d => yScale(d.points))
-            .curve(d3.curveMonotoneX);
-
-        g.append('path')
-            .datum(timelineData)
-            .attr('fill', 'none')
-            .attr('stroke', '#3498db')
-            .attr('stroke-width', 2)
-            .attr('d', line);
-
-        // Points
-        g.selectAll('.dot')
+        const hitNodes = g.selectAll('.hit')
             .data(timelineData)
-            .enter().append('circle')
-            .attr('class', 'dot')
-            .attr('cx', d => xScale(d.time))
-            .attr('cy', d => yScale(d.points))
-            .attr('r', 4)
-            .attr('fill', '#e74c3c')
+            .enter().append('g')
+            .attr('class', 'hit')
+            .attr('transform', d => `translate(${xScale(d.time)}, ${rowY})`)
+            .style('cursor', 'pointer');
+
+        hitNodes.append('circle')
+            .attr('r', d => rScale(d.points))
+            .attr('fill', d => colorScale(Math.min(4, Math.max(1, Math.round(d.multiplier)))))
+            .attr('stroke', '#fff')
+            .attr('stroke-width', 1.5)
             .on('mouseover', function(event, d) {
-                d3.select(this).attr('r', 6);
-                // Add tooltip logic here
+                d3.select(this).attr('stroke-width', 2.5);
+                // tooltip
+                const tooltip = d3.select(container).append('div')
+                    .attr('class', 'tt')
+                    .style('position', 'absolute')
+                    .style('pointer-events', 'none')
+                    .style('background', 'rgba(44,62,80,0.9)')
+                    .style('color', '#fff')
+                    .style('padding', '6px 8px')
+                    .style('border-radius', '4px')
+                    .style('font-size', '12px')
+                    .html(`<strong>${d.points} pts</strong><br/>${d.time}s • ${d.component}`);
+
+                const matrix = this.getScreenCTM().translate(+this.getAttribute('cx'), +this.getAttribute('cy'));
+                const left = window.pageXOffset + matrix.e + margin.left + 10;
+                const top = window.pageYOffset + matrix.f + margin.top - 30;
+                tooltip.style('left', `${left}px`).style('top', `${top}px`);
             })
             .on('mouseout', function() {
-                d3.select(this).attr('r', 4);
+                d3.select(this).attr('stroke-width', 1.5);
+                d3.select(container).selectAll('.tt').remove();
             });
+
+        // Add small tick for each hit (subtle) to emphasize 1D nature
+        hitNodes.append('line')
+            .attr('x1', 0)
+            .attr('y1', d => rScale(d.points) + 4)
+            .attr('x2', 0)
+            .attr('y2', d => rScale(d.points) + 12)
+            .attr('stroke', 'rgba(44,62,80,0.08)')
+            .attr('stroke-width', 1);
+
+        // Add click handler for fullscreen
+        svg.style('cursor', 'pointer')
+            .on('click', () => {
+                this.openFullscreen('timeline', hits, 'Hit Timeline - Detailed Analysis');
+            });
+
+        // Add fullscreen indicator
+        svg.append('text')
+            .attr('x', width + margin.left + margin.right - 20)
+            .attr('y', 20)
+            .attr('class', 'fullscreen-indicator')
+            .style('font-size', '16px')
+            .style('fill', '#3498db')
+            .style('cursor', 'pointer')
+            .text('🔍')
+            .append('title')
+            .text('Click to view in fullscreen');
     }
 
     /**
@@ -353,6 +903,29 @@ class LaserTagVisualizations {
 
         progressionContainer.appendChild(summary);
         container.appendChild(progressionContainer);
+
+        // Add click handler for fullscreen
+        progressionContainer.style.cursor = 'pointer';
+        progressionContainer.addEventListener('click', () => {
+            this.openFullscreen('score', events, 'Score Progression - Detailed Analysis');
+        });
+
+        // Add fullscreen indicator
+        const fullscreenBtn = document.createElement('div');
+        fullscreenBtn.innerHTML = '🔍 View Details';
+        fullscreenBtn.style.cssText = `
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(52, 152, 219, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+        `;
+        container.style.position = 'relative';
+        container.appendChild(fullscreenBtn);
     }
 
     /**
@@ -419,6 +992,29 @@ class LaserTagVisualizations {
             barContainer.appendChild(bar);
             container.appendChild(barContainer);
         });
+
+        // Add click handler for fullscreen
+        container.style.cursor = 'pointer';
+        container.addEventListener('click', () => {
+            this.openFullscreen('target', hits, 'Target Distribution - Detailed Analysis');
+        });
+
+        // Add fullscreen indicator
+        const fullscreenBtn = document.createElement('div');
+        fullscreenBtn.innerHTML = '🔍 View Details';
+        fullscreenBtn.style.cssText = `
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(46, 204, 113, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+        `;
+        container.style.position = 'relative';
+        container.appendChild(fullscreenBtn);
     }
 
     /**
