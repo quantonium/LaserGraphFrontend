@@ -73,12 +73,20 @@ h1 {
 	}
 }
 
-h2, h3, h4 {
+h2, h3, h4, h5, h6 {
 	font-family: "Oxanium", sans-serif;
 	font-optical-sizing: auto;
 	font-weight: 400;
 	font-style: normal;
 	animation: rgbFade 60s infinite;
+}
+
+h2, h3, h4 {
+	animation: rgbFade 60s infinite;
+}
+
+h5, h6 {
+	color: #FFF;
 }
 
 p, body {
