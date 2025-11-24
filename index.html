@@ -6,6 +6,7 @@
     <title>Laser Tag Data Visualization</title>
     <link rel="stylesheet" href="https://playlaser.games/style.css">
 	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="network-graph.css">
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 </head>
 <body>
@@ -38,6 +39,11 @@
                 <div class="chart-container">
                     <h2>Target Distribution</h2>
                     <div id="targetChart"></div>
+                </div>
+
+                <div class="chart-container" style="grid-column: 1 / -1;">
+                    <h2>Player Interaction Network</h2>
+                    <div id="nodeGraph"></div>
                 </div>
             </div>
 

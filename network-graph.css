@@ -1,0 +1,36 @@
+/* Network Graph Styles */
+.network-graph {
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    border-radius: 10px;
+}
+
+.network-graph .nodes circle {
+    cursor: pointer;
+    transition: r 0.3s ease, stroke-width 0.3s ease;
+}
+
+.network-graph .nodes circle:hover {
+    r: 25;
+    stroke-width: 4;
+}
+
+.network-graph .links line {
+    transition: stroke-opacity 0.3s ease;
+}
+
+.network-graph .links line:hover {
+    stroke-opacity: 1;
+    stroke: #3498db;
+}
+
+.network-graph .labels text {
+    font-family: Arial, sans-serif;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.no-data {
+    text-align: center;
+    color: #7f8c8d;
+    font-style: italic;
+    margin: 50px 0;
+}

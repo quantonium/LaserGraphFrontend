@@ -32,6 +32,61 @@ class LaserTagDataProcessor {
     }
 
     /**
+     * Calculate player interaction network data for node graph
+     */
+    calculatePlayerNetwork() {
+        // Get player data
+        const playerData = this.data.PlayerData || {};
+        
+        // Create nodes for each player
+        const nodes = Object.entries(playerData).map(([id, data]) => ({
+            id: id,
+            name: data.playerName || `Player ${id}`,
+            color: data.preferredPrimaryColor ? 
+                `rgb(${Math.floor(data.preferredPrimaryColor.r * 255)}, ${Math.floor(data.preferredPrimaryColor.g * 255)}, ${Math.floor(data.preferredPrimaryColor.b * 255)})` : 
+                '#3498db'
+        }));
+
+        // Track shot relationships
+        const shotCounts = {};
+        
+        this.hits.forEach(hit => {
+            const shooterId = hit.instigatorStateId?.index?.toString();
+            const targetId = hit.hitStateId?.index?.toString();
+            
+            if (shooterId && targetId && shooterId !== targetId) {
+                const key = `${shooterId}-${targetId}`;
+                shotCounts[key] = (shotCounts[key] || 0) + 1;
+            }
+        });
+
+        // Create links based on shot relationships
+        const links = Object.entries(shotCounts).map(([key, count]) => {
+            const [source, target] = key.split('-');
+            return {
+                source: source,
+                target: target,
+                value: count,
+                width: Math.min(Math.max(count * 2, 2), 15) // Increased scaling: count * 2, min 2, max 15
+            };
+        });
+
+        // Filter out nodes that have no connections
+        const connectedNodeIds = new Set();
+        links.forEach(link => {
+            connectedNodeIds.add(link.source);
+            connectedNodeIds.add(link.target);
+        });
+        
+        const connectedNodes = nodes.filter(node => connectedNodeIds.has(node.id));
+
+        return {
+            nodes: connectedNodes,
+            links: links
+        };
+    }
+
+    /**
      * Trickshot = complex shots ratio based on distance and target type
      */
     calculateTrickshot() {
