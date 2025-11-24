@@ -1,0 +1,21 @@
+/* Score progression tooltip styles */
+.score-tooltip {
+    position: absolute !important;
+    background: rgba(0, 0, 0, 0.9) !important;
+    color: white !important;
+    padding: 12px 15px !important;
+    border-radius: 6px !important;
+    font-size: 13px !important;
+    pointer-events: none !important;
+    z-index: 1000 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    max-width: 200px !important;
+    word-wrap: break-word !important;
+    line-height: 1.4 !important;
+}
+
+.score-tooltip strong {
+    color: #3498db !important;
+    display: block !important;
+    margin-bottom: 4px !important;
+}
