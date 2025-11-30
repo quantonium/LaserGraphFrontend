@@ -35,7 +35,13 @@
 	<main>
 		<div class="dashboard">
 			<div class="chart-container">
-
+				<!--match title and basic info-->
+				<h4 id="gameName">Match Name</h4>
+				<h5 id="gametype">Gametype</h5>
+				<br>
+				<h5 id="date"></h5>
+				<br>
+				<h5 id="timer"></h5>
 			</div>
 
 			<!-- Additional visualization containers for future use -->
@@ -43,12 +49,15 @@
 				<!--h2>Hit Timeline</h2-->
 				<div id="timelineChart"></div>
 			</div>
-<!-- Hexagon Radar Chart -->
+			<!-- Hexagon Radar Chart -->
 			<div class="chart-container">
 				<!--h2>Player Performance Hexagon</h2-->
 				<div id="hexChart"></div>
 			</div>
-			<div class="chart-container"></div>
+			<div class="chart-container">
+				<h2>Player Interaction Network</h2>
+				<div id="nodeGraph"></div>
+			</div>
 			<div class="chart-container">
 				<h2>Score Progression</h2>
 				<div id="scoreChart"></div>
@@ -59,10 +68,7 @@
 				<div id="targetChart"></div>
 			</div>
 
-			<div class="chart-container" style="grid-column: 1 / -1;">
-				<h2>Player Interaction Network</h2>
-				<div id="nodeGraph"></div>
-			</div>
+			
 		</div>
 
 		<!-- Metrics Display -->

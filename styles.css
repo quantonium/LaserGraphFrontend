@@ -2,7 +2,7 @@
 .dashboard {
 	display: grid;
 	grid-template-columns: min-content auto min-content;
-	grid-template-rows: min-content auto min-content;
+	grid-template-rows: 2fr auto min-content;
 	gap: 20px;
 	min-height: 80vh;
 	max-width: 100%;

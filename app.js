@@ -33,6 +33,8 @@ class LaserTagApp {
             // Process the data
             this.processData();
             
+            this.updateText();
+
             // Create visualizations
             this.createVisualizations();
             
@@ -87,6 +89,15 @@ class LaserTagApp {
         
         console.log('Creating visualizations...');
         LaserTagVisualizations.updateAll(this.processor);
+    }
+
+    updateText() {
+        document.getElementById("gametype").innerText = this.data.MatchData.gameTypeName
+        document.getElementById("gameName").innerText = this.data.SessionInfo.ServerName
+        let time = this.data.SessionInfo.serverTime
+        document.getElementById("timer").innerText = `${Math.floor(time/60)} mins ${Math.floor(time%60)} secs`
+        let d = new Date((this.data.SessionInfo.actualTime + time) * 1000)
+        document.getElementById("date").innerText = d.toISOString()
     }
 
     /**
