@@ -8,6 +8,7 @@ class LaserTagApp {
         this.processor = null;
         //this.visualizations = new LaserTagVisualizations();
         this.data = null;
+        this.currentFile = null;
 
         //visualizations
         this.hitTimeline = new LaserTagHitTimeline("timelineChart");
@@ -15,21 +16,177 @@ class LaserTagApp {
         this.networkGraph = new LaserTagNetworkGraph("nodeGraph");
         this.scoreProgression = new LaserTagScoreProgression("scoreChart")
         this.targetDist = new LaserTagTargetDistribution("targetChart")
+        
+        // Initialize file upload handlers
+        this.initFileUpload();
     }
 
     /**
-     * Initialize the application
+     * Initialize the application UI (no automatic data loading)
      */
     async init() {
+        console.log('Laser Tag Analytics App ready for data upload...');
+    }
+
+    /**
+     * Initialize file upload functionality
+     */
+    initFileUpload() {
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const browseBtn = document.getElementById('browseBtn');
+        const processBtn = document.getElementById('processBtn');
+        const loadSampleBtn = document.getElementById('loadSampleBtn');
+        const removeFileBtn = document.getElementById('removeFileBtn');
+        const fileInfo = document.getElementById('fileInfo');
+
+        // Drag and drop handlers
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('drag-over');
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                this.handleFile(files[0]);
+            }
+        });
+
+        // Click to browse
+        browseBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                this.handleFile(e.target.files[0]);
+            }
+        });
+
+        // Process button
+        processBtn.addEventListener('click', () => {
+            if (this.currentFile) {
+                this.processUploadedFile();
+            }
+        });
+
+        // Load sample data button
+        loadSampleBtn.addEventListener('click', () => {
+            this.loadSampleData();
+        });
+
+        // Remove file button
+        removeFileBtn.addEventListener('click', () => {
+            this.clearFile();
+        });
+    }
+
+    /**
+     * Handle uploaded file
+     */
+    handleFile(file) {
+        if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+            this.showError('Please upload a JSON file.');
+            return;
+        }
+
+        this.currentFile = file;
+        this.displayFileInfo(file);
+        document.getElementById('processBtn').disabled = false;
+    }
+
+    /**
+     * Display file information
+     */
+    displayFileInfo(file) {
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const fileInfo = document.getElementById('fileInfo');
+        const uploadArea = document.getElementById('uploadArea');
+
+        fileName.textContent = file.name;
+        fileSize.textContent = this.formatFileSize(file.size);
+        fileInfo.style.display = 'flex';
+        uploadArea.style.display = 'none';
+    }
+
+    /**
+     * Clear selected file
+     */
+    clearFile() {
+        this.currentFile = null;
+        document.getElementById('fileInfo').style.display = 'none';
+        document.getElementById('uploadArea').style.display = 'flex';
+        document.getElementById('processBtn').disabled = true;
+        document.getElementById('fileInput').value = '';
+    }
+
+    /**
+     * Format file size for display
+     */
+    formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    /**
+     * Process uploaded file
+     */
+    async processUploadedFile() {
+        if (!this.currentFile) return;
+
         try {
-            console.log('Initializing Laser Tag Analytics App...');
+            const text = await this.currentFile.text();
+            this.data = JSON.parse(text);
             
-            // Show loading indicators
-            this.showLoading();
+            await this.processAndVisualize();
             
-            // Load the JSON data
-            await this.loadData();
+        } catch (error) {
+            console.error('Error processing uploaded file:', error);
+            this.showError('Error processing file. Please ensure it is a valid JSON file.');
+        }
+    }
+
+    /**
+     * Load sample data
+     */
+    async loadSampleData() {
+        try {
+            const response = await fetch('./sample-match-data.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            this.data = await response.json();
             
+            await this.processAndVisualize();
+            
+        } catch (error) {
+            console.error('Error loading sample data:', error);
+            this.showError('Failed to load sample data. Please check if the file exists.');
+        }
+    }
+
+    /**
+     * Process data and create visualizations
+     */
+    async processAndVisualize() {
+        try {
             // Process the data
             this.processData();
             
@@ -39,28 +196,11 @@ class LaserTagApp {
             // Update metrics display
             this.updateMetricsDisplay();
             
-            console.log('App initialized successfully!');
+            console.log('Data processed and visualizations created successfully!');
             
         } catch (error) {
-            console.error('Error initializing app:', error);
-            this.showError('Failed to load or process data. Please check the console for details.');
-        }
-    }
-
-    /**
-     * Load JSON data from file
-     */
-    async loadData() {
-        try {
-            const response = await fetch('./sample-match-data.json');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            this.data = await response.json();
-            console.log('Data loaded successfully:', this.data);
-        } catch (error) {
-            console.error('Error loading data:', error);
-            throw error;
+            console.error('Error processing data:', error);
+            this.showError('Failed to process data. Please check the console for details.');
         }
     }
 
@@ -121,42 +261,15 @@ class LaserTagApp {
     }
 
     /**
-     * Show loading indicators
-     */
-    showLoading() {
-        // Add loading class to metric values
-        const metricValues = document.querySelectorAll('[id$="Value"]');
-        metricValues.forEach(element => {
-            element.innerHTML = '<div class="loading"></div>';
-        });
-        
-        // Add loading message to chart containers
-        const chartContainers = document.querySelectorAll('.chart-container canvas, .chart-container div[id$="Chart"]');
-        chartContainers.forEach(container => {
-            if (container.tagName === 'CANVAS') return; // Skip canvas elements
-            container.innerHTML = '<p style="text-align: center; color: #7f8c8d; padding: 40px;"><div class="loading" style="margin: 0 auto 20px;"></div>Loading data...</p>';
-        });
-    }
-
-    /**
      * Show error message
      */
     showError(message) {
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'error-message';
-        errorDiv.style.cssText = `
-            background: #e74c3c;
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            text-align: center;
-            font-weight: bold;
-        `;
-        errorDiv.textContent = message;
+        const errorDiv = document.getElementById('errorMessage');
         
-        const container = document.querySelector('.container');
-        container.insertBefore(errorDiv, container.firstChild);
+        if (errorDiv) {
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+        }
     }
 
     /**

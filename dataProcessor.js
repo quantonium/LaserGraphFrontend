@@ -39,13 +39,27 @@ class LaserTagDataProcessor {
         const playerData = this.data.PlayerData || {};
         
         // Create nodes for each player
-        const nodes = Object.entries(playerData).map(([id, data]) => ({
-            id: id,
-            name: data.playerName || `Player ${id}`,
-            color: data.preferredPrimaryColor ? 
-                `rgb(${Math.floor(data.preferredPrimaryColor.r * 255)}, ${Math.floor(data.preferredPrimaryColor.g * 255)}, ${Math.floor(data.preferredPrimaryColor.b * 255)})` : 
-                '#3498db'
-        }));
+        const nodes = Object.entries(playerData).map(([id, data]) => {
+            const playerId = parseInt(id);
+            const teamId = this.getPlayerTeam(playerId);
+            let color = '#3498db'; // default color
+            
+            // Always prioritize team color for team-based games
+            if (teamId > 0 && this.teamData[teamId] && this.teamData[teamId].primaryColor) {
+                const teamColor = this.teamData[teamId].primaryColor;
+                color = `rgb(${Math.floor(teamColor.r * 255)}, ${Math.floor(teamColor.g * 255)}, ${Math.floor(teamColor.b * 255)})`;
+            } else if (data.preferredPrimaryColor) {
+                // Only use individual player color if no team assignment (FFA mode or spectators)
+                color = `rgb(${Math.floor(data.preferredPrimaryColor.r * 255)}, ${Math.floor(data.preferredPrimaryColor.g * 255)}, ${Math.floor(data.preferredPrimaryColor.b * 255)})`;
+            }
+            
+            return {
+                id: id,
+                name: data.playerName || `Player ${id}`,
+                color: color,
+                teamId: teamId
+            };
+        });
 
         // Track shot relationships
         const shotCounts = {};

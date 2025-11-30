@@ -12,7 +12,8 @@ class LaserTagNetworkGraph extends LaserTagVisualizations {
             return;
         }
 
-        const width = 800;
+        const containerWidth = container.clientWidth || 800;
+        const width = Math.max(400, containerWidth - 40);
         const height = 600;
         const margin = { top: 20, right: 20, bottom: 20, left: 20 };
 
@@ -91,7 +92,13 @@ class LaserTagNetworkGraph extends LaserTagVisualizations {
 
         // Add tooltips for nodes
         node.append('title')
-            .text(d => d.name);
+            .text(d => {
+                let tooltip = d.name;
+                if (d.teamId && d.teamId > 0) {
+                    tooltip += `\nTeam: ${d.teamId}`;
+                }
+                return tooltip;
+            });
 
         // Update positions on simulation tick
         simulation.on('tick', () => {
@@ -163,6 +170,13 @@ class LaserTagNetworkGraph extends LaserTagVisualizations {
             .style('font-size', '11px')
             .style('fill', '#666')
             .text('Line thickness = shot count');
+
+        legend.append('text')
+            .attr('x', 0)
+            .attr('y', 50)
+            .style('font-size', '11px')
+            .style('fill', '#666')
+            .text('Node color = team color');
 
         // Store chart reference
         this.nodeGraph = { svg, simulation };

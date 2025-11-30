@@ -23,9 +23,10 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
     /**
      * Create enhanced score chart with timeline visualization
      */
-    createEnhancedScoreChart(scoreEvents, container) {
-        const width = 800;
-        const height = 500;
+	createEnhancedScoreChart(scoreEvents, container) {
+        const containerWidth = container.clientWidth || 400;
+        const width = Math.max(300, containerWidth - 40);
+        const height = 400;
         const margin = { top: 40, right: 60, bottom: 60, left: 80 };
         const chartWidth = width - margin.left - margin.right;
         const chartHeight = height - margin.top - margin.bottom;
