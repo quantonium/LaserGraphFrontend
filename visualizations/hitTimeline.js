@@ -223,4 +223,34 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 			.append('title')
 			.text('Click to view in fullscreen');
 	}
+
+	/**
+	 * Create hit details table
+	 */
+	createHitDetailsTable(timelineData, container) {
+		const detailsDiv = document.createElement('div');
+		detailsDiv.className = 'hit-details';
+		detailsDiv.innerHTML = `
+			<h3>Hit Timeline Details (${timelineData.length} hits)</h3>
+			<div class="hit-stats">
+				<div class="stat-card">
+					<h4>Total Points</h4>
+					<span>${timelineData.reduce((sum, hit) => sum + hit.points, 0)}</span>
+				</div>
+				<div class="stat-card">
+					<h4>Average Points/Hit</h4>
+					<span>${(timelineData.reduce((sum, hit) => sum + hit.points, 0) / timelineData.length).toFixed(1)}</span>
+				</div>
+				<div class="stat-card">
+					<h4>Max Hit Value</h4>
+					<span>${Math.max(...timelineData.map(hit => hit.points))}</span>
+				</div>
+				<div class="stat-card">
+					<h4>Game Duration</h4>
+					<span>${Math.max(...timelineData.map(hit => hit.time)).toFixed(1)}s</span>
+				</div>
+			</div>
+		`;
+		container.appendChild(detailsDiv);
+	}
 }
