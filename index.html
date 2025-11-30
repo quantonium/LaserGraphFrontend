@@ -22,17 +22,23 @@
 		</div>
 		<!--used for spacing-->
 		<img src="https://playlaser.games/assets/logo wip 4 early access small.svg" class="norender">
-		<nav><button onclick="window.location.href='https:\/\/playlaser.games'">
-				<h3>To playlaser.games</h3>
-			</button>
-			<button onclick="window.print()">
-				<h3>Print Page</h3>
-			</button>
+		</header>
+		<nav style="flex-direction: column;" id="noprint">
+			<div style="display: flex; flex-direction: row;"><button
+					onclick="window.location.href='https:\/\/playlaser.games'">
+					<h3>To playlaser.games</h3>
+				</button>
+				<button onclick="window.print()">
+					<h3>Print Page</h3>
+				</button>
+				<button onclick="toggleUpload()"><h3>Upload Dialog</h3></button>
+			</div>
+			<p>Player metrics visualization dashboard</p>
 		</nav>
-		<p>Player metrics visualization dashboard</p>
-	</header>
+
+	
 	<!-- File Upload Area -->
-	<section class="file-upload-section">
+	<section class="file-upload-section" id="fileUpload">
 		<div class="error-message" id="errorMessage"></div>
 		<div class="upload-container" id="uploadContainer">
 			<div class="upload-area" id="uploadArea">
@@ -46,10 +52,12 @@
 							stroke-linejoin="round" />
 					</svg>
 					<h3>Upload Match Data</h3>
-					<p>Drag and drop your JSON file here, or click to browse</p>
-					<button type="button" class="browse-btn" id="browseBtn">Browse Files</button>
+					<p>Drag and drop your LJSON file here, or click to browse</p>
+					<button type="button" class="browse-btn" id="browseBtn">
+						<h3>Browse Files</h3>
+					</button>
 				</div>
-				<input type="file" id="fileInput" accept=".json,application/json" style="display: none;">
+				<input type="file" id="fileInput" accept=".json,.ljson,application/json" style="display: none;">
 			</div>
 			<div class="file-info" id="fileInfo" style="display: none;">
 				<div class="file-details">
@@ -60,11 +68,15 @@
 			</div>
 		</div>
 		<div class="upload-actions">
-			<button type="button" class="load-sample-btn" id="loadSampleBtn">Load Sample Data</button>
-			<button type="button" class="process-btn" id="processBtn" disabled>Process Data</button>
+			<button type="button" class="load-sample-btn" id="loadSampleBtn">
+				<h3>Load Sample Data</h3>
+			</button>
+			<button type="button" class="process-btn" id="processBtn" disabled>
+				<h3>Process Data</h3>
+			</button>
 		</div>
 	</section>
-	<main>
+	<main id="statsView">
 		<div class="dashboard">
 			<div class="chart-container">
 				<!--match title and basic info-->

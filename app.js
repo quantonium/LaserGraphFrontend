@@ -4,311 +4,327 @@
  */
 
 class LaserTagApp {
-    constructor() {
-        this.processor = null;
-        //this.visualizations = new LaserTagVisualizations();
-        this.data = null;
-        this.currentFile = null;
+	constructor() {
+		this.processor = null;
+		//this.visualizations = new LaserTagVisualizations();
+		this.data = null;
+		this.currentFile = null;
 
-        //visualizations
-        this.hitTimeline = new LaserTagHitTimeline("timelineChart");
-        this.hexChart = new LaserTagHexagon("hexChart");
-        this.networkGraph = new LaserTagNetworkGraph("nodeGraph");
-        this.scoreProgression = new LaserTagScoreProgression("scoreChart")
-        this.targetDist = new LaserTagTargetDistribution("targetChart")
-        
-        // Initialize file upload handlers
-        this.initFileUpload();
-    }
+		//visualizations
+		this.hitTimeline = new LaserTagHitTimeline("timelineChart");
+		this.hexChart = new LaserTagHexagon("hexChart");
+		this.networkGraph = new LaserTagNetworkGraph("nodeGraph");
+		this.scoreProgression = new LaserTagScoreProgression("scoreChart")
+		this.targetDist = new LaserTagTargetDistribution("targetChart")
+		
+		// Initialize file upload handlers
+		this.initFileUpload();
+	}
 
-    /**
-     * Initialize the application UI (no automatic data loading)
-     */
-    async init() {
-        console.log('Laser Tag Analytics App ready for data upload...');
-    }
+	/**
+	 * Initialize the application UI (no automatic data loading)
+	 */
+	async init() {
+		console.log('Laser Tag Analytics App ready for data upload...');
 
-    /**
-     * Initialize file upload functionality
-     */
-    initFileUpload() {
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
-        const browseBtn = document.getElementById('browseBtn');
-        const processBtn = document.getElementById('processBtn');
-        const loadSampleBtn = document.getElementById('loadSampleBtn');
-        const removeFileBtn = document.getElementById('removeFileBtn');
-        const fileInfo = document.getElementById('fileInfo');
+		document.getElementById("fileUpload").style.display = "block"
+		document.getElementById("statsView").style.display = "none"
+	}
 
-        // Drag and drop handlers
-        uploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            uploadArea.classList.add('drag-over');
-        });
+	/**
+	 * Initialize file upload functionality
+	 */
+	initFileUpload() {
+		const uploadArea = document.getElementById('uploadArea');
+		const fileInput = document.getElementById('fileInput');
+		const browseBtn = document.getElementById('browseBtn');
+		const processBtn = document.getElementById('processBtn');
+		const loadSampleBtn = document.getElementById('loadSampleBtn');
+		const removeFileBtn = document.getElementById('removeFileBtn');
+		const fileInfo = document.getElementById('fileInfo');
 
-        uploadArea.addEventListener('dragleave', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('drag-over');
-        });
+		// Drag and drop handlers
+		uploadArea.addEventListener('dragover', (e) => {
+			e.preventDefault();
+			uploadArea.classList.add('drag-over');
+		});
 
-        uploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            uploadArea.classList.remove('drag-over');
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                this.handleFile(files[0]);
-            }
-        });
+		uploadArea.addEventListener('dragleave', (e) => {
+			e.preventDefault();
+			uploadArea.classList.remove('drag-over');
+		});
 
-        // Click to browse
-        browseBtn.addEventListener('click', () => {
-            fileInput.click();
-        });
+		uploadArea.addEventListener('drop', (e) => {
+			e.preventDefault();
+			uploadArea.classList.remove('drag-over');
+			const files = e.dataTransfer.files;
+			if (files.length > 0) {
+				this.handleFile(files[0]);
+			}
+		});
 
-        uploadArea.addEventListener('click', () => {
-            fileInput.click();
-        });
+		// Click to browse
+		browseBtn.addEventListener('click', () => {
+			fileInput.click();
+		});
 
-        // File input change
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                this.handleFile(e.target.files[0]);
-            }
-        });
+		uploadArea.addEventListener('click', () => {
+			fileInput.click();
+		});
 
-        // Process button
-        processBtn.addEventListener('click', () => {
-            if (this.currentFile) {
-                this.processUploadedFile();
-            }
-        });
+		// File input change
+		fileInput.addEventListener('change', (e) => {
+			if (e.target.files.length > 0) {
+				this.handleFile(e.target.files[0]);
+			}
+		});
 
-        // Load sample data button
-        loadSampleBtn.addEventListener('click', () => {
-            this.loadSampleData();
-        });
+		// Process button
+		processBtn.addEventListener('click', () => {
+			if (this.currentFile) {
+				this.processUploadedFile();
+			}
+		});
 
-        // Remove file button
-        removeFileBtn.addEventListener('click', () => {
-            this.clearFile();
-        });
-    }
+		// Load sample data button
+		loadSampleBtn.addEventListener('click', () => {
+			this.loadSampleData();
+		});
 
-    /**
-     * Handle uploaded file
-     */
-    handleFile(file) {
-        if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
-            this.showError('Please upload a JSON file.');
-            return;
-        }
+		// Remove file button
+		removeFileBtn.addEventListener('click', () => {
+			this.clearFile();
+		});
+	}
 
-        this.currentFile = file;
-        this.displayFileInfo(file);
-        document.getElementById('processBtn').disabled = false;
-    }
+	/**
+	 * Handle uploaded file
+	 */
+	handleFile(file) {
+		if (file.type !== 'application/json' && !(file.name.endsWith('.json') || file.name.endsWith('.ljson'))) {
+			this.showError('Please upload a JSON file.');
+			return;
+		}
 
-    /**
-     * Display file information
-     */
-    displayFileInfo(file) {
-        const fileName = document.getElementById('fileName');
-        const fileSize = document.getElementById('fileSize');
-        const fileInfo = document.getElementById('fileInfo');
-        const uploadArea = document.getElementById('uploadArea');
+		this.currentFile = file;
+		this.displayFileInfo(file);
+		document.getElementById('processBtn').disabled = false;
+	}
 
-        fileName.textContent = file.name;
-        fileSize.textContent = this.formatFileSize(file.size);
-        fileInfo.style.display = 'flex';
-        uploadArea.style.display = 'none';
-    }
+	/**
+	 * Display file information
+	 */
+	displayFileInfo(file) {
+		const fileName = document.getElementById('fileName');
+		const fileSize = document.getElementById('fileSize');
+		const fileInfo = document.getElementById('fileInfo');
+		const uploadArea = document.getElementById('uploadArea');
 
-    /**
-     * Clear selected file
-     */
-    clearFile() {
-        this.currentFile = null;
-        document.getElementById('fileInfo').style.display = 'none';
-        document.getElementById('uploadArea').style.display = 'flex';
-        document.getElementById('processBtn').disabled = true;
-        document.getElementById('fileInput').value = '';
-    }
+		fileName.textContent = file.name;
+		fileSize.textContent = this.formatFileSize(file.size);
+		fileInfo.style.display = 'flex';
+		uploadArea.style.display = 'none';
+	}
 
-    /**
-     * Format file size for display
-     */
-    formatFileSize(bytes) {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    }
+	/**
+	 * Clear selected file
+	 */
+	clearFile() {
+		this.currentFile = null;
+		document.getElementById('fileInfo').style.display = 'none';
+		document.getElementById('uploadArea').style.display = 'flex';
+		document.getElementById('processBtn').disabled = true;
+		document.getElementById('fileInput').value = '';
+	}
 
-    /**
-     * Process uploaded file
-     */
-    async processUploadedFile() {
-        if (!this.currentFile) return;
+	/**
+	 * Format file size for display
+	 */
+	formatFileSize(bytes) {
+		if (bytes === 0) return '0 Bytes';
+		const k = 1024;
+		const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+		const i = Math.floor(Math.log(bytes) / Math.log(k));
+		return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+	}
 
-        try {
-            const text = await this.currentFile.text();
-            this.data = JSON.parse(text);
-            
-            await this.processAndVisualize();
-            
-        } catch (error) {
-            console.error('Error processing uploaded file:', error);
-            this.showError('Error processing file. Please ensure it is a valid JSON file.');
-        }
-    }
+	/**
+	 * Process uploaded file
+	 */
+	async processUploadedFile() {
+		if (!this.currentFile) return;
 
-    /**
-     * Load sample data
-     */
-    async loadSampleData() {
-        try {
-            const response = await fetch('./sample-match-data.json');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            this.data = await response.json();
-            
-            await this.processAndVisualize();
-            
-        } catch (error) {
-            console.error('Error loading sample data:', error);
-            this.showError('Failed to load sample data. Please check if the file exists.');
-        }
-    }
+		try {
+			const text = await this.currentFile.text();
+			this.data = JSON.parse(text);
+			
+			await this.processAndVisualize();
+			
+		} catch (error) {
+			console.error('Error processing uploaded file:', error);
+			this.showError('Error processing file. Please ensure it is a valid JSON file.');
+		}
+	}
 
-    /**
-     * Process data and create visualizations
-     */
-    async processAndVisualize() {
-        try {
-            // Process the data
-            this.processData();
-            
-            this.updateText();
+	/**
+	 * Load sample data
+	 */
+	async loadSampleData() {
+		try {
+			const response = await fetch('./sample-match-data.json');
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			this.data = await response.json();
+			
+			await this.processAndVisualize();
+			
+		} catch (error) {
+			console.error('Error loading sample data:', error);
+			this.showError('Failed to load sample data. Please check if the file exists.');
+		}
+	}
 
-            // Create visualizations
-            this.createVisualizations();
-            
-            // Update metrics display
-            this.updateMetricsDisplay();
-            
-            console.log('Data processed and visualizations created successfully!');
-            
-        } catch (error) {
-            console.error('Error processing data:', error);
-            this.showError('Failed to process data. Please check the console for details.');
-        }
-    }
+	/**
+	 * Process data and create visualizations
+	 */
+	async processAndVisualize() {
+		try {
+			// Process the data
+			this.processData();
+			
+			this.updateText();
 
-    /**
-     * Process the loaded data
-     */
-    processData() {
-        if (!this.data) {
-            throw new Error('No data to process');
-        }
-        
-        this.processor = new LaserTagDataProcessor(this.data);
-        const metrics = this.processor.calculateMetrics();
-        console.log('Calculated metrics:', metrics);
-    }
+			// Create visualizations
+			this.createVisualizations();
+			
+			// Update metrics display
+			this.updateMetricsDisplay();
+			
+			console.log('Data processed and visualizations created successfully!');
 
-    /**
-     * Create all visualizations
-     */
-    createVisualizations() {
-        if (!this.processor) {
-            throw new Error('No processor available');
-        }
-        
-        console.log('Creating visualizations...');
-        LaserTagVisualizations.updateAll(this.processor);
-    }
+			document.getElementById("statsView").style.display = "block"
 
-    updateText() {
-        document.getElementById("gametype").innerText = this.data.MatchData.gameTypeName
-        document.getElementById("gameName").innerText = this.data.SessionInfo.ServerName
-        let time = this.data.SessionInfo.serverTime
-        document.getElementById("timer").innerText = `${Math.floor(time/60)} mins ${Math.floor(time%60)} secs`
-        let d = new Date((this.data.SessionInfo.actualTime + time) * 1000)
-        document.getElementById("date").innerText = d.toISOString()
-    }
+			toggleUpload()
+			
+		} catch (error) {
+			console.error('Error processing data:', error);
+			this.showError('Failed to process data. Please check the console for details.');
+		}
+	}
 
-    /**
-     * Update the metrics display cards
-     */
-    updateMetricsDisplay() {
-        if (!this.processor) return;
-        
-        const metricsInfo = this.processor.getMetricsInfo();
-        
-        // Update each metric card
-        Object.keys(metricsInfo).forEach(metricName => {
-            const metric = metricsInfo[metricName];
-            const valueElement = document.getElementById(`${metricName}Value`);
-            
-            if (valueElement) {
-                // Add animation class
-                valueElement.classList.add('loading');
-                
-                // Update value after a brief delay for effect
-                setTimeout(() => {
-                    valueElement.textContent = `${metric.value}${metric.unit}`;
-                    valueElement.classList.remove('loading');
-                    
-                    // Add a color based on the normalized value
-                    const intensity = metric.normalized / 100;
-                    const hue = intensity * 120; // 0 (red) to 120 (green)
-                    valueElement.style.color = `hsl(${hue}, 70%, 50%)`;
-                }, Math.random() * 500 + 200);
-            }
-        });
-    }
+	/**
+	 * Process the loaded data
+	 */
+	processData() {
+		if (!this.data) {
+			throw new Error('No data to process');
+		}
+		
+		this.processor = new LaserTagDataProcessor(this.data);
+		const metrics = this.processor.calculateMetrics();
+		console.log('Calculated metrics:', metrics);
+	}
 
-    /**
-     * Show error message
-     */
-    showError(message) {
-        const errorDiv = document.getElementById('errorMessage');
-        
-        if (errorDiv) {
-            errorDiv.textContent = message;
-            errorDiv.classList.add('show');
-        }
-    }
+	/**
+	 * Create all visualizations
+	 */
+	createVisualizations() {
+		if (!this.processor) {
+			throw new Error('No processor available');
+		}
+		
+		console.log('Creating visualizations...');
+		LaserTagVisualizations.updateAll(this.processor);
+	}
 
-    /**
-     * Refresh all data and visualizations
-     */
-    async refresh() {
-        console.log('Refreshing application...');
-        await this.init();
-    }
+	updateText() {
+		document.getElementById("gametype").innerText = this.data.MatchData.gameTypeName
+		document.getElementById("gameName").innerText = this.data.SessionInfo.ServerName
+		let time = this.data.SessionInfo.serverTime
+		document.getElementById("timer").innerText = `${Math.floor(time/60)} mins ${Math.floor(time%60)} secs`
+		let d = new Date((this.data.SessionInfo.actualTime + time) * 1000)
+		document.getElementById("date").innerText = d.toISOString()
+	}
+
+	/**
+	 * Update the metrics display cards
+	 */
+	updateMetricsDisplay() {
+		if (!this.processor) return;
+		
+		const metricsInfo = this.processor.getMetricsInfo();
+		
+		// Update each metric card
+		Object.keys(metricsInfo).forEach(metricName => {
+			const metric = metricsInfo[metricName];
+			const valueElement = document.getElementById(`${metricName}Value`);
+			
+			if (valueElement) {
+				// Add animation class
+				valueElement.classList.add('loading');
+				
+				// Update value after a brief delay for effect
+				setTimeout(() => {
+					valueElement.textContent = `${metric.value}${metric.unit}`;
+					valueElement.classList.remove('loading');
+					
+					// Add a color based on the normalized value
+					const intensity = metric.normalized / 100;
+					const hue = intensity * 120; // 0 (red) to 120 (green)
+					valueElement.style.color = `hsl(${hue}, 70%, 50%)`;
+				}, Math.random() * 500 + 200);
+			}
+		});
+	}
+
+	/**
+	 * Show error message
+	 */
+	showError(message) {
+		const errorDiv = document.getElementById('errorMessage');
+		
+		if (errorDiv) {
+			errorDiv.textContent = message;
+			errorDiv.classList.add('show');
+		}
+	}
+
+	/**
+	 * Refresh all data and visualizations
+	 */
+	async refresh() {
+		console.log('Refreshing application...');
+		await this.init();
+	}
 }
 
 // Initialize the application when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded, starting app...');
-    
-    // Create global app instance
-    window.laserTagApp = new LaserTagApp();
-    
-    // Initialize the app
-    window.laserTagApp.init().catch(error => {
-        console.error('Failed to initialize app:', error);
-    });
+	console.log('DOM loaded, starting app...');
+	
+	// Create global app instance
+	window.laserTagApp = new LaserTagApp();
+	
+	// Initialize the app
+	window.laserTagApp.init().catch(error => {
+		console.error('Failed to initialize app:', error);
+	});
 });
 
 // Add some utility functions for development/debugging
 window.debugApp = {
-    getMetrics: () => window.laserTagApp?.processor?.calculateMetrics(),
-    getData: () => window.laserTagApp?.data,
-    getProcessor: () => window.laserTagApp?.processor,
-    refresh: () => window.laserTagApp?.refresh()
+	getMetrics: () => window.laserTagApp?.processor?.calculateMetrics(),
+	getData: () => window.laserTagApp?.data,
+	getProcessor: () => window.laserTagApp?.processor,
+	refresh: () => window.laserTagApp?.refresh()
 };
+
+function toggleUpload() {
+	let hidden = document.getElementById("fileUpload").style.display == "none"
+	document.getElementById("fileUpload").style.display = hidden ? "block" : "none"
+	if(hidden) {
+		document.body.scrollTop = 0
+		document.documentElement.scrollTop = 0
+	}
+}
