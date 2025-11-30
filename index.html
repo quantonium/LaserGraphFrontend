@@ -31,7 +31,39 @@
 		</nav>
 		<p>Player metrics visualization dashboard</p>
 	</header>
-
+	<!-- File Upload Area -->
+	<section class="file-upload-section">
+		<div class="error-message" id="errorMessage"></div>
+		<div class="upload-container" id="uploadContainer">
+			<div class="upload-area" id="uploadArea">
+				<div class="upload-content">
+					<svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none"
+						xmlns="http://www.w3.org/2000/svg">
+						<path
+							d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z"
+							stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+						<polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+							stroke-linejoin="round" />
+					</svg>
+					<h3>Upload Match Data</h3>
+					<p>Drag and drop your JSON file here, or click to browse</p>
+					<button type="button" class="browse-btn" id="browseBtn">Browse Files</button>
+				</div>
+				<input type="file" id="fileInput" accept=".json,application/json" style="display: none;">
+			</div>
+			<div class="file-info" id="fileInfo" style="display: none;">
+				<div class="file-details">
+					<span class="file-name" id="fileName"></span>
+					<span class="file-size" id="fileSize"></span>
+				</div>
+				<button type="button" class="remove-file-btn" id="removeFileBtn">×</button>
+			</div>
+		</div>
+		<div class="upload-actions">
+			<button type="button" class="load-sample-btn" id="loadSampleBtn">Load Sample Data</button>
+			<button type="button" class="process-btn" id="processBtn" disabled>Process Data</button>
+		</div>
+	</section>
 	<main>
 		<div class="dashboard">
 			<div class="chart-container">
@@ -42,9 +74,8 @@
 				<h5 id="date"></h5>
 				<br>
 				<h5 id="timer"></h5>
-			</div>
 
-			<!-- Additional visualization containers for future use -->
+			</div>
 			<div class="chart-container">
 				<!--h2>Hit Timeline</h2-->
 				<div id="timelineChart"></div>
@@ -68,7 +99,7 @@
 				<div id="targetChart"></div>
 			</div>
 
-			
+
 		</div>
 
 		<!-- Metrics Display -->

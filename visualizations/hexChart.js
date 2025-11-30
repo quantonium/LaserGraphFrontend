@@ -3,9 +3,11 @@ class LaserTagHexagon extends LaserTagVisualizations {
 	 * Create fullscreen hexagon chart with detailed metrics
 	 */
 	createFullscreen(metricsInfo, container, detailsContainer) {
-		// Create larger hexagon chart
-		const width = 600;
-		const height = 600;
+		// Create responsive hexagon chart
+		const containerWidth = container.clientWidth || 400;
+		const size = Math.min(containerWidth - 40, 600);
+		const width = size;
+		const height = size;
 		const radius = Math.min(width, height) / 2 - 80;
 		const centerX = width / 2;
 		const centerY = height / 2;

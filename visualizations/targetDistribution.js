@@ -18,8 +18,9 @@ class LaserTagTargetDistribution extends LaserTagVisualizations {
      * Create enhanced target chart with detailed breakdown
      */
     createEnhancedTargetChart(hits, container) {
-        const width = 800;
-        const height = 500;
+        const containerWidth = container.clientWidth || 400;
+        const width = Math.max(300, containerWidth - 40);
+        const height = 400;
         const margin = { top: 40, right: 80, bottom: 80, left: 120 };
         const chartWidth = width - margin.left - margin.right;
         const chartHeight = height - margin.top - margin.bottom;

@@ -4,8 +4,9 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 	 */
 	createFullscreen(hits, container, detailsContainer) {
 		const margin = { top: 40, right: 60, bottom: 80, left: 80 };
-		const width = 800 - margin.left - margin.right;
-		const height = 500 - margin.top - margin.bottom;
+		const containerWidth = container.clientWidth || 400;
+		const width = Math.max(300, containerWidth - margin.left - margin.right - 40);
+		const height = 400 - margin.top - margin.bottom;
 
 		const svg = d3.select(container)
 			.append('svg')
