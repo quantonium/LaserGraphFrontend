@@ -6,8 +6,15 @@
 class LaserTagApp {
     constructor() {
         this.processor = null;
-        this.visualizations = new LaserTagVisualizations();
+        //this.visualizations = new LaserTagVisualizations();
         this.data = null;
+
+        //visualizations
+        this.hitTimeline = new LaserTagHitTimeline("timelineChart");
+        this.hexChart = new LaserTagHexagon("hexChart");
+        this.networkGraph = new LaserTagNetworkGraph("nodeGraph");
+        this.scoreProgression = new LaserTagScoreProgression("scoreChart")
+        this.targetDist = new LaserTagTargetDistribution("targetChart")
     }
 
     /**
@@ -79,7 +86,7 @@ class LaserTagApp {
         }
         
         console.log('Creating visualizations...');
-        this.visualizations.updateAll(this.processor);
+        LaserTagVisualizations.updateAll(this.processor);
     }
 
     /**
