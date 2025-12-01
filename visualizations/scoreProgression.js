@@ -366,7 +366,7 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 
 		// Create the score progression list
 		const progressionContainer = document.createElement('div');
-		progressionContainer.style.cssText = 'max-height: 400px; overflow-y: auto; padding: 15px;';
+		progressionContainer.style.cssText = 'height: 550px; overflow-y: auto; padding: 15px;';
 
 		const title = document.createElement('h3');
 		title.textContent = `Score Progression (${scoreEvents.length} events)`;

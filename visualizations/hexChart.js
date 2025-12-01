@@ -154,10 +154,13 @@ class LaserTagHexagon extends LaserTagVisualizations {
 		const container = this.getContainer();
 		container.innerHTML = ''; // Clear existing content
 
-		// Chart dimensions and setup
-		const width = 400;
-		const height = 400;
-		const radius = Math.min(width, height) / 2 - 50;
+		// Chart dimensions and setup - make responsive
+		const containerWidth = container.clientWidth || 400;
+		const containerHeight = container.clientHeight || 400;
+		const size = Math.min(containerWidth - 20, containerHeight - 20); // Use almost full container
+		const width = size;
+		const height = size;
+		const radius = Math.min(width, height) / 2 - 30; // Reduce margin
 		const centerX = width / 2;
 		const centerY = height / 2;
 

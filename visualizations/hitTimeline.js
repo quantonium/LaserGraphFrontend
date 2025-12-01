@@ -23,7 +23,12 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 			index: index,
 			component: hit.hitComponent || 'Unknown',
 			range: hit.hitRange || 0,
-			multiplier: hit.pointMultiplier || 1
+			multiplier: hit.pointMultiplier || 1,
+			shooterId: hit.instigatorStateId?.index,
+			targetId: hit.hitStateId?.index,
+			hitFriendlyName: hit.hitFriendlyName || 'Unknown Target',
+			hitAbbreviation: hit.hitAbbreviation || 'UNK',
+			basePoints: hit.basePointValue || 0
 		})).sort((a, b) => a.time - b.time);
 
 		// Create scales
@@ -92,7 +97,57 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 			.attr('fill', d => d.multiplier > 1 ? '#e74c3c' : '#27ae60')
 			.attr('stroke', '#fff')
 			.attr('stroke-width', 2)
-			.style('cursor', 'pointer');
+			.style('cursor', 'pointer')
+			.on('mouseover', function(event, d) {
+				d3.select(this).attr('stroke-width', 4).attr('r', d => (3 + d.multiplier) * 1.2);
+				
+				// Get player names from global processor
+				const processor = window.laserTagApp?.processor;
+				const shooterName = processor && processor.playerData && d.shooterId ? 
+					(processor.playerData[d.shooterId.toString()]?.playerName || `Player ${d.shooterId}`) : 'Unknown';
+				const targetName = processor && processor.playerData && d.targetId ? 
+					(processor.playerData[d.targetId.toString()]?.playerName || `Player ${d.targetId}`) : 'Unknown';
+				
+				// Create enhanced tooltip
+				const tooltip = d3.select('body').append('div')
+					.attr('class', 'fullscreen-tooltip')
+					.style('position', 'absolute')
+					.style('pointer-events', 'none')
+					.style('background', 'rgba(44,62,80,0.95)')
+					.style('color', '#fff')
+					.style('padding', '12px 15px')
+					.style('border-radius', '8px')
+					.style('font-size', '14px')
+					.style('box-shadow', '0 6px 12px rgba(0,0,0,0.4)')
+					.style('border', '1px solid rgba(255,255,255,0.2)')
+					.style('z-index', '1001')
+					.style('max-width', '300px')
+					.html(`
+						<div style="font-weight: bold; color: #3498db; margin-bottom: 8px; font-size: 16px;">
+							🎯 Hit Details
+						</div>
+						<div style="margin-bottom: 6px; font-size: 15px;">
+							<span style="color: #e74c3c; font-weight: bold;">👤 ${shooterName}</span> tagged 
+							<span style="color: #27ae60; font-weight: bold;">👤 ${targetName}</span>
+						</div>
+						<div style="margin-bottom: 6px;">
+							📍 Target: <span style="color: #f39c12; font-weight: bold;">${d.hitFriendlyName} (${d.hitAbbreviation})</span>
+						</div>
+						<div style="margin-bottom: 6px;">
+							💰 Points: <span style="color: #2ecc71; font-weight: bold; font-size: 16px;">${d.points}</span>
+							${d.multiplier > 1 ? `<span style="color: #e67e22; font-weight: bold;"> (${d.basePoints} × ${d.multiplier})</span>` : ''}
+						</div>
+						<div style="color: #95a5a6; font-size: 12px;">
+							⏱️ Game Time: ${d.time.toFixed(1)}s
+						</div>
+					`);
+
+				tooltip.style('left', (event.pageX + 10) + 'px').style('top', (event.pageY - 10) + 'px');
+			})
+			.on('mouseout', function(event, d) {
+				d3.select(this).attr('stroke-width', 2).attr('r', 3 + d.multiplier);
+				d3.selectAll('.fullscreen-tooltip').remove();
+			});
 
 		// Create hit details table
 		this.createHitDetailsTable(timelineData, detailsContainer);
@@ -108,9 +163,9 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 
 		// Compact 1-dimensional preview timeline
 		// Preview shows hits along a single horizontal row (x = game time). The fullscreen modal keeps the 2D chart.
-		const margin = { top: 10, right: 20, bottom: 30, left: 40 };
-		const width = Math.max(300, container.offsetWidth) - margin.left - margin.right;
-		const height = 120 - margin.top - margin.bottom; // compact preview height
+		const margin = { top: 20, right: 20, bottom: 60, left: 40 };
+		const width = Math.max(900, container.offsetWidth) - margin.left - margin.right;
+		const height = 400 - margin.top - margin.bottom; // increased height for better visibility
 
 		const svg = d3.select('#timelineChart')
 			.append('svg')
@@ -126,7 +181,12 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 			points: (hit.basePointValue || 0) * (hit.pointMultiplier || 1),
 			multiplier: hit.pointMultiplier || 1,
 			component: hit.hitComponent || 'Unknown',
-			index: index
+			index: index,
+			shooterId: hit.instigatorStateId?.index,
+			targetId: hit.hitStateId?.index,
+			hitFriendlyName: hit.hitFriendlyName || 'Unknown Target',
+			hitAbbreviation: hit.hitAbbreviation || 'UNK',
+			basePoints: hit.basePointValue || 0
 		})).sort((a, b) => a.time - b.time);
 
 		if (timelineData.length === 0) {
@@ -174,27 +234,54 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 			.attr('stroke', '#fff')
 			.attr('stroke-width', 1.5)
 			.on('mouseover', function(event, d) {
-				d3.select(this).attr('stroke-width', 2.5);
-				// tooltip
-				const tooltip = d3.select(container).append('div')
-					.attr('class', 'tt')
+				d3.select(this).attr('stroke-width', 3).attr('r', d => rScale(d.points) * 1.15);
+				
+				// Get player names from global processor
+				const processor = window.laserTagApp?.processor;
+				const shooterName = processor && processor.playerData && d.shooterId ? 
+					(processor.playerData[d.shooterId.toString()]?.playerName || `Player ${d.shooterId}`) : 'Unknown';
+				const targetName = processor && processor.playerData && d.targetId ? 
+					(processor.playerData[d.targetId.toString()]?.playerName || `Player ${d.targetId}`) : 'Unknown';
+				
+				// Create enhanced tooltip
+				const tooltip = d3.select('body').append('div')
+					.attr('class', 'timeline-preview-tooltip')
 					.style('position', 'absolute')
 					.style('pointer-events', 'none')
-					.style('background', 'rgba(44,62,80,0.9)')
+					.style('background', 'rgba(44,62,80,0.95)')
 					.style('color', '#fff')
-					.style('padding', '6px 8px')
-					.style('border-radius', '4px')
-					.style('font-size', '12px')
-					.html(`<strong>${d.points} pts</strong><br/>${d.time}s • ${d.component}`);
+					.style('padding', '10px 12px')
+					.style('border-radius', '6px')
+					.style('font-size', '13px')
+					.style('box-shadow', '0 4px 8px rgba(0,0,0,0.3)')
+					.style('border', '1px solid rgba(255,255,255,0.2)')
+					.style('z-index', '1000')
+					.style('max-width', '280px')
+					.html(`
+						<div style="font-weight: bold; color: #3498db; margin-bottom: 6px;">
+							🎯 Hit Details
+						</div>
+						<div style="margin-bottom: 4px;">
+							<span style="color: #e74c3c;">👤 ${shooterName}</span> tagged 
+							<span style="color: #27ae60;">👤 ${targetName}</span>
+						</div>
+						<div style="margin-bottom: 4px;">
+							📍 Target: <span style="color: #f39c12;">${d.hitFriendlyName} (${d.hitAbbreviation})</span>
+						</div>
+						<div style="margin-bottom: 4px;">
+							💰 Points: <span style="color: #2ecc71; font-weight: bold;">${d.points}</span>
+							${d.multiplier > 1 ? `<span style="color: #e67e22;"> (${d.basePoints} × ${d.multiplier})</span>` : ''}
+						</div>
+						<div style="color: #95a5a6; font-size: 11px;">
+							⏱️ ${d.time.toFixed(1)}s
+						</div>
+					`);
 
-				const matrix = this.getScreenCTM().translate(+this.getAttribute('cx'), +this.getAttribute('cy'));
-				const left = window.pageXOffset + matrix.e + margin.left + 10;
-				const top = window.pageYOffset + matrix.f + margin.top - 30;
-				tooltip.style('left', `${left}px`).style('top', `${top}px`);
+				tooltip.style('left', (event.pageX + 15) + 'px').style('top', (event.pageY - 15) + 'px');
 			})
-			.on('mouseout', function() {
-				d3.select(this).attr('stroke-width', 1.5);
-				d3.select(container).selectAll('.tt').remove();
+			.on('mouseout', function(event, d) {
+				d3.select(this).attr('stroke-width', 1.5).attr('r', rScale(d.points));
+				d3.selectAll('.timeline-preview-tooltip').remove();
 			});
 
 		// Add small tick for each hit (subtle) to emphasize 1D nature
