@@ -29,6 +29,12 @@ class LaserTagApp {
 
 		document.getElementById("fileUpload").style.display = "block"
 		document.getElementById("statsView").style.display = "none"
+
+		let playerElement = document.getElementById("playerSelect")
+		let teamElement = document.getElementById("teamSelect")
+
+		teamElement.addEventListener("onchange", (e) => {this.onTeamSelect(e)})
+		playerElement.addEventListener("onchange", (e) => {this.onTeamSelect(e)})
 	}
 
 	/**
@@ -95,6 +101,8 @@ class LaserTagApp {
 		removeFileBtn.addEventListener('click', () => {
 			this.clearFile();
 		});
+
+
 	}
 
 	/**
@@ -195,6 +203,8 @@ class LaserTagApp {
 			
 			this.updateText();
 
+			this.updateFilterElements();
+
 			// Create visualizations
 			this.createVisualizations();
 			
@@ -238,6 +248,9 @@ class LaserTagApp {
 		LaserTagVisualizations.updateAll(this.processor);
 	}
 
+	/**
+	 * Updates text elements within the visualization, like game name
+	 */
 	updateText() {
 		document.getElementById("gametype").innerText = this.data.MatchData.gameTypeName
 		document.getElementById("gameName").innerText = this.data.SessionInfo.ServerName
@@ -279,6 +292,34 @@ class LaserTagApp {
 	}
 
 	/**
+	 * adds players and teams into the selection filters
+	 */
+	updateFilterElements() {
+		let playerElement = document.getElementById("playerSelect")
+		let teamElement = document.getElementById("teamSelect")
+
+		playerElement.innerHTML = `
+		<option value="">All Players</option>
+		`
+
+		teamElement.innerHTML = `
+		<option value="">All Teams</option>
+		`
+		for (let [key, value] of Object.entries(this.data.PlayerData)) {
+			playerElement.innerHTML +=`
+			<option value="${key}">${value.playerName}</option>
+			`
+		}
+
+		for (let [key, value] of Object.entries(this.data.TeamData)) {
+			teamElement.innerHTML +=`
+			<option value="${key}">${value.teamName}</option>
+			`
+		}
+		
+	}
+
+	/**
 	 * Show error message
 	 */
 	showError(message) {
@@ -296,6 +337,15 @@ class LaserTagApp {
 	async refresh() {
 		console.log('Refreshing application...');
 		await this.init();
+	}
+
+	onTeamSelect(e) {
+		//todo: update player select to filter on players that have been on the selected team
+		//and then update visuals to filter for this team's data only
+	}
+
+	onPlayerSelect(e) {
+		//todo: update visuals to filter for this player's data only
 	}
 }
 
