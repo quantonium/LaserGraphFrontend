@@ -366,6 +366,7 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 
 		// Create the score progression list
 		const progressionContainer = document.createElement('div');
+		progressionContainer.className = 'score-progression-container';
 		progressionContainer.style.cssText = 'height: 550px; overflow-y: auto; padding: 15px;';
 
 		const title = document.createElement('h3');
@@ -375,6 +376,8 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 
 		scoreEvents.forEach((event, index) => {
 			const eventItem = document.createElement('div');
+			eventItem.className = 'timeline-sync-indicator';
+			eventItem.dataset.eventTime = event.matchState?.gameTime || 0;
 			eventItem.style.cssText = `
 				background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
 				border-left: 4px solid #3498db;
@@ -484,6 +487,9 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 		progressionContainer.appendChild(summary);
 		container.appendChild(progressionContainer);
 
+		// Add scroll synchronization with hit timeline
+		this.setupTimelineSync(progressionContainer, scoreEvents);
+
 		// Add click handler for fullscreen
 		progressionContainer.style.cursor = 'pointer';
 		progressionContainer.addEventListener('click', () => {
@@ -506,6 +512,79 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 		`;
 		container.style.position = 'relative';
 		container.appendChild(fullscreenBtn);
+	}
+
+	/**
+	 * Setup timeline synchronization based on scroll position
+	 */
+	setupTimelineSync(progressionContainer, scoreEvents) {
+		let scrollTimeout;
+		
+		progressionContainer.addEventListener('scroll', () => {
+			clearTimeout(scrollTimeout);
+			scrollTimeout = setTimeout(() => {
+				this.updateTimelineFromScroll(progressionContainer, scoreEvents);
+			}, 100); // Debounce scroll events
+		});
+		
+		// Initial sync
+		this.updateTimelineFromScroll(progressionContainer, scoreEvents);
+	}
+
+	/**
+	 * Update hit timeline based on score progression scroll position
+	 */
+	updateTimelineFromScroll(progressionContainer, scoreEvents) {
+		const scrollTop = progressionContainer.scrollTop;
+		const scrollHeight = progressionContainer.scrollHeight - progressionContainer.clientHeight;
+		const scrollPercent = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
+		
+		// Calculate visible time range based on scroll position
+		const totalTime = Math.max(...scoreEvents.map(e => e.matchState?.gameTime || 0));
+		const timeWindow = totalTime * 0.2; // Show 20% of total time in the window
+		const centerTime = scrollPercent * totalTime;
+		const startTime = Math.max(0, centerTime - timeWindow / 2);
+		const endTime = Math.min(totalTime, centerTime + timeWindow / 2);
+		
+		// Find the corresponding hit timeline and update it
+		const hitTimelineInstance = window.laserTagApp?.hitTimeline;
+		if (hitTimelineInstance) {
+			hitTimelineInstance.highlightTimeRange(startTime, endTime, centerTime);
+		}
+		
+		// Update score progression visual indicators
+		this.updateScoreProgressionIndicators(startTime, endTime);
+		
+		// Dispatch custom event for other components that might want to listen
+		const event = new CustomEvent('scoreProgressionScroll', {
+			detail: {
+				scrollPercent,
+				startTime,
+				endTime,
+				centerTime,
+				totalTime
+			}
+		});
+		document.dispatchEvent(event);
+	}
+
+	/**
+	 * Update visual indicators in score progression based on focused time range
+	 */
+	updateScoreProgressionIndicators(startTime, endTime) {
+		const container = this.getContainer();
+		const indicators = container.querySelectorAll('.timeline-sync-indicator');
+		
+		indicators.forEach(indicator => {
+			const eventTime = parseFloat(indicator.dataset.eventTime);
+			const isInRange = eventTime >= startTime && eventTime <= endTime;
+			
+			if (isInRange) {
+				indicator.classList.add('active');
+			} else {
+				indicator.classList.remove('active');
+			}
+		});
 	}
 
 	/**

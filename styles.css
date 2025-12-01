@@ -48,6 +48,51 @@
 	opacity: 0.7;
 }
 
+/* Timeline Synchronization Styles */
+.time-range-highlight {
+	pointer-events: none !important;
+	transition: all 0.3s ease;
+}
+
+.time-range-legend {
+	pointer-events: none;
+}
+
+.timeline-sync-indicator {
+	background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
+	border: 1px solid rgba(52, 152, 219, 0.3);
+	border-radius: 8px;
+	padding: 8px 12px;
+	margin: 5px 0;
+	transition: all 0.2s ease;
+}
+
+.timeline-sync-indicator.active {
+	background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(155, 89, 182, 0.2));
+	border-color: rgba(52, 152, 219, 0.5);
+	transform: translateX(3px);
+	box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
+}
+
+.score-progression-container {
+	position: relative;
+}
+
+.score-progression-container::before {
+	content: '📊 Scroll to navigate timeline →';
+	position: absolute;
+	top: -25px;
+	right: 0;
+	background: rgba(155, 89, 182, 0.1);
+	color: #9b59b6;
+	padding: 4px 8px;
+	border-radius: 12px;
+	font-size: 11px;
+	font-weight: bold;
+	z-index: 10;
+	pointer-events: none;
+}
+
 .upload-area h3 {
 	margin: 0;
 	color: #2c3e50;

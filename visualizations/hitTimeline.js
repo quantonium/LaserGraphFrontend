@@ -154,12 +154,138 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 	}
 
 	/**
+	 * Highlight time range on the timeline based on external scroll input
+	 */
+	highlightTimeRange(startTime, endTime, centerTime) {
+		if (!this.currentTimelineData || !this.currentSvg) {
+			return;
+		}
+
+		// Remove existing highlight
+		this.currentSvg.selectAll('.time-range-highlight').remove();
+
+		// Filter hits within the time range
+		const hitsInRange = this.currentTimelineData.filter(d => 
+			d.time >= startTime && d.time <= endTime
+		);
+
+		// Add time range highlight background
+		const g = this.currentSvg.select('g');
+		const xScale = this.currentXScale;
+		const height = this.currentHeight;
+
+		if (xScale && height) {
+			// Add highlight rectangle
+			g.insert('rect', ':first-child')
+				.attr('class', 'time-range-highlight')
+				.attr('x', xScale(startTime))
+				.attr('y', 0)
+				.attr('width', xScale(endTime) - xScale(startTime))
+				.attr('height', height)
+				.attr('fill', 'rgba(52, 152, 219, 0.15)')
+				.attr('stroke', '#3498db')
+				.attr('stroke-width', 2)
+				.attr('stroke-dasharray', '5,5')
+				.style('pointer-events', 'none');
+
+			// Add center line
+			g.append('line')
+				.attr('class', 'time-range-highlight')
+				.attr('x1', xScale(centerTime))
+				.attr('y1', 0)
+				.attr('x2', xScale(centerTime))
+				.attr('y2', height)
+				.attr('stroke', '#e74c3c')
+				.attr('stroke-width', 2)
+				.style('pointer-events', 'none');
+
+			// Highlight hits in range
+			g.selectAll('.hit circle')
+				.style('opacity', d => {
+					return (d.time >= startTime && d.time <= endTime) ? 1.0 : 0.3;
+				})
+				.attr('stroke-width', d => {
+					return (d.time >= startTime && d.time <= endTime) ? 3 : 1.5;
+				});
+
+			// Update legend
+			this.updateTimeRangeLegend(startTime, endTime, centerTime, hitsInRange.length);
+		}
+	}
+
+	/**
+	 * Update or create time range legend
+	 */
+	updateTimeRangeLegend(startTime, endTime, centerTime, hitCount) {
+		if (!this.currentSvg) return;
+
+		// Remove existing legend
+		this.currentSvg.selectAll('.time-range-legend').remove();
+
+		// Create legend group
+		const legend = this.currentSvg.append('g')
+			.attr('class', 'time-range-legend')
+			.attr('transform', 'translate(20, 20)');
+
+		// Background
+		legend.append('rect')
+			.attr('x', -10)
+			.attr('y', -10)
+			.attr('width', 250)
+			.attr('height', 60)
+			.attr('fill', 'rgba(255, 255, 255, 0.9)')
+			.attr('stroke', '#3498db')
+			.attr('stroke-width', 1)
+			.attr('rx', 5);
+
+		// Title
+		legend.append('text')
+			.attr('x', 0)
+			.attr('y', 0)
+			.style('font-size', '12px')
+			.style('font-weight', 'bold')
+			.style('fill', '#2c3e50')
+			.text('📍 Focused Time Range');
+
+		// Time info
+		legend.append('text')
+			.attr('x', 0)
+			.attr('y', 15)
+			.style('font-size', '10px')
+			.style('fill', '#7f8c8d')
+			.text(`⏱️ ${startTime.toFixed(1)}s - ${endTime.toFixed(1)}s (center: ${centerTime.toFixed(1)}s)`);
+
+		// Hit count
+		legend.append('text')
+			.attr('x', 0)
+			.attr('y', 30)
+			.style('font-size', '10px')
+			.style('fill', '#27ae60')
+			.text(`🎯 ${hitCount} hits in focus range`);
+
+		// Sync indicator
+		legend.append('text')
+			.attr('x', 0)
+			.attr('y', 45)
+			.style('font-size', '9px')
+			.style('fill', '#9b59b6')
+			.style('font-style', 'italic')
+			.text('🔄 Synced with Score Progression scroll');
+	}
+
+	/**
 	 * Create timeline chart showing hits over time
 	 */
 	loadData(processor) {
 		const hits = processor.hits
 		const container = this.getContainer();
 		container.innerHTML = ''; // Clear existing content
+
+		// Clear stored references
+		this.currentTimelineData = null;
+		this.currentSvg = null;
+		this.currentXScale = null;
+		this.currentHeight = null;
 
 		// Compact 1-dimensional preview timeline
 		// Preview shows hits along a single horizontal row (x = game time). The fullscreen modal keeps the 2D chart.
@@ -171,6 +297,10 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 			.append('svg')
 			.attr('width', width + margin.left + margin.right)
 			.attr('height', height + margin.top + margin.bottom);
+
+		// Store for highlighting
+		this.currentSvg = svg;
+		this.currentHeight = height;
 
 		const g = svg.append('g')
 			.attr('transform', `translate(${margin.left},${margin.top})`);
@@ -189,6 +319,9 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 			basePoints: hit.basePointValue || 0
 		})).sort((a, b) => a.time - b.time);
 
+		// Store data for highlighting
+		this.currentTimelineData = timelineData;
+
 		if (timelineData.length === 0) {
 			container.innerHTML = '<p style="text-align:center;color:#7f8c8d;padding:10px;">No hits to display</p>';
 			return;
@@ -199,6 +332,9 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 			.domain(d3.extent(timelineData, d => d.time))
 			.nice()
 			.range([0, width]);
+
+		// Store for highlighting
+		this.currentXScale = xScale;
 
 		const rowY = height / 2; // single row
 
