@@ -547,9 +547,9 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 		const endTime = Math.min(totalTime, centerTime + timeWindow / 2);
 		
 		// Find the corresponding hit timeline and update it
-		const hitTimelineInstance = window.laserTagApp?.hitTimeline;
-		if (hitTimelineInstance) {
-			hitTimelineInstance.highlightTimeRange(startTime, endTime, centerTime);
+		const appInstance = window.laserTagApp;
+		if (appInstance) {
+			appInstance.updateTimeRange(startTime, endTime)
 		}
 		
 		// Update score progression visual indicators

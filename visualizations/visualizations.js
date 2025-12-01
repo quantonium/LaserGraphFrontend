@@ -38,6 +38,10 @@ class LaserTagVisualizations {
 	 */
 	createFullscreen(data, container, detailsContainer) {}
 
+	highlightTimeRange(startTime, endTime) {
+
+	}
+
 	/**
 	 * Create the modal structure for fullscreen chart viewing
 	 */
@@ -205,6 +209,12 @@ class LaserTagVisualizations {
 	static updateAll(processor) {
 		LaserTagVisualizations.visualizations.forEach((v) => {
 			v.loadData(processor)
+		})
+	}
+
+	static updateAllTimeRange(startTime, endTime) {
+		LaserTagVisualizations.visualizations.forEach((v) => {
+			v.highlightTimeRange(startTime, endTime)
 		})
 	}
 }

@@ -87,10 +87,11 @@
 			<label for="playerSelect">Choose player: </label><select name="playerSelect" id="playerSelect">
 				<option value="">All Players</option>
 			</select>
+			<button id="timeRangeReset" onclick="resetTimeRange()"><h3>Reset Time Range</h3></button>
 		</div>
 		<br>
 		<div style="display: flex; flex-direction: row; justify-content: space-around;">
-			<h4 id="gameName">Match Name</h4>
+			<h2 id="gameName">Match Name</h2>
 			<h5 id="gametype">Gametype</h5>
 			<br>
 			<h5 id="date"></h5>
@@ -101,7 +102,19 @@
 
 			<div class="chart-container">
 				<!--match title and basic info-->
-
+				<h4>Scores at time: <span id="matchTime">00:00.000</span></h4>
+				<table>
+					<tr>
+						<thead id="scoreLegend" style="text-decoration: underline;">
+							<td>Player</td>
+							<td>Team</td>
+							<td>Score</td>
+						</thead>
+					</tr>
+					<tr>
+						<tbody id="playerScores"></tbody>
+					</tr>
+				</table>
 
 			</div>
 			<div class="chart-container">
@@ -175,6 +188,7 @@
 	<script src="visualizations/networkGraph.js"></script>
 	<script src="visualizations/scoreProgression.js"></script>
 	<script src="visualizations/targetDistribution.js"></script>
+	<script src="visualizations/playerScores.js"></script>
 	<script src="app.js"></script>
 </body>
 

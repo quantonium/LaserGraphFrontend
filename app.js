@@ -16,6 +16,7 @@ class LaserTagApp {
 		this.networkGraph = new LaserTagNetworkGraph("nodeGraph");
 		this.scoreProgression = new LaserTagScoreProgression("scoreChart")
 		this.targetDist = new LaserTagTargetDistribution("targetChart")
+		this.playerScores = new LaserTagLeaderboard("playerScores")
 		
 		// Initialize file upload handlers
 		this.initFileUpload();
@@ -210,6 +211,10 @@ class LaserTagApp {
 			
 			// Update metrics display
 			this.updateMetricsDisplay();
+
+			let time = this.data.SessionInfo.serverTime
+
+			this.updateTimeRange(0, time);
 			
 			console.log('Data processed and visualizations created successfully!');
 
@@ -289,6 +294,13 @@ class LaserTagApp {
 				}, Math.random() * 500 + 200);
 			}
 		});
+	}
+
+	updateTimeRange(startTime, endTime=-1) {
+		if(endTime < 0) {
+			endTime = this.data.SessionInfo.serverTime
+		}
+		LaserTagVisualizations.updateAllTimeRange(startTime, endTime)
 	}
 
 	/**
@@ -378,4 +390,8 @@ function toggleUpload() {
 		document.body.scrollTop = 0
 		document.documentElement.scrollTop = 0
 	}
+}
+
+function resetTimeRange() {
+	window.laserTagApp?.updateTimeRange(0)
 }

@@ -414,7 +414,7 @@ class LaserTagDataProcessor {
 	/**
 	 * Get player team assignment by looking at team change events starting at startTime
 	 */
-	getPlayerTeam(playerId, startTime = 0) {
+	getPlayerTeam(playerId, startTime = 0, endTime = -1) {
 		if (playerId === undefined || playerId === null) return 0;
 		
 		// Build player ID mapping if not already done
@@ -428,7 +428,7 @@ class LaserTagDataProcessor {
 			const teamChangeEvents = this.events.filter(event => 
 				event.eventName === "TeamChange" && 
 				event.data && event.data.PlayerID === internalPlayerId &&
-				event.matchState.gameTime >= startTime
+				isWithinTimeRange(event.matchState.gameTime, startTime, endTime)
 			);
 			
 			if (teamChangeEvents.length > 0) {
@@ -443,7 +443,7 @@ class LaserTagDataProcessor {
 		const directLookup = this.events.filter(event => 
 			event.eventName === "TeamChange" && 
 			event.data && event.data.PlayerID === parseInt(playerId) &&
-			event.matchState.gameTime >= startTime
+			isWithinTimeRange(event.matchState.gameTime, startTime, endTime)
 		);
 		
 		if (directLookup.length > 0) {
@@ -477,16 +477,49 @@ class LaserTagDataProcessor {
 		return 0; // Default team
 	}
 
+	getPointInfoForHit(hitIndex = -1){
+		
+		const eventsWithHitInfo = this.events.filter(event => event.data?.HitID === hitIndex)
+		let playerPointsDelta = new Map()
+		let playerPointFinal = new Map()
+
+		let teamPointsDelta = new Map()
+		let teamPointFinal = new Map()
+
+
+		eventsWithHitInfo.forEach((event, index) => {
+			switch(event.eventName) {
+				case "TeamPointsChange":
+					let deltaTeam = event.data.new - event.data.old
+					teamPointsDelta.set(event.data?.ID, deltaTeam)
+					teamPointFinal.set(event.data?.ID, event.data.new)
+					break;
+				case "PlayerScore":
+					let delta = event.data.newScore - event.data.oldScore
+					playerPointsDelta.set(event.data.ID, delta)
+					playerPointFinal.set(event.data.ID, event.data.newScore)
+					break;
+			}
+		})
+		return {
+			playerDelta: playerPointsDelta,
+			playerFinal: playerPointFinal,
+			teamDelta: teamPointsDelta,
+			teamFinal: teamPointFinal
+		}
+	}
+
 	/**
 	 * Get player statistics
 	 */
-	getPlayerStats() {
+	getPlayerStats(startTime = 0, endTime = -1) {
 		const players = {};
-		
+		const hitsInRange = this.hits.filter(hit =>  isWithinTimeRange(hit.hitMatchState.gameTime, startTime, endTime))
 		Object.keys(this.playerData).forEach(playerId => {
 			const player = this.playerData[playerId];
-			const playerHits = this.hits.filter(hit => hit.instigatorStateId?.index === parseInt(playerId));
-			const playerGotHit = this.hits.filter(hit => hit.hitStateId?.index === parseInt(playerId));
+			const playerHits = this.hitsInRange.filter(hit => hit.instigatorStateId?.index === parseInt(playerId));
+			const playerGotHit = this.hitsInRange.filter(hit => hit.hitStateId?.index === parseInt(playerId));
+			const playerScoreDelta = playerHits
 
 			players[playerId] = {
 				name: player.playerName,
@@ -495,6 +528,7 @@ class LaserTagDataProcessor {
 				avgRange: playerHits.length > 0 ? playerHits.reduce((sum, hit) => sum + (hit.distance || 0), 0) / playerHits.length : 0,
 				team: this.getPlayerTeam(parseInt(playerId)),
 				color: player.preferredPrimaryColor
+				
 			};
 		});
 

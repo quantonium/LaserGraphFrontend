@@ -156,7 +156,8 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 	/**
 	 * Highlight time range on the timeline based on external scroll input
 	 */
-	highlightTimeRange(startTime, endTime, centerTime) {
+	highlightTimeRange(startTime, endTime) {
+		let centerTime = (startTime + endTime) / 2
 		if (!this.currentTimelineData || !this.currentSvg) {
 			return;
 		}
