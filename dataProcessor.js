@@ -414,7 +414,7 @@ class LaserTagDataProcessor {
 	/**
 	 * Get player team assignment by looking at team change events starting at startTime
 	 */
-	getPlayerTeam(playerId, startTime = 0, endTime = -1) {
+	getPlayerTeam(playerId, endTime = -1) {
 		if (playerId === undefined || playerId === null) return 0;
 		
 		// Build player ID mapping if not already done
@@ -428,7 +428,7 @@ class LaserTagDataProcessor {
 			const teamChangeEvents = this.events.filter(event => 
 				event.eventName === "TeamChange" && 
 				event.data && event.data.PlayerID === internalPlayerId &&
-				isWithinTimeRange(event.matchState.gameTime, startTime, endTime)
+				isWithinTimeRange(event.matchState.gameTime, 0, endTime)
 			);
 			
 			if (teamChangeEvents.length > 0) {
