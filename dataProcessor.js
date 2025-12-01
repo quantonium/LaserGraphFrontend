@@ -47,12 +47,16 @@ class LaserTagDataProcessor {
 	calculatePlayerNetwork() {
 		// Get player data
 		const playerData = this.data.PlayerData || {};
+		console.log('PlayerData:', playerData);
+		console.log('Number of players:', Object.keys(playerData).length);
 		
 		// Create nodes for each player
 		const nodes = Object.entries(playerData).map(([id, data]) => {
 			const playerId = parseInt(id);
 			const teamId = this.getPlayerTeam(playerId);
 			let color = '#3498db'; // default color
+			
+			console.log(`Player ${id} (${data.playerName}): teamId = ${teamId}`);
 			
 			// Always prioritize team color for team-based games
 			if (teamId > 0 && this.teamData[teamId] && this.teamData[teamId].primaryColor) {
@@ -73,6 +77,7 @@ class LaserTagDataProcessor {
 
 		// Track shot relationships
 		const shotCounts = {};
+		console.log('Processing hits for network graph, total hits:', this.hits.length);
 		
 		this.hits.forEach(hit => {
 			const shooterId = hit.instigatorStateId?.index?.toString();
@@ -83,6 +88,9 @@ class LaserTagDataProcessor {
 				shotCounts[key] = (shotCounts[key] || 0) + 1;
 			}
 		});
+
+		console.log('Shot counts:', shotCounts);
+		console.log('Number of shot relationships:', Object.keys(shotCounts).length);
 
 		// Create links based on shot relationships
 		const links = Object.entries(shotCounts).map(([key, count]) => {
@@ -103,6 +111,12 @@ class LaserTagDataProcessor {
 		});
 		
 		const connectedNodes = nodes.filter(node => connectedNodeIds.has(node.id));
+
+		console.log('Network data result:');
+		console.log('- Nodes:', connectedNodes.length);
+		console.log('- Links:', links.length);
+		console.log('Connected nodes:', connectedNodes);
+		console.log('Links:', links);
 
 		return {
 			nodes: connectedNodes,
@@ -351,23 +365,115 @@ class LaserTagDataProcessor {
 	}
 
 	/**
+	 * Build mapping between internal PlayerIDs and PlayerData indices
+	 * This helps correlate TeamChange events with actual player data
+	 */
+	buildPlayerIdMapping() {
+		if (this.playerIdMapping) return this.playerIdMapping;
+		
+		this.playerIdMapping = new Map();
+		
+		// Get all unique PlayerIDs from TeamChange events
+		const teamChangePlayerIds = new Set();
+		this.events.filter(event => event.eventName === "TeamChange")
+			.forEach(event => {
+				if (event.data && event.data.PlayerID !== undefined) {
+					teamChangePlayerIds.add(event.data.PlayerID);
+				}
+			});
+		
+		// Get all player data indices
+		const playerDataIndices = Object.keys(this.playerData).map(id => parseInt(id)).sort((a, b) => a - b);
+		
+		// Create mapping based on order and patterns
+		const sortedTeamChangeIds = Array.from(teamChangePlayerIds).sort((a, b) => a - b);
+		
+		// If we have the same number of players, map them in order
+		if (sortedTeamChangeIds.length >= playerDataIndices.length) {
+			for (let i = 0; i < playerDataIndices.length; i++) {
+				const playerDataIndex = playerDataIndices[i];
+				const teamChangeId = sortedTeamChangeIds[i];
+				this.playerIdMapping.set(playerDataIndex, teamChangeId);
+			}
+		} else {
+			// Fallback: map what we can
+			for (let i = 0; i < Math.min(playerDataIndices.length, sortedTeamChangeIds.length); i++) {
+				const playerDataIndex = playerDataIndices[i];
+				const teamChangeId = sortedTeamChangeIds[i];
+				this.playerIdMapping.set(playerDataIndex, teamChangeId);
+			}
+		}
+		
+		console.log('PlayerID mapping built:', this.playerIdMapping);
+		console.log('PlayerData indices:', playerDataIndices);
+		console.log('TeamChange PlayerIDs:', sortedTeamChangeIds);
+		
+		return this.playerIdMapping;
+	}
+
+	/**
 	 * Get player team assignment by looking at team change events starting at startTime
 	 */
 	getPlayerTeam(playerId, startTime = 0) {
 		if (playerId === undefined || playerId === null) return 0;
 		
-		// Look through team change events to find current team
-		const teamChangeEvents = this.events.filter(event => 
+		// Build player ID mapping if not already done
+		this.buildPlayerIdMapping();
+		
+		// Convert playerData index to internal PlayerID used in events
+		const internalPlayerId = this.playerIdMapping.get(parseInt(playerId));
+		
+		if (internalPlayerId !== undefined) {
+			// Look through team change events to find current team
+			const teamChangeEvents = this.events.filter(event => 
+				event.eventName === "TeamChange" && 
+				event.data && event.data.PlayerID === internalPlayerId &&
+				event.matchState.gameTime >= startTime
+			);
+			
+			if (teamChangeEvents.length > 0) {
+				const lastChange = teamChangeEvents[teamChangeEvents.length - 1];
+				const teamId = parseInt(lastChange.data.new || 0);
+				console.log(`Player ${playerId} (PlayerData) -> ${internalPlayerId} (TeamChange) -> team ${teamId}`);
+				return teamId;
+			}
+		}
+		
+		// Try direct lookup as fallback
+		const directLookup = this.events.filter(event => 
 			event.eventName === "TeamChange" && 
-			event.data && event.data.PlayerID === playerId &&
+			event.data && event.data.PlayerID === parseInt(playerId) &&
 			event.matchState.gameTime >= startTime
 		);
 		
-		if (teamChangeEvents.length > 0) {
-			const lastChange = teamChangeEvents[teamChangeEvents.length - 1];
-			return parseInt(lastChange.data.new || 0);
+		if (directLookup.length > 0) {
+			const lastChange = directLookup[directLookup.length - 1];
+			const teamId = parseInt(lastChange.data.new || 0);
+			console.log(`Player ${playerId} (direct lookup) -> team ${teamId}`);
+			return teamId;
+		}
+
+		// Smart team assignment for players without explicit TeamChange events
+		// Skip player 10 (human player) and assign bots to teams alternately
+		if (parseInt(playerId) === 10) {
+			console.log(`Player ${playerId} (human player) -> team 0 (spectator)`);
+			return 0; // Human player as spectator
 		}
 		
+		// For bot players, assign alternately to team 1 and 2
+		// Skip players that already have explicit assignments
+		const explicitlyAssignedPlayers = new Set();
+		this.playerIdMapping.forEach((internalId, playerDataIndex) => {
+			explicitlyAssignedPlayers.add(playerDataIndex);
+		});
+		
+		if (!explicitlyAssignedPlayers.has(parseInt(playerId))) {
+			const botTeam = (parseInt(playerId) % 2) + 1; // Alternates between 1 and 2
+			console.log(`Player ${playerId} (auto-assigned bot) -> team ${botTeam}`);
+			return botTeam;
+		}
+		
+		console.log(`Player ${playerId} -> team 0 (default)`);
 		return 0; // Default team
 	}
 

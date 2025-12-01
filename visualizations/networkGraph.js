@@ -5,23 +5,51 @@ class LaserTagNetworkGraph extends LaserTagVisualizations {
     loadData(processor) {
 		const networkData = processor.calculatePlayerNetwork();
         const container = this.getContainer();
+        
+        console.log('Container element:', container);
+        console.log('Container innerHTML before clear:', container.innerHTML);
+        
         container.innerHTML = '';
 
+        console.log('NetworkGraph loadData called');
+        console.log('Network data received:', networkData);
+
         if (!networkData || !networkData.nodes || networkData.nodes.length === 0) {
+            console.log('No network data available, showing no-data message');
             container.innerHTML = '<p class="no-data">No player interaction data available</p>';
             return;
         }
 
-        const containerWidth = container.clientWidth || 800;
+        // Ensure container has minimum dimensions
+        container.style.minHeight = '600px';
+        container.style.position = 'relative';
+
+        // Force container to have proper dimensions if not already set
+        if (container.clientWidth === 0) {
+            container.style.width = '100%';
+            container.style.minWidth = '400px';
+        }
+        
+        const containerWidth = container.clientWidth || container.offsetWidth || 400;
         const width = Math.max(400, containerWidth - 40);
         const height = 600;
         const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+
+        console.log('Container dimensions:', {
+            clientWidth: container.clientWidth,
+            offsetWidth: container.offsetWidth,
+            clientHeight: container.clientHeight,
+            calculatedWidth: width,
+            calculatedHeight: height
+        });
 
         const svg = d3.select(container)
             .append('svg')
             .attr('width', width)
             .attr('height', height)
             .attr('class', 'network-graph');
+
+        console.log('SVG created with dimensions:', width, 'x', height);
 
         // Create force simulation
         const simulation = d3.forceSimulation(networkData.nodes)
@@ -34,13 +62,13 @@ class LaserTagNetworkGraph extends LaserTagVisualizations {
         svg.append('defs').append('marker')
             .attr('id', 'arrowhead')
             .attr('viewBox', '0 -5 10 10')
-            .attr('refX', 25)
+            .attr('refX', 22)
             .attr('refY', 0)
-            .attr('markerWidth', 6)
-            .attr('markerHeight', 6)
+            .attr('markerWidth', 4)
+            .attr('markerHeight', 4)
             .attr('orient', 'auto')
             .append('path')
-            .attr('d', 'M0,-5L10,0L0,5')
+            .attr('d', 'M0,-3L6,0L0,3')
             .attr('fill', '#666');
 
         // Create links
