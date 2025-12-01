@@ -346,6 +346,7 @@ class LaserTagApp {
 
 	onPlayerSelect(e) {
 		//todo: update visuals to filter for this player's data only
+		//and update team select to show teams this player has been in
 	}
 }
 

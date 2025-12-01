@@ -3,386 +3,399 @@
  * Processes JSON match data to calculate performance metrics
  */
 
+/**
+ * returns true if the value is within the start and end time range
+ */
+
+function isWithinTimeRange(value, startTime = 0, endTime = -1) {
+	return value >= startTime && 
+			(endTime < 0 || value <= endTime)
+}
+
 class LaserTagDataProcessor {
-    constructor(matchData) {
-        this.data = matchData;
-        // Handle new nested structure
-        this.matchData = matchData.MatchData || matchData;
-        this.hits = this.matchData.hits || [];
-        this.events = this.matchData.events || [];
-        // Team data is at root level, not nested in MatchData
-        this.teamData = matchData.TeamData || matchData.teamData || {};
-        this.playerData = matchData.PlayerData || matchData.playerData || {};
-        this.metrics = {};
-    }
 
-    /**
-     * Calculate all performance metrics
-     */
-    calculateMetrics() {
-        this.metrics = {
-            trickshot: this.calculateTrickshot(),
-            stealth: this.calculateStealth(),
-            speed: this.calculateSpeed(),
-            rpm: this.calculateRPM(),
-            range: this.calculateRange(),
-            accuracy: this.calculateAccuracy()
-        };
-        return this.metrics;
-    }
+	constructor(matchData) {
+		this.data = matchData;
+		// Handle new nested structure
+		this.matchData = matchData.MatchData || matchData;
+		this.hits = this.matchData.hits || [];
+		this.events = this.matchData.events || [];
+		// Team data is at root level, not nested in MatchData
+		this.teamData = matchData.TeamData || matchData.teamData || {};
+		this.playerData = matchData.PlayerData || matchData.playerData || {};
+		this.metrics = {};
+	}
 
-    /**
-     * Calculate player interaction network data for node graph
-     */
-    calculatePlayerNetwork() {
-        // Get player data
-        const playerData = this.data.PlayerData || {};
-        
-        // Create nodes for each player
-        const nodes = Object.entries(playerData).map(([id, data]) => {
-            const playerId = parseInt(id);
-            const teamId = this.getPlayerTeam(playerId);
-            let color = '#3498db'; // default color
-            
-            // Always prioritize team color for team-based games
-            if (teamId > 0 && this.teamData[teamId] && this.teamData[teamId].primaryColor) {
-                const teamColor = this.teamData[teamId].primaryColor;
-                color = `rgb(${Math.floor(teamColor.r * 255)}, ${Math.floor(teamColor.g * 255)}, ${Math.floor(teamColor.b * 255)})`;
-            } else if (data.preferredPrimaryColor) {
-                // Only use individual player color if no team assignment (FFA mode or spectators)
-                color = `rgb(${Math.floor(data.preferredPrimaryColor.r * 255)}, ${Math.floor(data.preferredPrimaryColor.g * 255)}, ${Math.floor(data.preferredPrimaryColor.b * 255)})`;
-            }
-            
-            return {
-                id: id,
-                name: data.playerName || `Player ${id}`,
-                color: color,
-                teamId: teamId
-            };
-        });
+	/**
+	 * Calculate all performance metrics
+	 */
+	calculateMetrics() {
+		this.metrics = {
+			trickshot: this.calculateTrickshot(),
+			stealth: this.calculateStealth(),
+			speed: this.calculateSpeed(),
+			rpm: this.calculateRPM(),
+			range: this.calculateRange(),
+			accuracy: this.calculateAccuracy()
+		};
+		return this.metrics;
+	}
 
-        // Track shot relationships
-        const shotCounts = {};
-        
-        this.hits.forEach(hit => {
-            const shooterId = hit.instigatorStateId?.index?.toString();
-            const targetId = hit.hitStateId?.index?.toString();
-            
-            if (shooterId && targetId && shooterId !== targetId) {
-                const key = `${shooterId}-${targetId}`;
-                shotCounts[key] = (shotCounts[key] || 0) + 1;
-            }
-        });
+	/**
+	 * Calculate player interaction network data for node graph
+	 */
+	calculatePlayerNetwork() {
+		// Get player data
+		const playerData = this.data.PlayerData || {};
+		
+		// Create nodes for each player
+		const nodes = Object.entries(playerData).map(([id, data]) => {
+			const playerId = parseInt(id);
+			const teamId = this.getPlayerTeam(playerId);
+			let color = '#3498db'; // default color
+			
+			// Always prioritize team color for team-based games
+			if (teamId > 0 && this.teamData[teamId] && this.teamData[teamId].primaryColor) {
+				const teamColor = this.teamData[teamId].primaryColor;
+				color = `rgb(${Math.floor(teamColor.r * 255)}, ${Math.floor(teamColor.g * 255)}, ${Math.floor(teamColor.b * 255)})`;
+			} else if (data.preferredPrimaryColor) {
+				// Only use individual player color if no team assignment (FFA mode or spectators)
+				color = `rgb(${Math.floor(data.preferredPrimaryColor.r * 255)}, ${Math.floor(data.preferredPrimaryColor.g * 255)}, ${Math.floor(data.preferredPrimaryColor.b * 255)})`;
+			}
+			
+			return {
+				id: id,
+				name: data.playerName || `Player ${id}`,
+				color: color,
+				teamId: teamId
+			};
+		});
 
-        // Create links based on shot relationships
-        const links = Object.entries(shotCounts).map(([key, count]) => {
-            const [source, target] = key.split('-');
-            return {
-                source: source,
-                target: target,
-                value: count,
-                width: Math.min(Math.max(count * 2, 2), 15) // Increased scaling: count * 2, min 2, max 15
-            };
-        });
+		// Track shot relationships
+		const shotCounts = {};
+		
+		this.hits.forEach(hit => {
+			const shooterId = hit.instigatorStateId?.index?.toString();
+			const targetId = hit.hitStateId?.index?.toString();
+			
+			if (shooterId && targetId && shooterId !== targetId) {
+				const key = `${shooterId}-${targetId}`;
+				shotCounts[key] = (shotCounts[key] || 0) + 1;
+			}
+		});
 
-        // Filter out nodes that have no connections
-        const connectedNodeIds = new Set();
-        links.forEach(link => {
-            connectedNodeIds.add(link.source);
-            connectedNodeIds.add(link.target);
-        });
-        
-        const connectedNodes = nodes.filter(node => connectedNodeIds.has(node.id));
+		// Create links based on shot relationships
+		const links = Object.entries(shotCounts).map(([key, count]) => {
+			const [source, target] = key.split('-');
+			return {
+				source: source,
+				target: target,
+				value: count,
+				width: Math.min(Math.max(count * 2, 2), 15) // Increased scaling: count * 2, min 2, max 15
+			};
+		});
 
-        return {
-            nodes: connectedNodes,
-            links: links
-        };
-    }
+		// Filter out nodes that have no connections
+		const connectedNodeIds = new Set();
+		links.forEach(link => {
+			connectedNodeIds.add(link.source);
+			connectedNodeIds.add(link.target);
+		});
+		
+		const connectedNodes = nodes.filter(node => connectedNodeIds.has(node.id));
 
-    /**
-     * Trickshot = complex shots ratio based on distance and target type
-     */
-    calculateTrickshot() {
-        if (this.hits.length === 0) return 0;
+		return {
+			nodes: connectedNodes,
+			links: links
+		};
+	}
 
-        let complexShots = 0;
-        let totalMultiplier = 0;
+	/**
+	 * Trickshot = complex shots ratio based on distance and target type
+	 */
+	calculateTrickshot() {
+		if (this.hits.length === 0) return 0;
 
-        this.hits.forEach(hit => {
-            // Check for long-range shots or difficult targets as "trick shots"
-            const distance = hit.distance || 0;
-            const isLongRange = distance > 2000; // Long range shots
-            const hasReflectiveMaterial = hit.hitResult && hit.hitResult.physMaterial && 
-                hit.hitResult.physMaterial.includes('Reflective');
-            const isRectangleTarget = hit.hitComponent && hit.hitComponent.includes('Rectangle');
-            
-            if (isLongRange || hasReflectiveMaterial || isRectangleTarget || (hit.pointMultiplier > 1)) {
-                complexShots++;
-            }
-            totalMultiplier += hit.pointMultiplier || 1;
-        });
+		let complexShots = 0;
+		let totalMultiplier = 0;
 
-        const trickshotRatio = complexShots / this.hits.length;
-        const avgMultiplier = totalMultiplier / this.hits.length;
-        
-        return (trickshotRatio * avgMultiplier) * 100;
-    }
+		this.hits.forEach(hit => {
+			// Check for long-range shots or difficult targets as "trick shots"
+			const distance = hit.distance || 0;
+			const isLongRange = distance > 2000; // Long range shots
+			const hasReflectiveMaterial = hit.hitResult && hit.hitResult.physMaterial && 
+				hit.hitResult.physMaterial.includes('Reflective');
+			const isRectangleTarget = hit.hitComponent && hit.hitComponent.includes('Rectangle');
+			
+			if (isLongRange || hasReflectiveMaterial || isRectangleTarget || (hit.pointMultiplier > 1)) {
+				complexShots++;
+			}
+			totalMultiplier += hit.pointMultiplier || 1;
+		});
 
-    /**
-     * Stealth = average time between hits (in seconds)
-     */
-    calculateStealth() {
-        if (this.hits.length <= 1) return 0;
+		const trickshotRatio = complexShots / this.hits.length;
+		const avgMultiplier = totalMultiplier / this.hits.length;
+		
+		return (trickshotRatio * avgMultiplier) * 100;
+	}
 
-        const hitTimes = this.hits
-            .map(hit => hit.hitMatchState?.gameTime || 0)
-            .sort((a, b) => a - b);
+	/**
+	 * Stealth = average time between hits (in seconds)
+	 */
+	calculateStealth() {
+		if (this.hits.length <= 1) return 0;
 
-        let totalTimeDiff = 0;
-        for (let i = 1; i < hitTimes.length; i++) {
-            totalTimeDiff += hitTimes[i] - hitTimes[i - 1];
-        }
+		const hitTimes = this.hits
+			.map(hit => hit.hitMatchState?.gameTime || 0)
+			.sort((a, b) => a - b);
 
-        return totalTimeDiff / (hitTimes.length - 1);
-    }
+		let totalTimeDiff = 0;
+		for (let i = 1; i < hitTimes.length; i++) {
+			totalTimeDiff += hitTimes[i] - hitTimes[i - 1];
+		}
 
-    /**
-     * Speed = average distance between shot start locations
-     */
-    calculateSpeed() {
-        if (this.hits.length <= 1) return 0;
+		return totalTimeDiff / (hitTimes.length - 1);
+	}
 
-        const startPositions = this.hits
-            .filter(hit => hit.hitResult?.traceStart)
-            .map(hit => hit.hitResult.traceStart);
+	/**
+	 * Speed = average distance between shot start locations
+	 */
+	calculateSpeed() {
+		if (this.hits.length <= 1) return 0;
 
-        if (startPositions.length <= 1) return 0;
+		const startPositions = this.hits
+			.filter(hit => hit.hitResult?.traceStart)
+			.map(hit => hit.hitResult.traceStart);
 
-        let totalDistance = 0;
-        let distanceCount = 0;
+		if (startPositions.length <= 1) return 0;
 
-        for (let i = 1; i < startPositions.length; i++) {
-            const dist = this.calculateDistance3D(
-                startPositions[i - 1],
-                startPositions[i]
-            );
-            totalDistance += dist;
-            distanceCount++;
-        }
+		let totalDistance = 0;
+		let distanceCount = 0;
 
-        return distanceCount > 0 ? totalDistance / distanceCount : 0;
-    }
+		for (let i = 1; i < startPositions.length; i++) {
+			const dist = this.calculateDistance3D(
+				startPositions[i - 1],
+				startPositions[i]
+			);
+			totalDistance += dist;
+			distanceCount++;
+		}
 
-    /**
-     * RPM = rounds per minute (shots per minute)
-     */
-    calculateRPM() {
-        if (this.hits.length === 0) return 0;
+		return distanceCount > 0 ? totalDistance / distanceCount : 0;
+	}
 
-        const hitTimes = this.hits
-            .map(hit => hit.hitMatchState?.gameTime || 0)
-            .filter(time => time > 0);
+	/**
+	 * RPM = rounds per minute (shots per minute)
+	 */
+	calculateRPM() {
+		if (this.hits.length === 0) return 0;
 
-        if (hitTimes.length === 0) return 0;
+		const hitTimes = this.hits
+			.map(hit => hit.hitMatchState?.gameTime || 0)
+			.filter(time => time > 0);
 
-        const minTime = Math.min(...hitTimes);
-        const maxTime = Math.max(...hitTimes);
-        const timeSpanMinutes = (maxTime - minTime) / 60;
+		if (hitTimes.length === 0) return 0;
 
-        return timeSpanMinutes > 0 ? this.hits.length / timeSpanMinutes : 0;
-    }
+		const minTime = Math.min(...hitTimes);
+		const maxTime = Math.max(...hitTimes);
+		const timeSpanMinutes = (maxTime - minTime) / 60;
 
-    /**
-     * Range = average range value for hits
-     */
-    calculateRange() {
-        if (this.hits.length === 0) return 0;
+		return timeSpanMinutes > 0 ? this.hits.length / timeSpanMinutes : 0;
+	}
 
-        const totalRange = this.hits.reduce((sum, hit) => {
-            return sum + (hit.distance || 0);
-        }, 0);
+	/**
+	 * Range = average range value for hits
+	 */
+	calculateRange() {
+		if (this.hits.length === 0) return 0;
 
-        return totalRange / this.hits.length;
-    }
+		const totalRange = this.hits.reduce((sum, hit) => {
+			return sum + (hit.distance || 0);
+		}, 0);
 
-    /**
-     * Accuracy = shots hit / shots fired
-     * We'll estimate shots fired from hit events and calculate accuracy per player
-     */
-    calculateAccuracy() {
-        // Count hit events from the events array
-        const hitEvents = this.events.filter(event => event.eventName === "HitEvent");
-        const shotsHit = hitEvents.length;
+		return totalRange / this.hits.length;
+	}
 
-        // Estimate total shots fired - in team matches, assume some misses
-        // Use player data and hit distribution to estimate
-        const uniquePlayers = [...new Set(this.hits.map(hit => hit.instigatorStateId?.index))].filter(id => id !== undefined);
-        const avgHitsPerPlayer = this.hits.length / uniquePlayers.length;
-        
-        // Estimate that accuracy decreases with more active players (more chaos)
-        const estimatedAccuracy = Math.min(95, Math.max(60, 100 - (avgHitsPerPlayer * 2)));
-        
-        return estimatedAccuracy;
-    }
+	/**
+	 * Accuracy = shots hit / shots fired
+	 * We'll estimate shots fired from hit events and calculate accuracy per player
+	 */
+	calculateAccuracy() {
+		// Count hit events from the events array
+		const hitEvents = this.events.filter(event => event.eventName === "HitEvent");
+		const shotsHit = hitEvents.length;
 
-    /**
-     * Helper function to calculate 3D distance between two points
-     */
-    calculateDistance3D(point1, point2) {
-        const dx = point2.x - point1.x;
-        const dy = point2.y - point1.y;
-        const dz = point2.z - point1.z;
-        return Math.sqrt(dx * dx + dy * dy + dz * dz);
-    }
+		// Estimate total shots fired - in team matches, assume some misses
+		// Use player data and hit distribution to estimate
+		const uniquePlayers = [...new Set(this.hits.map(hit => hit.instigatorStateId?.index))].filter(id => id !== undefined);
+		const avgHitsPerPlayer = this.hits.length / uniquePlayers.length;
+		
+		// Estimate that accuracy decreases with more active players (more chaos)
+		const estimatedAccuracy = Math.min(95, Math.max(60, 100 - (avgHitsPerPlayer * 2)));
+		
+		return estimatedAccuracy;
+	}
 
-    /**
-     * Get normalized metrics for radar chart (0-100 scale)
-     */
-    getNormalizedMetrics() {
-        const metrics = this.calculateMetrics();
-        
-        return {
-            trickshot: Math.min(100, Math.max(0, metrics.trickshot)),
-            stealth: this.normalizeValue(metrics.stealth, 0, 10, true), // Reverse scale (lower is better)
-            speed: this.normalizeValue(metrics.speed, 0, 2000, false),
-            rpm: this.normalizeValue(metrics.rpm, 0, 60, false),
-            range: this.normalizeValue(metrics.range, 0, 8000, false),
-            accuracy: Math.min(100, Math.max(0, metrics.accuracy))
-        };
-    }
+	/**
+	 * Helper function to calculate 3D distance between two points
+	 */
+	calculateDistance3D(point1, point2) {
+		const dx = point2.x - point1.x;
+		const dy = point2.y - point1.y;
+		const dz = point2.z - point1.z;
+		return Math.sqrt(dx * dx + dy * dy + dz * dz);
+	}
 
-    /**
-     * Normalize a value to 0-100 scale
-     */
-    normalizeValue(value, min, max, reverse = false) {
-        const normalized = ((value - min) / (max - min)) * 100;
-        const clamped = Math.min(100, Math.max(0, normalized));
-        return reverse ? 100 - clamped : clamped;
-    }
+	/**
+	 * Get normalized metrics for radar chart (0-100 scale)
+	 */
+	getNormalizedMetrics() {
+		const metrics = this.calculateMetrics();
+		
+		return {
+			trickshot: Math.min(100, Math.max(0, metrics.trickshot)),
+			stealth: this.normalizeValue(metrics.stealth, 0, 10, true), // Reverse scale (lower is better)
+			speed: this.normalizeValue(metrics.speed, 0, 2000, false),
+			rpm: this.normalizeValue(metrics.rpm, 0, 60, false),
+			range: this.normalizeValue(metrics.range, 0, 8000, false),
+			accuracy: Math.min(100, Math.max(0, metrics.accuracy))
+		};
+	}
 
-    /**
-     * Get detailed metrics information
-     */
-    getMetricsInfo() {
-        const raw = this.calculateMetrics();
-        const normalized = this.getNormalizedMetrics();
+	/**
+	 * Normalize a value to 0-100 scale
+	 */
+	normalizeValue(value, min, max, reverse = false) {
+		const normalized = ((value - min) / (max - min)) * 100;
+		const clamped = Math.min(100, Math.max(0, normalized));
+		return reverse ? 100 - clamped : clamped;
+	}
 
-        return {
-            trickshot: {
-                value: raw.trickshot.toFixed(2),
-                normalized: normalized.trickshot,
-                unit: '%',
-                description: 'Complex shot efficiency'
-            },
-            stealth: {
-                value: raw.stealth.toFixed(2),
-                normalized: normalized.stealth,
-                unit: 's',
-                description: 'Average time between hits'
-            },
-            speed: {
-                value: raw.speed.toFixed(0),
-                normalized: normalized.speed,
-                unit: ' units',
-                description: 'Movement between shots'
-            },
-            rpm: {
-                value: raw.rpm.toFixed(1),
-                normalized: normalized.rpm,
-                unit: ' shots/min',
-                description: 'Rate of fire'
-            },
-            range: {
-                value: raw.range.toFixed(0),
-                normalized: normalized.range,
-                unit: ' units',
-                description: 'Average shot distance'
-            },
-            accuracy: {
-                value: raw.accuracy.toFixed(1),
-                normalized: normalized.accuracy,
-                unit: '%',
-                description: 'Hit percentage'
-            }
-        };
-    }
+	/**
+	 * Get detailed metrics information
+	 */
+	getMetricsInfo() {
+		const raw = this.calculateMetrics();
+		const normalized = this.getNormalizedMetrics();
 
-    /**
-     * Get team performance data
-     */
-    getTeamPerformance() {
-        const teams = {};
-        
-        Object.keys(this.teamData).forEach(teamId => {
-            const team = this.teamData[teamId];
-            
-            // Skip spectator teams
-            if (team.bTeamIsSpectator) return;
-            
-            const teamHits = this.hits.filter(hit => {
-                // Find hits by players on this team
-                const playerId = hit.instigatorStateId?.index;
-                return this.getPlayerTeam(playerId) === parseInt(teamId);
-            });
+		return {
+			trickshot: {
+				value: raw.trickshot.toFixed(2),
+				normalized: normalized.trickshot,
+				unit: '%',
+				description: 'Complex shot efficiency'
+			},
+			stealth: {
+				value: raw.stealth.toFixed(2),
+				normalized: normalized.stealth,
+				unit: 's',
+				description: 'Average time between hits'
+			},
+			speed: {
+				value: raw.speed.toFixed(0),
+				normalized: normalized.speed,
+				unit: ' units',
+				description: 'Movement between shots'
+			},
+			rpm: {
+				value: raw.rpm.toFixed(1),
+				normalized: normalized.rpm,
+				unit: ' shots/min',
+				description: 'Rate of fire'
+			},
+			range: {
+				value: raw.range.toFixed(0),
+				normalized: normalized.range,
+				unit: ' units',
+				description: 'Average shot distance'
+			},
+			accuracy: {
+				value: raw.accuracy.toFixed(1),
+				normalized: normalized.accuracy,
+				unit: '%',
+				description: 'Hit percentage'
+			}
+		};
+	}
 
-            teams[teamId] = {
-                name: team.teamName,
-                points: team.points,
-                hits: teamHits.length,
-                avgRange: teamHits.length > 0 ? teamHits.reduce((sum, hit) => sum + (hit.distance || 0), 0) / teamHits.length : 0,
-                color: team.primaryColor || { r: 0.5, g: 0.5, b: 0.5 } // Default color if missing
-            };
-        });
+	/**
+	 * Get team performance data
+	 */
+	getTeamPerformance( startTime = 0, endTime = -1) {
+		const teams = {};
+		
+		Object.keys(this.teamData).forEach(teamId => {
+			const team = this.teamData[teamId];
+			
+			// Skip spectator teams
+			if (team.bTeamIsSpectator) return;
+			
+			const teamHits = this.hits.filter(hit => {
+				// Find hits by players on this team
+				const playerId = hit.instigatorStateId?.index;
 
-        return teams;
-    }
+				return this.getPlayerTeam(playerId) === parseInt(teamId)
+				&& isWithinTimeRange(history.hitMatchState.gameTime, startTime, endTime)
+			});
 
-    /**
-     * Get player team assignment by looking at team change events
-     */
-    getPlayerTeam(playerId) {
-        if (playerId === undefined || playerId === null) return 0;
-        
-        // Look through team change events to find current team
-        const teamChangeEvents = this.events.filter(event => 
-            event.eventName === "TeamChange" && 
-            event.data && event.data.PlayerID === playerId
-        );
-        
-        if (teamChangeEvents.length > 0) {
-            const lastChange = teamChangeEvents[teamChangeEvents.length - 1];
-            return parseInt(lastChange.data.new || 0);
-        }
-        
-        return 0; // Default team
-    }
+			teams[teamId] = {
+				name: team.teamName,
+				points: team.points,
+				hits: teamHits.length,
+				avgRange: teamHits.length > 0 ? teamHits.reduce((sum, hit) => sum + (hit.distance || 0), 0) / teamHits.length : 0,
+				color: team.primaryColor || { r: 0.5, g: 0.5, b: 0.5 } // Default color if missing
+			};
+		});
 
-    /**
-     * Get player statistics
-     */
-    getPlayerStats() {
-        const players = {};
-        
-        Object.keys(this.playerData).forEach(playerId => {
-            const player = this.playerData[playerId];
-            const playerHits = this.hits.filter(hit => hit.instigatorStateId?.index === parseInt(playerId));
-            const playerGotHit = this.hits.filter(hit => hit.hitStateId?.index === parseInt(playerId));
+		return teams;
+	}
 
-            players[playerId] = {
-                name: player.playerName,
-                hits: playerHits.length,
-                gotHit: playerGotHit.length,
-                avgRange: playerHits.length > 0 ? playerHits.reduce((sum, hit) => sum + (hit.distance || 0), 0) / playerHits.length : 0,
-                team: this.getPlayerTeam(parseInt(playerId)),
-                color: player.preferredPrimaryColor
-            };
-        });
+	/**
+	 * Get player team assignment by looking at team change events starting at startTime
+	 */
+	getPlayerTeam(playerId, startTime = 0) {
+		if (playerId === undefined || playerId === null) return 0;
+		
+		// Look through team change events to find current team
+		const teamChangeEvents = this.events.filter(event => 
+			event.eventName === "TeamChange" && 
+			event.data && event.data.PlayerID === playerId &&
+			event.matchState.gameTime >= startTime
+		);
+		
+		if (teamChangeEvents.length > 0) {
+			const lastChange = teamChangeEvents[teamChangeEvents.length - 1];
+			return parseInt(lastChange.data.new || 0);
+		}
+		
+		return 0; // Default team
+	}
 
-        return players;
-    }
+	/**
+	 * Get player statistics
+	 */
+	getPlayerStats() {
+		const players = {};
+		
+		Object.keys(this.playerData).forEach(playerId => {
+			const player = this.playerData[playerId];
+			const playerHits = this.hits.filter(hit => hit.instigatorStateId?.index === parseInt(playerId));
+			const playerGotHit = this.hits.filter(hit => hit.hitStateId?.index === parseInt(playerId));
 
-    
+			players[playerId] = {
+				name: player.playerName,
+				hits: playerHits.length,
+				gotHit: playerGotHit.length,
+				avgRange: playerHits.length > 0 ? playerHits.reduce((sum, hit) => sum + (hit.distance || 0), 0) / playerHits.length : 0,
+				team: this.getPlayerTeam(parseInt(playerId)),
+				color: player.preferredPrimaryColor
+			};
+		});
+
+		return players;
+	}
+
+	
 }
 
 // Export for use in other modules
