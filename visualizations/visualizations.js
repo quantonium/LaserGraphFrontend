@@ -120,9 +120,9 @@ class LaserTagVisualizations {
 		hits.forEach(hit => {
 			if (hit.hitComponent) {
 				const component = hit.hitComponent;
-				let targetType = 'Unknown';
+				let targetType = hit.hitFriendlyName;
 				
-				// Extract the full sensor name as the target type
+				/*// Extract the full sensor name as the target type
 				if (component.includes('Sensor_')) {
 					// Keep the full sensor component name as the target type
 					targetType = component;
@@ -130,7 +130,7 @@ class LaserTagVisualizations {
 					// For non-sensor components, use the component name directly
 					targetType = component;
 				}
-
+				*/
 				if (!targetData[targetType]) {
 					targetData[targetType] = {
 						count: 0,
