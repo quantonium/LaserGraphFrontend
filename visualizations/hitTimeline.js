@@ -366,11 +366,12 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 	createScrollableTimeline(hits) {
 		const container = this.getContainer();
 
-		// Set up dimensions for scrollable timeline
-		const margin = { top: 20, right: 20, bottom: 60, left: 40 };
-		// Make timeline wider to enable horizontal scrolling
-		const width = Math.max(1200, hits.length * 8) - margin.left - margin.right;
-		const height = 400 - margin.top - margin.bottom;
+		// Set up dimensions for responsive timeline
+		const margin = { top: 20, right: 20, bottom: 40, left: 40 };
+		// Use actual container width, don't force minimum
+		const containerWidth = container.offsetWidth || 300;
+		const width = containerWidth - margin.left - margin.right - 20;
+		const height = 200 - margin.top - margin.bottom;
 
 		const svg = d3.select('#timelineChart')
 			.append('svg')
