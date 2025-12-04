@@ -268,10 +268,10 @@ class LaserTagDataProcessor {
 		
 		return {
 			trickshot: Math.min(100, Math.max(0, metrics.trickshot)),
-			stealth: this.normalizeValue(metrics.stealth, 0, 10, true), // Reverse scale (lower is better)
+			stealth: this.normalizeValue(metrics.stealth, 0, 60, true), // Reverse scale (lower is better) - increased max to 60s
 			speed: this.normalizeValue(metrics.speed, 0, 2000, false),
 			rpm: this.normalizeValue(metrics.rpm, 0, 60, false),
-			range: this.normalizeValue(metrics.range, 0, 8000, false),
+			range: this.normalizeValue(metrics.range, 0, 500, false), // Reduced max to 500 units for better scaling
 			accuracy: Math.min(100, Math.max(0, metrics.accuracy))
 		};
 	}
