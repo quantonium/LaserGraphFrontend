@@ -74,6 +74,37 @@
 	box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
 }
 
+/* Timeline Controls */
+.timeline-controls {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 10px;
+	padding: 5px;
+	font-size: 12px;
+}
+
+.timeline-controls label {
+	margin-right: 3px;
+}
+
+.timeline-controls button {
+	padding: 3px 8px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	background: #f8f8f8;
+	cursor: pointer;
+	font-size: 11px;
+}
+
+.timeline-controls button:hover {
+	background: #e8e8e8;
+}
+
+#timelineChart svg {
+	min-width: 1200px;
+}
+
 .score-progression-container {
 	position: relative;
 }
