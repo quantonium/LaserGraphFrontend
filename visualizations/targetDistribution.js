@@ -1,6 +1,6 @@
 class LaserTagTargetDistribution extends LaserTagVisualizations {
 	/**
-     * Create fullscreen target distribution
+     * Create fullscreen hit matrix
      */
     createFullscreen(hits, container, detailsContainer) {
         if (!hits || hits.length === 0) {
@@ -9,314 +9,620 @@ class LaserTagTargetDistribution extends LaserTagVisualizations {
             return;
         }
 
-        // Create enhanced visualization
-        this.createEnhancedTargetChart(hits, container);
-        this.createDetailedTargetAnalysis(hits, detailsContainer);
+        // Create enhanced hit matrix
+        this.createEnhancedHitMatrix(hits, container);
+        this.createDetailedHitAnalysis(hits, detailsContainer);
     }
 
     /**
-     * Create enhanced target chart with detailed breakdown
+     * Create enhanced hit matrix showing who hit whom and how many times
      */
-    createEnhancedTargetChart(hits, container) {
-        const containerWidth = container.clientWidth || 400;
-        const width = Math.max(300, containerWidth - 40);
-        const height = 400;
-        const margin = { top: 40, right: 80, bottom: 80, left: 120 };
-        const chartWidth = width - margin.left - margin.right;
-        const chartHeight = height - margin.top - margin.bottom;
-
+    createEnhancedHitMatrix(hits, container) {
         container.innerHTML = '';
 
-        // Process target data
-        const targetData = this.processTargetData(hits);
-        const targetTypes = Object.keys(targetData).sort((a, b) => targetData[b].count - targetData[a].count);
+        // Process hit data to create matrix
+        const matrixData = this.processHitMatrix(hits);
+        
+        if (!matrixData || matrixData.players.length === 0) {
+            container.innerHTML = '<p style="text-align: center; color: #7f8c8d; padding: 40px;">No player hit data available</p>';
+            return;
+        }
 
-        // Create SVG
-        const svg = d3.select(container)
-            .append('svg')
-            .attr('width', width)
-            .attr('height', height)
-            .style('background', '#f8f9fa')
-            .style('border-radius', '8px');
-
-        const g = svg.append('g')
-            .attr('transform', `translate(${margin.left},${margin.top})`);
-
-        // Create scales
-        const xScale = d3.scaleBand()
-            .domain(targetTypes)
-            .range([0, chartWidth])
-            .padding(0.2);
-
-        const yScale = d3.scaleLinear()
-            .domain([0, Math.max(...targetTypes.map(type => targetData[type].count))])
-            .range([chartHeight, 0]);
-
-        // Color scale based on target effectiveness
-        const colorScale = d3.scaleSequential(d3.interpolateViridis)
-            .domain([0, Math.max(...targetTypes.map(type => targetData[type].avgMultiplier || 1))]);
-
-        // Add axes
-        g.append('g')
-            .attr('transform', `translate(0,${chartHeight})`)
-            .call(d3.axisBottom(xScale))
-            .selectAll('text')
-            .attr('transform', 'rotate(-45)')
-            .style('text-anchor', 'end')
-            .style('font-size', '12px')
-            .style('fill', '#2c3e50');
-
-        g.append('g')
-            .call(d3.axisLeft(yScale))
-            .append('text')
-            .attr('transform', 'rotate(-90)')
-            .attr('y', -60)
-            .attr('x', -chartHeight / 2)
-            .attr('fill', '#2c3e50')
-            .style('text-anchor', 'middle')
-            .style('font-weight', 'bold')
-            .text('Number of Hits');
-
-        // Create bars
-        g.selectAll('.target-bar')
-            .data(targetTypes)
-            .enter()
-            .append('rect')
-            .attr('class', 'target-bar')
-            .attr('x', d => xScale(d))
-            .attr('y', chartHeight)
-            .attr('width', xScale.bandwidth())
-            .attr('height', 0)
-            .attr('fill', d => colorScale(targetData[d].avgMultiplier || 1))
-            .attr('stroke', '#fff')
-            .attr('stroke-width', 1)
-            .style('cursor', 'pointer')
-            .transition()
-            .duration(1000)
-            .delay((d, i) => i * 100)
-            .attr('y', d => yScale(targetData[d].count))
-            .attr('height', d => chartHeight - yScale(targetData[d].count));
-
-        // Add value labels on bars
-        g.selectAll('.bar-label')
-            .data(targetTypes)
-            .enter()
-            .append('text')
-            .attr('class', 'bar-label')
-            .attr('x', d => xScale(d) + xScale.bandwidth() / 2)
-            .attr('y', d => yScale(targetData[d].count) - 5)
-            .attr('text-anchor', 'middle')
-            .style('font-size', '12px')
-            .style('font-weight', 'bold')
-            .style('fill', '#2c3e50')
-            .text(d => targetData[d].count)
-            .style('opacity', 0)
-            .transition()
-            .duration(1000)
-            .delay((d, i) => i * 100 + 500)
-            .style('opacity', 1);
-
-        // Add hover interactions
-        g.selectAll('.target-bar')
-            .on('mouseover', function(event, d) {
-                d3.select(this)
-                    .attr('stroke-width', 3)
-                    .attr('stroke', '#e74c3c');
-
-                // Create tooltip
-                const tooltip = d3.select('body')
-                    .append('div')
-                    .attr('class', 'target-tooltip')
-                    .style('position', 'absolute')
-                    .style('background', 'rgba(0,0,0,0.8)')
-                    .style('color', 'white')
-                    .style('padding', '12px')
-                    .style('border-radius', '6px')
-                    .style('font-size', '13px')
-                    .style('pointer-events', 'none')
-                    .style('z-index', '1000')
-                    .style('opacity', 0);
-
-                tooltip.transition().duration(200).style('opacity', 1);
-
-                const data = targetData[d];
-                tooltip.html(`
-                    <strong>${d}</strong><br>
-                    Hits: ${data.count}<br>
-                    Avg Multiplier: ${data.avgMultiplier?.toFixed(2) || 'N/A'}<br>
-                    Percentage: ${data.percentage.toFixed(1)}%<br>
-                    ${data.players?.length || 0} different players
-                `)
-                    .style('left', (event.pageX + 10) + 'px')
-                    .style('top', (event.pageY - 10) + 'px');
-            })
-            .on('mouseout', function() {
-                d3.select(this)
-                    .attr('stroke-width', 1)
-                    .attr('stroke', '#fff');
-                
-                d3.selectAll('.target-tooltip').remove();
-            });
+        // Create matrix table
+        const tableContainer = document.createElement('div');
+        tableContainer.style.cssText = `
+            width: 100%;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        `;
 
         // Add title
-        svg.append('text')
-            .attr('x', width / 2)
-            .attr('y', 25)
-            .attr('fill', '#2c3e50')
-            .style('text-anchor', 'middle')
-            .style('font-size', '18px')
-            .style('font-weight', 'bold')
-            .text('Target Hit Distribution Analysis');
+        const title = document.createElement('h3');
+        title.textContent = 'Hit Matrix - Who Shot Whom';
+        title.style.cssText = `
+            text-align: center;
+            color: #2c3e50;
+            margin: 0 0 25px 0;
+            font-size: 1.8em;
+            font-weight: bold;
+        `;
+        tableContainer.appendChild(title);
 
-        // Add legend for color coding
-        const legend = svg.append('g')
-            .attr('transform', `translate(${width - 70}, 60)`);
+        // Create table wrapper for overflow handling
+        const tableWrapper = document.createElement('div');
+        tableWrapper.style.cssText = `
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        `;
 
-        legend.append('text')
-            .attr('x', 0)
-            .attr('y', 0)
-            .style('font-size', '12px')
-            .style('font-weight', 'bold')
-            .style('fill', '#2c3e50')
-            .text('Avg Multiplier');
+        // Create the matrix table
+        const table = document.createElement('table');
+        table.style.cssText = `
+            width: 100%;
+            min-width: 400px;
+            border-collapse: collapse;
+            background: white;
+        `;
 
-        const legendScale = d3.scaleLinear()
-            .domain(d3.extent(targetTypes, d => targetData[d].avgMultiplier || 1))
-            .range([10, 80]);
+        // Create header row
+        const headerRow = document.createElement('tr');
+        headerRow.style.cssText = `
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        `;
 
-        const legendAxis = d3.axisRight(legendScale)
-            .tickSize(6)
-            .ticks(4);
+        // Corner cell
+        const cornerCell = document.createElement('th');
+        cornerCell.textContent = 'Shooter → Target';
+        cornerCell.style.cssText = `
+            padding: 12px 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.9em;
+            min-width: 120px;
+        `;
+        headerRow.appendChild(cornerCell);
 
-        legend.append('g')
-            .attr('transform', 'translate(20, 10)')
-            .call(legendAxis)
-            .selectAll('text')
-            .style('font-size', '10px');
+        // Target player columns
+        matrixData.players.forEach(player => {
+            const th = document.createElement('th');
+            th.textContent = player.name;
+            th.style.cssText = `
+                padding: 12px 8px;
+                border: 1px solid rgba(255,255,255,0.2);
+                font-weight: bold;
+                text-align: center;
+                font-size: 0.9em;
+                writing-mode: vertical-rl;
+                text-orientation: mixed;
+                min-width: 60px;
+                max-width: 80px;
+                background: ${player.color};
+                color: white;
+            `;
+            headerRow.appendChild(th);
+        });
+
+        // Total column
+        const totalHeader = document.createElement('th');
+        totalHeader.textContent = 'Total Hits';
+        totalHeader.style.cssText = `
+            padding: 12px 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.9em;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            background: #e74c3c;
+            color: white;
+        `;
+        headerRow.appendChild(totalHeader);
+
+        table.appendChild(headerRow);
+
+        // Create data rows
+        matrixData.players.forEach((shooter, rowIndex) => {
+            const row = document.createElement('tr');
+            row.style.backgroundColor = rowIndex % 2 === 0 ? '#ffffff' : '#f8f9fa';
+
+            // Shooter name cell
+            const shooterCell = document.createElement('td');
+            shooterCell.textContent = shooter.name;
+            shooterCell.style.cssText = `
+                padding: 10px 12px;
+                border: 1px solid #dee2e6;
+                font-weight: bold;
+                text-align: left;
+                background: ${shooter.color};
+                color: white;
+                position: sticky;
+                left: 0;
+                z-index: 1;
+            `;
+            row.appendChild(shooterCell);
+
+            let rowTotal = 0;
+
+            // Hit count cells
+            matrixData.players.forEach(target => {
+                const hitCount = matrixData.matrix[shooter.id]?.[target.id] || 0;
+                rowTotal += hitCount;
+
+                const cell = document.createElement('td');
+                cell.textContent = hitCount || '';
+                cell.style.cssText = `
+                    padding: 10px 8px;
+                    border: 1px solid #dee2e6;
+                    text-align: center;
+                    font-weight: ${hitCount > 0 ? 'bold' : 'normal'};
+                    background: ${this.getHeatmapColor(hitCount, matrixData.maxHits)};
+                    color: ${hitCount > matrixData.maxHits * 0.7 ? 'white' : '#2c3e50'};
+                `;
+
+                // Add click handler for details
+                if (hitCount > 0) {
+                    cell.style.cursor = 'pointer';
+                    cell.title = `${shooter.name} hit ${target.name} ${hitCount} times`;
+                    
+                    cell.addEventListener('click', () => {
+                        this.showHitDetails(shooter, target, hitCount, hits);
+                    });
+
+                    cell.addEventListener('mouseenter', () => {
+                        cell.style.transform = 'scale(1.1)';
+                        cell.style.transition = 'all 0.2s ease';
+                        cell.style.zIndex = '10';
+                        cell.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+                    });
+
+                    cell.addEventListener('mouseleave', () => {
+                        cell.style.transform = 'scale(1)';
+                        cell.style.zIndex = '1';
+                        cell.style.boxShadow = 'none';
+                    });
+                }
+
+                row.appendChild(cell);
+            });
+
+            // Total cell
+            const totalCell = document.createElement('td');
+            totalCell.textContent = rowTotal;
+            totalCell.style.cssText = `
+                padding: 10px 8px;
+                border: 1px solid #dee2e6;
+                text-align: center;
+                font-weight: bold;
+                background: #e74c3c;
+                color: white;
+            `;
+            row.appendChild(totalCell);
+
+            table.appendChild(row);
+        });
+
+        // Create footer row with totals
+        const footerRow = document.createElement('tr');
+        footerRow.style.cssText = `
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+            font-weight: bold;
+        `;
+
+        // Footer label
+        const footerLabel = document.createElement('td');
+        footerLabel.textContent = 'Times Hit';
+        footerLabel.style.cssText = `
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+            font-weight: bold;
+        `;
+        footerRow.appendChild(footerLabel);
+
+        let grandTotal = 0;
+
+        // Column totals
+        matrixData.players.forEach(target => {
+            let columnTotal = 0;
+            matrixData.players.forEach(shooter => {
+                columnTotal += matrixData.matrix[shooter.id]?.[target.id] || 0;
+            });
+            grandTotal += columnTotal;
+
+            const cell = document.createElement('td');
+            cell.textContent = columnTotal;
+            cell.style.cssText = `
+                padding: 12px 8px;
+                border: 1px solid rgba(255,255,255,0.2);
+                text-align: center;
+                font-weight: bold;
+            `;
+            footerRow.appendChild(cell);
+        });
+
+        // Grand total
+        const grandTotalCell = document.createElement('td');
+        grandTotalCell.textContent = grandTotal;
+        grandTotalCell.style.cssText = `
+            padding: 12px 8px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+            font-weight: bold;
+            background: #c0392b;
+        `;
+        footerRow.appendChild(grandTotalCell);
+
+        table.appendChild(footerRow);
+        tableWrapper.appendChild(table);
+        tableContainer.appendChild(tableWrapper);
+
+        // Add legend
+        const legend = document.createElement('div');
+        legend.style.cssText = `
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        `;
+
+        legend.innerHTML = `
+            <h4 style="margin: 0 0 10px 0; color: #2c3e50;">Legend:</h4>
+            <div style="display: flex; flex-wrap: wrap; gap: 15px; font-size: 0.9em;">
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 20px; height: 20px; background: ${this.getHeatmapColor(0, 1)}; border: 1px solid #ccc; margin-right: 5px;"></div>
+                    <span>No hits</span>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 20px; height: 20px; background: ${this.getHeatmapColor(0.3, 1)}; border: 1px solid #ccc; margin-right: 5px;"></div>
+                    <span>Few hits</span>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 20px; height: 20px; background: ${this.getHeatmapColor(0.6, 1)}; border: 1px solid #ccc; margin-right: 5px;"></div>
+                    <span>Many hits</span>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <div style="width: 20px; height: 20px; background: ${this.getHeatmapColor(1, 1)}; border: 1px solid #ccc; margin-right: 5px;"></div>
+                    <span>Most hits</span>
+                </div>
+            </div>
+            <p style="margin: 10px 0 0 0; color: #7f8c8d; font-size: 0.85em;">
+                💡 Click on any cell with hits to see detailed information about those shots.
+            </p>
+        `;
+
+        tableContainer.appendChild(legend);
+        container.appendChild(tableContainer);
     }
 
     /**
-     * Create detailed target analysis
+     * Create detailed hit analysis
      */
-    createDetailedTargetAnalysis(hits, container) {
-        container.innerHTML = '';
+    createDetailedHitAnalysis(hits, detailsContainer) {
+        const matrixData = this.processHitMatrix(hits);
+        
+        if (!matrixData) {
+            detailsContainer.innerHTML = '<p style="text-align: center; color: #7f8c8d;">No detailed hit data available</p>';
+            return;
+        }
 
-        const targetData = this.processTargetData(hits);
-        const targetTypes = Object.keys(targetData).sort((a, b) => targetData[b].count - targetData[a].count);
-
-        // Create analysis container
         const analysisContainer = document.createElement('div');
         analysisContainer.style.cssText = `
-            max-height: 500px;
+            height: 100%;
+            max-height: 70vh;
             overflow-y: auto;
             padding: 20px;
             background: #f8f9fa;
-            border-radius: 8px;
+            border-radius: 12px;
         `;
 
         // Overall statistics
         const overallStats = document.createElement('div');
-        overallStats.style.cssText = 'margin-bottom: 30px;';
-        
-        const totalHits = hits.length;
-        const uniqueTargets = targetTypes.length;
-        const avgHitsPerTarget = totalHits / uniqueTargets;
-        const mostHitTarget = targetTypes[0];
+        overallStats.innerHTML = '<h3 style="color: #2c3e50; margin: 0 0 20px 0; border-bottom: 2px solid #e74c3c; padding-bottom: 8px;">Hit Statistics Overview</h3>';
 
-        overallStats.innerHTML = `
-            <h3 style="color: #2c3e50; margin-bottom: 15px; border-bottom: 2px solid #27ae60; padding-bottom: 8px;">Target Analysis Overview</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px;">
-                <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <div style="font-size: 1.5em; font-weight: bold; color: #27ae60;">${totalHits}</div>
-                    <div style="color: #7f8c8d; font-size: 0.9em;">Total Hits</div>
-                </div>
-                <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <div style="font-size: 1.5em; font-weight: bold; color: #3498db;">${uniqueTargets}</div>
-                    <div style="color: #7f8c8d; font-size: 0.9em;">Unique Targets</div>
-                </div>
-                <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <div style="font-size: 1.5em; font-weight: bold; color: #f39c12;">${avgHitsPerTarget.toFixed(1)}</div>
-                    <div style="color: #7f8c8d; font-size: 0.9em;">Avg Hits/Target</div>
-                </div>
-                <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <div style="font-size: 1.2em; font-weight: bold; color: #e74c3c;">${mostHitTarget}</div>
-                    <div style="color: #7f8c8d; font-size: 0.9em;">Most Hit Target</div>
-                </div>
-            </div>
+        const statsGrid = document.createElement('div');
+        statsGrid.style.cssText = `
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
         `;
 
-        // Target breakdown
-        const targetBreakdown = document.createElement('div');
-        targetBreakdown.innerHTML = '<h3 style="color: #2c3e50; margin: 30px 0 15px 0; border-bottom: 2px solid #27ae60; padding-bottom: 8px;">Target Breakdown</h3>';
+        const stats = [
+            { label: 'Total Players', value: matrixData.players.length, color: '#3498db' },
+            { label: 'Total Hits', value: matrixData.totalHits, color: '#e74c3c' },
+            { label: 'Most Active Shooter', value: matrixData.topShooter.name, color: '#27ae60' },
+            { label: 'Most Hit Player', value: matrixData.topTarget.name, color: '#f39c12' },
+            { label: 'Max Hits on Single Player', value: matrixData.maxHits, color: '#9b59b6' },
+            { label: 'Average Hits per Player', value: (matrixData.totalHits / matrixData.players.length).toFixed(1), color: '#34495e' }
+        ];
 
-        targetTypes.forEach((targetType, index) => {
-            const data = targetData[targetType];
-            const targetCard = document.createElement('div');
-            targetCard.style.cssText = `
+        stats.forEach(stat => {
+            const statCard = document.createElement('div');
+            statCard.style.cssText = `
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                border-left: 4px solid ${stat.color};
+                text-align: center;
+            `;
+            
+            statCard.innerHTML = `
+                <div style="font-size: 2em; font-weight: bold; color: ${stat.color}; margin-bottom: 5px;">${stat.value}</div>
+                <div style="color: #7f8c8d; font-size: 0.9em;">${stat.label}</div>
+            `;
+            
+            statsGrid.appendChild(statCard);
+        });
+
+        overallStats.appendChild(statsGrid);
+
+        // Player performance breakdown
+        const playerBreakdown = document.createElement('div');
+        playerBreakdown.innerHTML = '<h3 style="color: #2c3e50; margin: 30px 0 20px 0; border-bottom: 2px solid #27ae60; padding-bottom: 8px;">Player Performance Analysis</h3>';
+
+        // Sort players by total hits given
+        const playerStats = matrixData.players.map(player => {
+            let hitsGiven = 0;
+            let hitsReceived = 0;
+            
+            matrixData.players.forEach(target => {
+                hitsGiven += matrixData.matrix[player.id]?.[target.id] || 0;
+                hitsReceived += matrixData.matrix[target.id]?.[player.id] || 0;
+            });
+            
+            return {
+                ...player,
+                hitsGiven,
+                hitsReceived,
+                ratio: hitsReceived > 0 ? (hitsGiven / hitsReceived).toFixed(2) : hitsGiven > 0 ? '∞' : '0'
+            };
+        }).sort((a, b) => b.hitsGiven - a.hitsGiven);
+
+        playerStats.forEach((player, index) => {
+            const playerCard = document.createElement('div');
+            playerCard.style.cssText = `
                 background: white;
                 margin: 15px 0;
                 padding: 20px;
                 border-radius: 12px;
                 box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-                border-left: 5px solid ${index === 0 ? '#e74c3c' : index === 1 ? '#f39c12' : '#27ae60'};
+                border-left: 5px solid ${player.color};
             `;
 
-            const effectiveness = data.avgMultiplier > 1.5 ? 'High' : data.avgMultiplier > 1 ? 'Medium' : 'Low';
-            const effectivenessColor = effectiveness === 'High' ? '#27ae60' : effectiveness === 'Medium' ? '#f39c12' : '#e74c3c';
+            const performance = player.hitsGiven > player.hitsReceived ? 'Aggressive' : 
+                              player.hitsGiven < player.hitsReceived ? 'Defensive' : 'Balanced';
+            const performanceColor = performance === 'Aggressive' ? '#e74c3c' : 
+                                   performance === 'Defensive' ? '#3498db' : '#27ae60';
 
-            targetCard.innerHTML = `
+            playerCard.innerHTML = `
                 <h4 style="color: #2c3e50; margin: 0 0 15px 0; font-size: 1.3em; display: flex; justify-content: space-between; align-items: center;">
-                    ${targetType}
-                    <span style="font-size: 0.7em; background: ${effectivenessColor}; color: white; padding: 4px 8px; border-radius: 12px;">
-                        ${effectiveness} Value
+                    ${player.name}
+                    <span style="font-size: 0.7em; background: ${performanceColor}; color: white; padding: 4px 12px; border-radius: 20px;">
+                        ${performance} Player
                     </span>
                 </h4>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px;">
                     <div>
-                        <div style="font-size: 1.3em; font-weight: bold; color: #3498db;">${data.count}</div>
-                        <div style="color: #7f8c8d; font-size: 0.8em;">Hits</div>
+                        <div style="font-size: 1.4em; font-weight: bold; color: #e74c3c;">${player.hitsGiven}</div>
+                        <div style="color: #7f8c8d; font-size: 0.9em;">Hits Given</div>
                     </div>
                     <div>
-                        <div style="font-size: 1.3em; font-weight: bold; color: #27ae60;">${data.percentage.toFixed(1)}%</div>
-                        <div style="color: #7f8c8d; font-size: 0.8em;">Share</div>
+                        <div style="font-size: 1.4em; font-weight: bold; color: #3498db;">${player.hitsReceived}</div>
+                        <div style="color: #7f8c8d; font-size: 0.9em;">Hits Taken</div>
                     </div>
                     <div>
-                        <div style="font-size: 1.3em; font-weight: bold; color: #e74c3c;">${data.avgMultiplier?.toFixed(2) || 'N/A'}</div>
-                        <div style="color: #7f8c8d; font-size: 0.8em;">Avg Multiplier</div>
+                        <div style="font-size: 1.4em; font-weight: bold; color: #27ae60;">${player.ratio}</div>
+                        <div style="color: #7f8c8d; font-size: 0.9em;">Hit Ratio</div>
                     </div>
                     <div>
-                        <div style="font-size: 1.3em; font-weight: bold; color: #9b59b6;">${data.players?.length || 0}</div>
-                        <div style="color: #7f8c8d; font-size: 0.8em;">Players</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 1.3em; font-weight: bold; color: #f39c12;">${data.maxMultiplier?.toFixed(1) || 'N/A'}</div>
-                        <div style="color: #7f8c8d; font-size: 0.8em;">Max Multiplier</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 1.3em; font-weight: bold; color: #34495e;">${data.rank}</div>
-                        <div style="color: #7f8c8d; font-size: 0.8em;">Popularity Rank</div>
-                    </div>
-                </div>
-                <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
-                    <div style="font-size: 0.9em; color: #34495e;">
-                        <strong>Player Distribution:</strong> ${data.playerDistribution || 'Even spread across players'}
+                        <div style="font-size: 1.4em; font-weight: bold; color: #f39c12;">#${index + 1}</div>
+                        <div style="color: #7f8c8d; font-size: 0.9em;">Shooter Rank</div>
                     </div>
                 </div>
             `;
 
-            targetBreakdown.appendChild(targetCard);
+            playerBreakdown.appendChild(playerCard);
         });
 
         analysisContainer.appendChild(overallStats);
-        analysisContainer.appendChild(targetBreakdown);
-        container.appendChild(analysisContainer);
+        analysisContainer.appendChild(playerBreakdown);
+        detailsContainer.appendChild(analysisContainer);
+    }
+    /**
+     * Create hit matrix data processor
+     */
+    processHitMatrix(hits) {
+        // Get player data from the global data processor
+        const playerData = window.globalDataProcessor?.data?.PlayerData || {};
+        
+        if (!playerData || Object.keys(playerData).length === 0) {
+            console.warn('No player data available for hit matrix');
+            return null;
+        }
+
+        // Create player list with colors
+        const players = Object.entries(playerData).map(([id, data]) => ({
+            id: id,
+            name: data.playerName || `Player ${id}`,
+            color: this.getPlayerColor(data, id)
+        }));
+
+        // Initialize matrix
+        const matrix = {};
+        players.forEach(shooter => {
+            matrix[shooter.id] = {};
+            players.forEach(target => {
+                matrix[shooter.id][target.id] = 0;
+            });
+        });
+
+        // Process hits
+        let maxHits = 0;
+        let totalHits = 0;
+        
+        hits.forEach(hit => {
+            const shooterId = hit.instigatorStateId?.index?.toString();
+            const targetId = hit.hitStateId?.index?.toString();
+            
+            if (shooterId && targetId && shooterId !== targetId && matrix[shooterId] && matrix[shooterId][targetId] !== undefined) {
+                matrix[shooterId][targetId]++;
+                maxHits = Math.max(maxHits, matrix[shooterId][targetId]);
+                totalHits++;
+            }
+        });
+
+        // Find top shooter and target
+        let topShooter = players[0];
+        let topTarget = players[0];
+        let maxShotsGiven = 0;
+        let maxShotsReceived = 0;
+
+        players.forEach(player => {
+            let shotsGiven = 0;
+            let shotsReceived = 0;
+            
+            players.forEach(other => {
+                shotsGiven += matrix[player.id][other.id];
+                shotsReceived += matrix[other.id][player.id];
+            });
+            
+            if (shotsGiven > maxShotsGiven) {
+                maxShotsGiven = shotsGiven;
+                topShooter = player;
+            }
+            
+            if (shotsReceived > maxShotsReceived) {
+                maxShotsReceived = shotsReceived;
+                topTarget = player;
+            }
+        });
+
+        return {
+            players,
+            matrix,
+            maxHits,
+            totalHits,
+            topShooter,
+            topTarget
+        };
     }
 
-	/**
-     * Create target distribution chart
+    /**
+     * Get player color from their data
+     */
+    getPlayerColor(playerData, playerId) {
+        if (playerData.preferredPrimaryColor) {
+            const color = playerData.preferredPrimaryColor;
+            return `rgb(${Math.floor(color.r * 255)}, ${Math.floor(color.g * 255)}, ${Math.floor(color.b * 255)})`;
+        }
+        
+        // Default colors if no preference set
+        const colors = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c', '#e67e22', '#34495e'];
+        return colors[parseInt(playerId) % colors.length];
+    }
+
+    /**
+     * Get heatmap color based on hit count
+     */
+    getHeatmapColor(hitCount, maxHits) {
+        if (hitCount === 0) {
+            return '#f8f9fa';
+        }
+        
+        const intensity = hitCount / maxHits;
+        const red = Math.floor(231 + (255 - 231) * intensity);   // 231-255 (light to bright red)
+        const green = Math.floor(76 - 76 * intensity);           // 76-0 (some green to no green)
+        const blue = Math.floor(60 - 60 * intensity);            // 60-0 (some blue to no blue)
+        
+        return `rgb(${red}, ${green}, ${blue})`;
+    }
+
+    /**
+     * Show detailed hit information
+     */
+    showHitDetails(shooter, target, hitCount, allHits) {
+        // Filter hits between these two players
+        const relevantHits = allHits.filter(hit => 
+            hit.instigatorStateId?.index?.toString() === shooter.id &&
+            hit.hitStateId?.index?.toString() === target.id
+        );
+
+        // Create modal content
+        const modal = document.createElement('div');
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        `;
+
+        const content = document.createElement('div');
+        content.style.cssText = `
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 500px;
+            max-height: 70vh;
+            overflow-y: auto;
+            position: relative;
+        `;
+
+        content.innerHTML = `
+            <button style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 24px; cursor: pointer; color: #7f8c8d;" onclick="this.closest('div[style*=\"position: fixed\"]').remove()">×</button>
+            <h3 style="color: #2c3e50; margin: 0 0 20px 0;">Hit Details</h3>
+            <div style="background: linear-gradient(135deg, ${shooter.color}, ${target.color}); color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+                <strong>${shooter.name}</strong> → <strong>${target.name}</strong><br>
+                <span style="font-size: 1.5em; margin-top: 10px; display: block;">${hitCount} hits</span>
+            </div>
+            <div style="max-height: 300px; overflow-y: auto;">
+                ${relevantHits.slice(0, 10).map((hit, i) => `
+                    <div style="background: #f8f9fa; margin: 10px 0; padding: 15px; border-radius: 8px; border-left: 4px solid ${shooter.color};">
+                        <div style="font-weight: bold; color: #2c3e50;">Hit ${i + 1}</div>
+                        <div style="color: #7f8c8d; font-size: 0.9em; margin-top: 5px;">
+                            Target: ${hit.hitFriendlyName || 'Unknown'}<br>
+                            Distance: ${hit.distance ? Math.round(hit.distance) + 'm' : 'Unknown'}<br>
+                            Points: ${hit.basePointValue || 0} × ${hit.pointMultiplier || 1} = ${(hit.basePointValue || 0) * (hit.pointMultiplier || 1)}
+                        </div>
+                    </div>
+                `).join('')}
+                ${relevantHits.length > 10 ? `<div style="text-align: center; color: #7f8c8d; margin-top: 15px;">...and ${relevantHits.length - 10} more hits</div>` : ''}
+            </div>
+        `;
+
+        modal.appendChild(content);
+        document.body.appendChild(modal);
+
+        // Close on background click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    }
+    /**
+     * Create target distribution pie chart for preview
      */
     loadData(processor) {
-		const hits = processor.hits
+        // Store reference to the processor for access to player data
+        window.globalDataProcessor = processor;
+        
+        const hits = processor.hits;
         const container = this.getContainer();
         container.innerHTML = '';
         
@@ -483,15 +789,15 @@ class LaserTagTargetDistribution extends LaserTagVisualizations {
                 .text(`+${targetTypes.length - 5} more...`);
         }
 
-        // Add click handler for fullscreen
+        // Add click handler for fullscreen - this will show the hit matrix
         container.style.cursor = 'pointer';
         container.addEventListener('click', () => {
-            this.openFullscreen('target', hits, 'Target Distribution - Detailed Analysis');
+            this.openFullscreen('hitMatrix', hits, 'Player Hit Matrix - Detailed Analysis');
         });
 
         // Add fullscreen indicator
         const fullscreenBtn = document.createElement('div');
-        fullscreenBtn.innerHTML = '🔍 View Details';
+        fullscreenBtn.innerHTML = '🔍 View Hit Matrix';
         fullscreenBtn.style.cssText = `
             position: absolute;
             top: 10px;
@@ -505,5 +811,21 @@ class LaserTagTargetDistribution extends LaserTagVisualizations {
         `;
         container.style.position = 'relative';
         container.appendChild(fullscreenBtn);
+    }
+
+    /**
+     * Abbreviate player name for compact display
+     */
+    abbreviateName(name) {
+        if (name.length <= 4) return name;
+        
+        // Try to get initials from words
+        const words = name.split(/[\s_-]+/);
+        if (words.length > 1) {
+            return words.map(w => w.charAt(0)).join('').substring(0, 3);
+        }
+        
+        // Just take first 3 characters
+        return name.substring(0, 3);
     }
 }
