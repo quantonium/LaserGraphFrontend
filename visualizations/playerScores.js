@@ -52,6 +52,16 @@ class LaserTagLeaderboard extends LaserTagVisualizations {
 		for (let data of this.currentPlayerData) {
 			let r = document.createElement("tr")
 			r.id = "player_" + data.id
+			
+			// Apply team color as background with transparency and border
+			if (data.team && data.team.primaryColor) {
+				const color = data.team.primaryColor;
+				const alpha = 0.15; // Light background transparency
+				const borderAlpha = 0.8; // Stronger border opacity
+				r.style.backgroundColor = `rgba(${Math.floor(color.r * 255)}, ${Math.floor(color.g * 255)}, ${Math.floor(color.b * 255)}, ${alpha})`;
+				r.style.borderLeftColor = `rgba(${Math.floor(color.r * 255)}, ${Math.floor(color.g * 255)}, ${Math.floor(color.b * 255)}, ${borderAlpha})`;
+			}
+			
     		let name = document.createElement("td")
 			name.innerText = data.name
 			r.appendChild(name)
