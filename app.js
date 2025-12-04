@@ -395,3 +395,66 @@ function toggleUpload() {
 function resetTimeRange() {
 	window.laserTagApp?.updateTimeRange(0)
 }
+
+/**
+ * Fullscreen Network Graph Functions
+ */
+function toggleNetworkFullscreen() {
+	const modal = document.getElementById('networkFullscreenModal');
+	if (!modal) {
+		console.error('Fullscreen modal not found');
+		return;
+	}
+
+	// Show the modal
+	modal.classList.add('active');
+	
+	// Render the network graph in fullscreen
+	if (window.laserTagApp && window.laserTagApp.networkGraph) {
+		window.laserTagApp.networkGraph.renderFullscreen();
+	}
+	
+	// Add keyboard listener for ESC key
+	document.addEventListener('keydown', handleFullscreenKeydown);
+	
+	// Prevent body scrolling
+	document.body.style.overflow = 'hidden';
+}
+
+function closeNetworkFullscreen() {
+	const modal = document.getElementById('networkFullscreenModal');
+	if (!modal) return;
+	
+	// Hide the modal
+	modal.classList.remove('active');
+	
+	// Clear the fullscreen content
+	const container = document.getElementById('nodeGraphFullscreen');
+	if (container) {
+		container.innerHTML = '';
+	}
+	
+	// Remove keyboard listener
+	document.removeEventListener('keydown', handleFullscreenKeydown);
+	
+	// Restore body scrolling
+	document.body.style.overflow = '';
+}
+
+function handleFullscreenKeydown(event) {
+	if (event.key === 'Escape') {
+		event.preventDefault();
+		closeNetworkFullscreen();
+	}
+}
+
+// Handle window resize in fullscreen mode
+window.addEventListener('resize', function() {
+	const modal = document.getElementById('networkFullscreenModal');
+	if (modal && modal.classList.contains('active')) {
+		// Re-render the graph with new dimensions
+		if (window.laserTagApp && window.laserTagApp.networkGraph) {
+			window.laserTagApp.networkGraph.renderFullscreen();
+		}
+	}
+});

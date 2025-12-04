@@ -128,8 +128,15 @@
 				<!--h2>Player Performance Hexagon</h2-->
 				<div id="hexChart"></div>
 			</div>
-			<div class="chart-container">
-				<h2>Player Interaction Network</h2>
+			<div class="chart-container network-chart-container">
+				<div class="chart-header">
+					<h2>Player Interaction Network</h2>
+					<button class="fullscreen-btn" onclick="toggleNetworkFullscreen()" title="View in fullscreen">
+						<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+							<path d="M7 14H5v5h5v-2M5 10h2V5h5V3H5v7zM17 14h2v5h-5v-2M19 10h-2V5h-5V3h7v7z" stroke="currentColor" stroke-width="2" fill="none"/>
+						</svg>
+					</button>
+				</div>
 				<div id="nodeGraph"></div>
 			</div>
 			<div class="chart-container">
@@ -192,6 +199,19 @@
 	<script src="visualizations/targetDistribution.js"></script>
 	<script src="visualizations/playerScores.js"></script>
 	<script src="app.js"></script>
+
+	<!-- Fullscreen Network Graph Modal -->
+	<div id="networkFullscreenModal" class="fullscreen-modal">
+		<div class="fullscreen-header">
+			<h2>Player Interaction Network</h2>
+			<button class="close-fullscreen-btn" onclick="closeNetworkFullscreen()" title="Exit fullscreen">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+					<path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2"/>
+				</svg>
+			</button>
+		</div>
+		<div id="nodeGraphFullscreen" class="fullscreen-content"></div>
+	</div>
 </body>
 
 </html>
