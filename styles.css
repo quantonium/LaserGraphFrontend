@@ -761,12 +761,6 @@
 	}
 }
 
-@media print {
-	#noprint, .noprint{
-		display: none !important;
-	}
-}
-
 /* Chart responsiveness improvements */
 @media (max-width: 1200px) {
 	.dashboard {

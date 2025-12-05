@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="styles.css">
 	<link rel="stylesheet" href="network-graph.css">
 	<link rel="stylesheet" href="score-tooltip.css">
+	<link rel="stylesheet" href="print.css">
 	<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 </head>
 
@@ -23,24 +24,24 @@
 		<!--used for spacing-->
 		<img src="https://playlaser.games/assets/logo wip 4 early access small.svg" class="norender">
 	</header>
-	<nav style="flex-direction: column;" id="noprint">
+	<nav style="flex-direction: column;" class="noprint">
 		<div style="display: flex; flex-direction: row;"><button
 				onclick="window.location.href='https:\/\/playlaser.games'">
 				<h3>To playlaser.games</h3>
 			</button>
-			<button onclick="window.print()">
+			<!--button onclick="window.print()">
 				<h3>Print Page</h3>
-			</button>
+			</button-->
 			<button onclick="toggleUpload()">
 				<h3>Upload Dialog</h3>
 			</button>
 		</div>
 
 	</nav>
-	<p>Player metrics visualization dashboard</p>
+	<p class="noprint">Player metrics visualization dashboard</p>
 
 	<!-- File Upload Area -->
-	<section class="file-upload-section" id="fileUpload">
+	<section class="file-upload-section" id="fileUpload" class="noprint">
 		<div class="error-message" id="errorMessage"></div>
 		<div class="upload-container" id="uploadContainer">
 			<div class="upload-area" id="uploadArea">
@@ -79,18 +80,20 @@
 		</div>
 	</section>
 	<main id="statsView">
-		<br>
-		<div id="playerTeamSelect">
-			<div style="display: none">
-				<label for="teamSelect">Choose team: </label><select name="teamSelect" id="teamSelect">
-					<option value="">All Teams</option>
-				</select>
-				<label for="playerSelect">Choose player: </label><select name="playerSelect" id="playerSelect">
-					<option value="">All Players</option>
-				</select>
+		<div class="noprint">
+			<br>
+			<div id="playerTeamSelect">
+				<div style="display: none">
+					<label for="teamSelect">Choose team: </label><select name="teamSelect" id="teamSelect">
+						<option value="">All Teams</option>
+					</select>
+					<label for="playerSelect">Choose player: </label><select name="playerSelect" id="playerSelect">
+						<option value="">All Players</option>
+					</select>
+				</div>
 			</div>
+			<br>
 		</div>
-		<br>
 		<div style="display: flex; flex-direction: row; justify-content: space-around;">
 			<h2 id="gameName">Match Name</h2>
 			<h5 id="gametype">Gametype</h5>
@@ -100,11 +103,11 @@
 			<h5 id="timer"></h5>
 		</div>
 		<div>
-		<!--h2>Hit Timeline</h2-->
-		<div id="timelineChart"></div>
+			<!--h2>Hit Timeline</h2-->
+			<div id="timelineChart"></div>
 			<div class="noprint" id="timelineRange">
 				<input type="range" min="0" max="100" value="0" id="timelineRangeSlider" style="display: none">
-				
+
 			</div>
 			<div class="timeline-controls">
 				<div class="noprint">
