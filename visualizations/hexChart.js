@@ -1,4 +1,6 @@
 class LaserTagHexagon extends LaserTagVisualizations {
+	processor = null
+
 	/**
 	 * Create fullscreen hexagon chart with detailed metrics
 	 */
@@ -38,7 +40,7 @@ class LaserTagHexagon extends LaserTagVisualizations {
 		const gridLevels = 10;
 		for (let level = 1; level <= gridLevels; level++) {
 			const levelRadius = (radius / gridLevels) * level;
-			
+
 			g.append('circle')
 				.attr('r', levelRadius)
 				.style('fill', 'none')
@@ -118,7 +120,8 @@ class LaserTagHexagon extends LaserTagVisualizations {
 		});
 
 		// Create detailed metrics table
-		const metricsTable = document.createElement('div');
+		//note: replaced with the per-player stats originally in score progression
+		/*const metricsTable = document.createElement('div');
 		metricsTable.className = 'metrics-details';
 		metricsTable.innerHTML = `
 			<h3>Detailed Metrics</h3>
@@ -143,13 +146,93 @@ class LaserTagHexagon extends LaserTagVisualizations {
 				</tbody>
 			</table>
 		`;
-		detailsContainer.appendChild(metricsTable);
+		detailsContainer.appendChild(metricsTable);*/
+		const playerStats = {};
+		const uniquePlayers = Object.entries(this.processor.playerData)
+		const scoreEvents = this.processor.events.filter(event => event.eventName === "PlayerScore");
+		
+		uniquePlayers.forEach(playerId => {
+			let id = parseInt(playerId[0])
+			let data = playerId[1]
+			const playerEvents = scoreEvents.filter(e => e.data?.ID === id);
+			const scores = playerEvents.map(e => e.data?.newScore || 0);
+			const scoreChanges = playerEvents.map(e => (e.data?.newScore || 0) - (e.data?.oldScore || 0));
+			const positiveChanges = scoreChanges.filter(change => change > 0);
+			const negativeChanges = scoreChanges.filter(change => change < 0);
+
+			playerStats[id] = {
+				totalEvents: playerEvents.length,
+				finalScore: Math.max(...scores, 0),
+				totalPositivePoints: positiveChanges.reduce((sum, change) => sum + change, 0),
+				totalNegativePoints: Math.abs(negativeChanges.reduce((sum, change) => sum + change, 0)),
+				averageScoreChange: scoreChanges.length == 0 ? 0 : scoreChanges.reduce((sum, change) => sum + change, 0) / scoreChanges.length,
+				largestGain: Math.max(...scoreChanges, 0),
+				largestLoss: Math.min(...scoreChanges, 0),
+				positiveEvents: positiveChanges.length,
+				negativeEvents: negativeChanges.length,
+				firstScoreTime: Math.min(...playerEvents.map(e => e.matchState?.gameTime || 0)),
+				lastScoreTime: Math.max(...playerEvents.map(e => e.matchState?.gameTime || 0))
+			};
+		});
+
+		// Player-specific statistics
+		detailsContainer.innerHTML = '<h3>Player Performance</h3>';
+
+		uniquePlayers.forEach(playerId => {
+			const player = playerId[1]
+			const playerCard = document.createElement('div');
+			const stats = playerStats[parseInt(playerId[0])]
+			let colors = this.processor.getColors(parseInt(playerId[0]))
+			const primary = LaserTagDataProcessor.convertColor(colors.primary)
+			const secondary = LaserTagDataProcessor.convertColor(colors.secondary)
+			playerCard.style.cssText = `
+				margin: 15px 0;
+				padding: 20px;
+				border-radius: 12px;
+				box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+				border: 1px solid ${primary};
+				background: #000;
+			`;
+
+			const efficiency = stats.positiveEvents / (stats.positiveEvents + stats.negativeEvents) * 100;
+			const scoreVelocity = stats.finalScore / ((stats.lastScoreTime - stats.firstScoreTime) / 60); // points per minute
+
+			playerCard.innerHTML = `
+				<h4 class="noanim" style="color: ${secondary};">${player.playerName}</h4>
+				<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+					<div style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);" class="metric-card">
+						<h2 style="font-weight: bold; color: #27ae60;">${stats.finalScore}</h2>
+						<h5>Final Score</h5>
+					</div>
+					<div style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);" class="metric-card">
+						<h2 style="font-weight: bold; color: #3498db;">${stats.totalEvents}</h2>
+						<h5>Hits</h5>
+					</div>
+					<div style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);" class="metric-card">
+						<h2 style="font-weight: bold; color: #f39c12;">${stats.averageScoreChange.toFixed(1)}</h2>
+						<h5>Avg Change</h5>
+					</div>
+					<div style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);" class="metric-card">
+						<h2 style="font-weight: bold;  color: #9b59b6;">${scoreVelocity.toFixed(1)}</h2>
+						<h5>Points/Min</h5>
+					</div>
+					<div  style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);" class="metric-card">
+						<span style="color: #27ae60;">+${stats.totalPositivePoints}</span> earned • 
+						<span style="color: #e74c3c;">-${stats.totalNegativePoints}</span> lost • 
+						Best gain: <span style="color: #27ae60;">+${stats.largestGain}</span>
+					</div>
+				</div>
+			`;
+
+			detailsContainer.appendChild(playerCard);
+		});
 	}
 
 	/**
 	 * Create hexagon radar chart using D3.js
 	 */
 	loadData(processor) {
+		this.processor = processor
 		const metricsInfo = processor.getMetricsInfo();
 		const container = this.getContainer();
 		container.innerHTML = ''; // Clear existing content
@@ -195,7 +278,7 @@ class LaserTagHexagon extends LaserTagVisualizations {
 		const gridLevels = 5;
 		for (let level = 1; level <= gridLevels; level++) {
 			const levelRadius = (radius / gridLevels) * level;
-			
+
 			g.append('circle')
 				.attr('cx', 0)
 				.attr('cy', 0)
@@ -277,7 +360,7 @@ class LaserTagHexagon extends LaserTagVisualizations {
 			.style('stroke', '#fff')
 			.style('stroke-width', 2)
 			.style('cursor', 'pointer')
-			.on('mouseover', function(event, d) {
+			.on('mouseover', function (event, d) {
 				d3.select(this)
 					.transition()
 					.duration(200)
@@ -331,7 +414,7 @@ class LaserTagHexagon extends LaserTagVisualizations {
 
 				tooltip.attr('transform', `translate(${tooltipX},${tooltipY})`);
 			})
-			.on('mouseout', function(event, d) {
+			.on('mouseout', function (event, d) {
 				d3.select(this)
 					.transition()
 					.duration(200)

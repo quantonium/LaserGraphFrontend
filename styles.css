@@ -6,9 +6,7 @@
 }
 
 .upload-container {
-	background: rgba(255, 255, 255, 0.95);
 	border: 2.5px double #444;
-	border-radius: 15px;
 	padding: 30px;
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 	backdrop-filter: blur(10px);
@@ -16,7 +14,6 @@
 
 .upload-area {
 	border: 3px dashed #3498db;
-	border-radius: 15px;
 	padding: 40px 20px;
 	text-align: center;
 	transition: all 0.3s ease;
@@ -59,32 +56,27 @@
 }
 
 .timeline-sync-indicator {
-	background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
-	border: 1px solid rgba(52, 152, 219, 0.3);
-	border-radius: 8px;
 	padding: 8px 12px;
 	margin: 5px 0;
 	transition: all 0.2s ease;
+	gap: 0;
+	background: #0008;
 }
 
 .timeline-sync-indicator.active {
 	background: linear-gradient(135deg, rgba(52, 152, 219, 0.2), rgba(155, 89, 182, 0.2));
 	border-color: rgba(52, 152, 219, 0.5);
-	transform: translateX(3px);
 	box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
 }
 
 /* Timeline Controls */
 .timeline-controls {
 	display: flex;
-	gap: 8px;
-	margin-bottom: 5px;
-	padding: 2px 5px;
+
 	font-size: 12px;
-	height: 20px;
 	width: 100%;
 	box-sizing: border-box;
-	flex-shrink: 0;
+	justify-content: space-evenly;
 }
 
 .timeline-controls label {
@@ -104,20 +96,47 @@
 	font-size: 10px;
 }
 
+#timelineRange {
+	width: 100%;
+}
+
+#timelineRangeSlider {
+	float: left;
+	width: 95%;
+}
+
 /* Override chart-container for timeline - make it flex container */
 
 
 #timelineChart {
-	overflow-x: auto;
+	overflow-x: scroll;
 	width: 100%;
 	max-width: 100%;
-	flex: 1;
 	box-sizing: border-box;
 	height: auto;
 }
 
+#timelineChart svg {
+	margin: auto;
+}
+
+#scoreChart {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	overflow: hidden;
+}
+
+.score-progression-scroll {
+	overflow: scroll;
+	flex: 1 1 auto;
+}
+
 .score-progression-container {
-	position: relative;
+	border-spacing:0;
+  	border-collapse: collapse;
+	width: 100%;
+	min-height: min-content;
 }
 
 .score-progression-container::before {
@@ -133,18 +152,6 @@
 	font-weight: bold;
 	z-index: 10;
 	pointer-events: none;
-}
-
-.upload-area h3 {
-	margin: 0;
-	color: #2c3e50;
-	font-size: 1.4rem;
-}
-
-.upload-area p {
-	margin: 0;
-	color: #7f8c8d;
-	font-size: 1rem;
 }
 
 .file-info {
@@ -235,17 +242,16 @@
 	
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 	backdrop-filter: blur(10px);
-	min-height: 650px;
+	height: 650px;
 	max-width: 100%;
-	overflow: visible;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-start;
+	overflow: hidden;
 }
 
 .chart-container > div {
 	min-height: auto;
-	overflow: visible;
 	width: 100%;
 }
 
@@ -323,7 +329,7 @@
 	opacity: 1;
 }
 
-.metric-card h6, .metric-card h3 {
+.metric-card h6, .metric-card h3, .metric-card h2, .metric-card h5, .timeline-sync-indicator h3 {
 	margin: 0;
 }
 
@@ -340,11 +346,6 @@
 	color: #7f8c8d;
 	line-height: 1.4;
 }*/
-
-#scoreChartTemplate {
-	display: flex;
-	border: 2px double #808080;
-}
 
 /* Specific metric colors */
 .metric-card:nth-child(1) span { color: #e74c3c; } /* Trickshot */
@@ -508,7 +509,7 @@
 }
 
 .modal-content {
-	background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 248, 255, 0.95));
+	background: #222;
 	margin: 2% auto;
 	padding: 0;
 	border-radius: 15px;
@@ -536,7 +537,7 @@
 	justify-content: space-between;
 	align-items: center;
 	padding: 20px 30px;
-	background: linear-gradient(135deg, #3498db, #2980b9);
+	background: #000;
 	color: white;
 	border-radius: 15px 15px 0 0;
 }
@@ -569,24 +570,26 @@
 .modal-body {
 	padding: 30px;
 	max-height: calc(90vh - 120px);
-	overflow-y: auto;
 	display: grid;
 	grid-template-columns: 1fr 300px;
 	gap: 30px;
+	grid-template-rows: 1fr;
 }
 
 #modalChart {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	min-height: 400px;
+	height: 100%;
+	overflow: scroll
 }
 
 #modalDetails {
-	background: rgba(255, 255, 255, 0.7);
+	background: #444;
 	border-radius: 10px;
 	padding: 20px;
 	border: 1px solid rgba(52, 152, 219, 0.2);
+	overflow: scroll;
 }
 
 /* Fullscreen chart specific styles */
@@ -663,38 +666,12 @@
 }
 
 /* Hit details styles */
-.hit-details h3 {
-	color: #2c3e50;
-	margin-bottom: 20px;
-	text-align: center;
-}
 
 .hit-stats {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 	gap: 15px;
 	margin-bottom: 20px;
-}
-
-.stat-card {
-	background: rgba(255, 255, 255, 0.8);
-	border-radius: 10px;
-	padding: 15px;
-	text-align: center;
-	border: 1px solid rgba(52, 152, 219, 0.2);
-}
-
-.stat-card h4 {
-	color: #7f8c8d;
-	font-size: 12px;
-	margin: 0 0 5px 0;
-	text-transform: uppercase;
-}
-
-.stat-card span {
-	color: #2c3e50;
-	font-size: 18px;
-	font-weight: bold;
 }
 
 /* Fullscreen indicators */
@@ -768,6 +745,10 @@
 	.metric-card span {
 		font-size: 1.5rem;
 	}
+
+	.metric-card h2 {
+		font-weight: bold;
+	}
 }
 
 @media (max-width: 480px) {
@@ -818,6 +799,7 @@ tbody {
 #playerScores tr {
 	transition: all 0.2s ease;
 	border-left: 4px solid transparent;
+	width: 95%;
 }
 
 #playerScores tr:hover {

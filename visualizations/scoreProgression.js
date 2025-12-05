@@ -1,4 +1,5 @@
 class LaserTagScoreProgression extends LaserTagVisualizations {
+	processor = null
 	/**
 	 * Create fullscreen score progression
 	 */
@@ -38,8 +39,6 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 			.append('svg')
 			.attr('width', width)
 			.attr('height', height)
-			.style('background', '#f8f9fa')
-			.style('border-radius', '8px');
 
 		const g = svg.append('g')
 			.attr('transform', `translate(${margin.left},${margin.top})`);
@@ -86,7 +85,7 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 			.append('text')
 			.attr('x', chartWidth / 2)
 			.attr('y', 40)
-			.attr('fill', '#2c3e50')
+			.attr('fill', '#aaa')
 			.style('text-anchor', 'middle')
 			.style('font-weight', 'bold')
 			.text('Game Time');
@@ -97,7 +96,7 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 			.attr('transform', 'rotate(-90)')
 			.attr('y', -50)
 			.attr('x', -chartHeight / 2)
-			.attr('fill', '#2c3e50')
+			.attr('fill', '#aaa')
 			.style('text-anchor', 'middle')
 			.style('font-weight', 'bold')
 			.text('Score');
@@ -192,7 +191,7 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 			legendItem.append('text')
 				.attr('x', 15)
 				.attr('dy', '0.35em')
-				.attr('fill', '#2c3e50')
+				.attr('fill', '#fff')
 				.style('font-size', '12px')
 				.text(`Player ${playerId}`);
 		});
@@ -201,7 +200,7 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 		svg.append('text')
 			.attr('x', width / 2)
 			.attr('y', 25)
-			.attr('fill', '#2c3e50')
+			.attr('fill', '#fff')
 			.style('text-anchor', 'middle')
 			.style('font-size', '18px')
 			.style('font-weight', 'bold')
@@ -215,140 +214,59 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 		container.innerHTML = '';
 
 		// Calculate statistics
-		const playerStats = {};
 		const uniquePlayers = [...new Set(scoreEvents.map(e => e.data?.ID))].filter(id => id !== undefined);
-		
-		uniquePlayers.forEach(playerId => {
-			const playerEvents = scoreEvents.filter(e => e.data?.ID === playerId);
-			const scores = playerEvents.map(e => e.data?.newScore || 0);
-			const scoreChanges = playerEvents.map(e => (e.data?.newScore || 0) - (e.data?.oldScore || 0));
-			const positiveChanges = scoreChanges.filter(change => change > 0);
-			const negativeChanges = scoreChanges.filter(change => change < 0);
-			
-			playerStats[playerId] = {
-				totalEvents: playerEvents.length,
-				finalScore: Math.max(...scores),
-				totalPositivePoints: positiveChanges.reduce((sum, change) => sum + change, 0),
-				totalNegativePoints: Math.abs(negativeChanges.reduce((sum, change) => sum + change, 0)),
-				averageScoreChange: scoreChanges.reduce((sum, change) => sum + change, 0) / scoreChanges.length,
-				largestGain: Math.max(...scoreChanges, 0),
-				largestLoss: Math.min(...scoreChanges, 0),
-				positiveEvents: positiveChanges.length,
-				negativeEvents: negativeChanges.length,
-				firstScoreTime: Math.min(...playerEvents.map(e => e.matchState?.gameTime || 0)),
-				lastScoreTime: Math.max(...playerEvents.map(e => e.matchState?.gameTime || 0))
-			};
-		});
-
-		// Create analysis container
-		const analysisContainer = document.createElement('div');
-		analysisContainer.style.cssText = `
-			max-height: 500px;
-			overflow-y: auto;
-			padding: 20px;
-			background: #f8f9fa;
-			border-radius: 8px;
-		`;
 
 		// Overall statistics
-		const overallStats = document.createElement('div');
-		overallStats.style.cssText = 'margin-bottom: 30px;';
+		const overallStats = container;
 		
 		const totalScoreEvents = scoreEvents.length;
 		const totalPlayers = uniquePlayers.length;
 		const matchDuration = Math.max(...scoreEvents.map(e => e.matchState?.gameTime || 0));
 		const averageEventsPerMinute = totalScoreEvents / (matchDuration / 60);
+		const maxScoreDelta = Math.max(...scoreEvents.map(e => e.data?.newScore - e.data?.oldScore))
+		const maxBounce = Math.max(...this.processor.hits.map(e => e.pointMultiplier))
+		const maxDist = Math.max(...this.processor.hits.map(e => e.distance))
 
 		overallStats.innerHTML = `
-			<h3 style="color: #2c3e50; margin-bottom: 15px; border-bottom: 2px solid #3498db; padding-bottom: 8px;">Match Overview</h3>
+			<h3>Match Overview</h3>
 			<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-				<div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-					<div style="font-size: 1.5em; font-weight: bold; color: #3498db;">${totalScoreEvents}</div>
-					<div style="color: #7f8c8d; font-size: 0.9em;">Total Score Events</div>
+				<div style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);" class="metric-card">
+					<h2 style="font-weight: bold; color: #3498db;">${totalScoreEvents}</h2>
+					<h5>Total Score Events</h5>
 				</div>
-				<div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-					<div style="font-size: 1.5em; font-weight: bold; color: #27ae60;">${totalPlayers}</div>
-					<div style="color: #7f8c8d; font-size: 0.9em;">Active Players</div>
+				<div style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);" class="metric-card">
+					<h2 style="font-weight: bold; color: #27ae60;">${totalPlayers}</h2>
+					<h5>Active Players</h5>
 				</div>
-				<div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-					<div style="font-size: 1.5em; font-weight: bold; color: #e74c3c;">${matchDuration.toFixed(1)}s</div>
-					<div style="color: #7f8c8d; font-size: 0.9em;">Match Duration</div>
+				<div style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);" class="metric-card">
+					<h2 style="font-weight: bold; color: #e74c3c;">${matchDuration.toFixed(1)}s</h2>
+					<h5>Match Duration</h5>
 				</div>
-				<div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-					<div style="font-size: 1.5em; font-weight: bold; color: #9b59b6;">${averageEventsPerMinute.toFixed(1)}</div>
-					<div style="color: #7f8c8d; font-size: 0.9em;">Events/Min</div>
+				<div style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);" class="metric-card">
+					<h2 style="font-weight: bold; color: #9b59b6;">${averageEventsPerMinute.toFixed(1)}</h2>
+					<h5>Events/Min</h5>
+				</div>
+				<div style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);" class="metric-card">
+					<h2 style="font-weight: bold; color: #b700ffff;">${maxScoreDelta}</h2>
+					<h5>Max Score Change</h5>
+				</div>
+				<div style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);" class="metric-card">
+					<h2 style="font-weight: bold; color: #b700ffff;">${maxBounce}</h2>
+					<h5>Max Bounce Multiplier</h5>
+				</div>
+				<div style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);" class="metric-card">
+					<h2 style="font-weight: bold; color: #b700ffff;">${maxDist}</h2>
+					<h5>Max Distance</h5>
 				</div>
 			</div>
 		`;
-
-		// Player-specific statistics
-		const playerStatsContainer = document.createElement('div');
-		playerStatsContainer.innerHTML = '<h3 style="color: #2c3e50; margin: 30px 0 15px 0; border-bottom: 2px solid #3498db; padding-bottom: 8px;">Player Performance</h3>';
-
-		uniquePlayers.forEach(playerId => {
-			const stats = playerStats[playerId];
-			const playerCard = document.createElement('div');
-			playerCard.style.cssText = `
-				background: white;
-				margin: 15px 0;
-				padding: 20px;
-				border-radius: 12px;
-				box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-				border-left: 5px solid #3498db;
-			`;
-
-			const efficiency = stats.positiveEvents / (stats.positiveEvents + stats.negativeEvents) * 100;
-			const scoreVelocity = stats.finalScore / ((stats.lastScoreTime - stats.firstScoreTime) / 60); // points per minute
-
-			playerCard.innerHTML = `
-				<h4 style="color: #2c3e50; margin: 0 0 15px 0; font-size: 1.3em;">Player ${playerId}</h4>
-				<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
-					<div>
-						<div style="font-size: 1.2em; font-weight: bold; color: #27ae60;">${stats.finalScore}</div>
-						<div style="color: #7f8c8d; font-size: 0.8em;">Final Score</div>
-					</div>
-					<div>
-						<div style="font-size: 1.2em; font-weight: bold; color: #3498db;">${stats.totalEvents}</div>
-						<div style="color: #7f8c8d; font-size: 0.8em;">Score Events</div>
-					</div>
-					<div>
-						<div style="font-size: 1.2em; font-weight: bold; color: #f39c12;">${stats.averageScoreChange.toFixed(1)}</div>
-						<div style="color: #7f8c8d; font-size: 0.8em;">Avg Change</div>
-					</div>
-					<div>
-						<div style="font-size: 1.2em; font-weight: bold; color: ${efficiency >= 70 ? '#27ae60' : efficiency >= 50 ? '#f39c12' : '#e74c3c'};">${efficiency.toFixed(1)}%</div>
-						<div style="color: #7f8c8d; font-size: 0.8em;">Efficiency</div>
-					</div>
-					<div>
-						<div style="font-size: 1.2em; font-weight: bold; color: #9b59b6;">${scoreVelocity.toFixed(1)}</div>
-						<div style="color: #7f8c8d; font-size: 0.8em;">Points/Min</div>
-					</div>
-					<div>
-						<div style="font-size: 1.2em; font-weight: bold; color: #e74c3c;">${Math.abs(stats.largestLoss)}</div>
-						<div style="color: #7f8c8d; font-size: 0.8em;">Largest Loss</div>
-					</div>
-				</div>
-				<div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px;">
-					<div style="font-size: 0.9em; color: #34495e;">
-						<span style="color: #27ae60;">+${stats.totalPositivePoints}</span> earned • 
-						<span style="color: #e74c3c;">-${stats.totalNegativePoints}</span> lost • 
-						Best gain: <span style="color: #27ae60;">+${stats.largestGain}</span>
-					</div>
-				</div>
-			`;
-
-			playerStatsContainer.appendChild(playerCard);
-		});
-
-		analysisContainer.appendChild(overallStats);
-		analysisContainer.appendChild(playerStatsContainer);
-		container.appendChild(analysisContainer);
 	}
 
 	/**
 	 * Create score progression visualization showing PlayerScore events
 	 */
 	loadData(processor) {
+		this.processor = processor
 		const events = processor.events;
 		const container = this.getContainer();
 		container.innerHTML = '';
@@ -356,8 +274,13 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 		// Filter for PlayerScore events
 		const scoreEvents = events.filter(event => event.eventName === "PlayerScore");
 		
+		const summ = document.createElement("div")
+		summ.style.display = "flex"
+		summ.style.flexDirection = "row"
+		summ.style.justifyContent = "space-around"
+		summ.style.flex = "0 1 auto"
 		if (scoreEvents.length === 0) {
-			container.innerHTML = '<p style="text-align: center; color: #7f8c8d; padding: 20px;">No score events found</p>';
+			summ.innerHTML = '<p style="text-align: center; color: #7f8c8d; padding: 20px;">No score events found</p>';
 			return;
 		}
 
@@ -365,9 +288,11 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 		scoreEvents.sort((a, b) => (a.matchState?.gameTime || 0) - (b.matchState?.gameTime || 0));
 
 		// Create the score progression list
-		const progressionContainer = document.createElement('div');
+		const scrollContainer = document.createElement("div");
+		scrollContainer.className = "score-progression-scroll"
+
+		const progressionContainer = document.createElement('table');
 		progressionContainer.className = 'score-progression-container';
-		progressionContainer.style.cssText = 'height: 550px; overflow-y: auto; padding: 15px;';
 
 		/**const title = document.createElement('h3');
 		title.textContent = `${scoreEvents.length} events`;
@@ -375,28 +300,7 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 		container.appendChild(title);**/
 
 		scoreEvents.forEach((event, index) => {
-			const eventItem = document.createElement('div');
-			eventItem.className = 'timeline-sync-indicator';
-			eventItem.dataset.eventTime = event.matchState?.gameTime || 0;
-			eventItem.style.cssText = `
-				background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
-				border-left: 4px solid #3498db;
-				margin: 8px 0;
-				padding: 12px 15px;
-				border-radius: 8px;
-				transition: all 0.3s ease;
-				position: relative;
-			`;
-
-			// Add hover effect
-			eventItem.addEventListener('mouseenter', () => {
-				eventItem.style.transform = 'translateX(5px)';
-				eventItem.style.boxShadow = '0 4px 15px rgba(52, 152, 219, 0.2)';
-			});
-			eventItem.addEventListener('mouseleave', () => {
-				eventItem.style.transform = 'translateX(0)';
-				eventItem.style.boxShadow = 'none';
-			});
+			
 
 			const eventData = event.data || {};
 			const matchState = event.matchState || {};
@@ -410,13 +314,36 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 			const gameTime = matchState.gameTime || 0;
 			const roundTime = matchState.roundTime || 0;
 
-			// Create event header
-			const eventHeader = document.createElement('div');
-			eventHeader.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;';
+			let colors = this.processor.getColors(playerId, gameTime)
+			const primary = LaserTagDataProcessor.convertColor(colors.primary)
+			const secondary = LaserTagDataProcessor.convertColor(colors.secondary)
 
-			const playerInfo = document.createElement('span');
+			const eventItem = document.createElement('tr');
+			eventItem.className = 'timeline-sync-indicator';
+			eventItem.dataset.eventTime = event.matchState?.gameTime || 0;
+			eventItem.style.cssText = `
+				
+				margin: 8px 0;
+				padding: 12px 15px;
+				border-radius: 8px;
+				transition: all 0.3s ease;
+				outline: 1px solid #000;
+			`;
+
+			// Add hover effect
+			eventItem.addEventListener('mouseenter', () => {
+				eventItem.style.boxShadow = '0 4px 15px rgba(52, 152, 219, 0.2)';
+			});
+			eventItem.addEventListener('mouseleave', () => {
+				eventItem.style.boxShadow = 'none';
+			});
+
+			// Create event header
+			const eventHeader = document.createElement('td');
+			const playerInfo = document.createElement('h3');
 			playerInfo.textContent = `${processor.playerData[playerId].playerName}`;
-			playerInfo.style.cssText = 'font-weight: bold; color: #2c3e50; font-size: 1.1em;';
+			playerInfo.className = "noanim"
+			playerInfo.style.cssText = `font-weight: bold; color: ${secondary};`;
 
 			const timeInfo = document.createElement('span');
 			timeInfo.textContent = `${gameTime.toFixed(1)}s`;
@@ -425,40 +352,50 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 			eventHeader.appendChild(playerInfo);
 			eventHeader.appendChild(timeInfo);
 
-			// Create score details
-			const scoreDetails = document.createElement('div');
-			scoreDetails.style.cssText = 'display: flex; justify-content: space-between; align-items: center;';
+			
 
-			const scoreChange = document.createElement('div');
+			// Create score details
+			const scoreOrig = document.createElement('td');
+			const arrow = document.createElement('td');
+			const scoreNew = document.createElement('td');
+
 			const scoreColor = scoreDiff > 0 ? '#27ae60' : scoreDiff < 0 ? '#e74c3c' : '#7f8c8d';
 			const scoreSymbol = scoreDiff > 0 ? '+' : '';
-			scoreChange.innerHTML = `
-				<span style="color: #34495e;">${oldScore} → </span>
-				<span style="color: ${scoreColor}; font-weight: bold;">${newScore}</span>
-				<span style="color: ${scoreColor}; margin-left: 8px;">(${scoreSymbol}${scoreDiff})</span>
-			`;
 
-			const hitInfo = document.createElement('span');
-			if (hitId !== '') {
-				hitInfo.textContent = `Hit #${hitId}`;
-				hitInfo.style.cssText = 'background: rgba(52, 152, 219, 0.2); padding: 2px 8px; border-radius: 12px; font-size: 0.8em; color: #2980b9;';
-			}
 
-			scoreDetails.appendChild(scoreChange);
-			if (hitInfo.textContent) {
-				scoreDetails.appendChild(hitInfo);
-			}
+			scoreOrig.innerHTML = `<span style="color: #34495e;">${oldScore}</span>`
+			scoreOrig.style.textAlign = "right"
+			arrow.innerHTML = `<span style="color: #34495e;">→</span>`
+			arrow.style.textAlign = "center"
+			scoreNew.innerHTML = `<span style="color: ${scoreColor}; font-weight: bold;">${newScore}</span><span style="color: ${scoreColor}; margin-left: 8px;">(${scoreSymbol}${scoreDiff})</span>`
+
+			const hitCol = document.createElement('td')
+			hitCol.style.textAlign = "right"
 
 			// Add round info if different from game time
 			if (Math.abs(roundTime - gameTime) > 0.1) {
 				const roundInfo = document.createElement('div');
 				roundInfo.textContent = `Round time: ${roundTime.toFixed(1)}s`;
 				roundInfo.style.cssText = 'font-size: 0.8em; color: #95a5a6; margin-top: 4px;';
-				eventItem.appendChild(roundInfo);
+				roundInfo.style.textAlign = "left"
+				hitCol.appendChild(roundInfo);
 			}
 
+			/*if (hitId !== '') {
+				const hitInfo = document.createElement('span');
+				
+				hitInfo.textContent = `Hit #${hitId}`;
+				hitInfo.style.cssText = "color: #616161ff;"
+				hitInfo.style.textAlign = "right"
+				//hitInfo.style.cssText = 'background: rgba(52, 152, 219, 0.2); padding: 2px 8px; border-radius: 12px; font-size: 0.8em; color: #2980b9;';
+				hitCol.appendChild(hitInfo)
+			}*/
+
 			eventItem.appendChild(eventHeader);
-			eventItem.appendChild(scoreDetails);
+			eventItem.appendChild(scoreOrig);
+			eventItem.appendChild(arrow);
+			eventItem.appendChild(scoreNew);
+			eventItem.appendChild(hitCol);
 
 			progressionContainer.appendChild(eventItem);
 		});
@@ -479,24 +416,27 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 		
 		summary.innerText = `${uniquePlayers.length} players • ${scoreEvents.length} score events • ${totalScoreChanges} total points awarded`;
 
-		container.appendChild(summary);
+		summ.appendChild(summary);
 		
 
 		// Add scroll synchronization with hit timeline
-		this.setupTimelineSync(progressionContainer, scoreEvents);
+		this.setupTimelineSync(scrollContainer, scoreEvents);
 
-		// Add click handler for fullscreen
-		progressionContainer.style.cursor = 'pointer';
-		progressionContainer.addEventListener('click', () => {
-			this.openFullscreen('score', events, 'Score Progression - Detailed Analysis');
-		});
+		
 
 		// Add fullscreen indicator
 		const fullscreenBtn = document.createElement('button');
+		fullscreenBtn.className = "noprint"
 		fullscreenBtn.innerText = '🔍 View Details';
-		container.style.position = 'relative';
-		container.appendChild(fullscreenBtn);
-		container.appendChild(progressionContainer);
+		// Add click handler for fullscreen
+		fullscreenBtn.addEventListener('click', () => {
+			this.openFullscreen('score', events, 'Score Progression - Detailed Analysis');
+		});
+		summ.appendChild(fullscreenBtn);
+		container.appendChild(summ);
+
+		scrollContainer.appendChild(progressionContainer);
+		container.appendChild(scrollContainer);
 	}
 
 	/**
@@ -536,9 +476,6 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 		if (appInstance) {
 			appInstance.updateTimeRange(startTime, endTime)
 		}
-		
-		// Update score progression visual indicators
-		this.updateScoreProgressionIndicators(startTime, endTime);
 		
 		// Dispatch custom event for other components that might want to listen
 		const event = new CustomEvent('scoreProgressionScroll', {
@@ -625,5 +562,10 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 		});
 
 		container.appendChild(chartContainer);
+	}
+
+	highlightTimeRange(startTime = 0, endTime = -1) {
+		// Update score progression visual indicators
+		this.updateScoreProgressionIndicators(startTime, endTime);
 	}
 }

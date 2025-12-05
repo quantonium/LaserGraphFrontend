@@ -480,3 +480,7 @@ window.addEventListener('resize', function() {
 		}
 	}
 });
+
+function secondsToTimeString(num) {
+	return `${Math.floor(num/60).toString().padStart(2, '0')}:${Math.floor(num%60).toString().padStart(2, '0')}.${Math.floor((num%1)*100).toString().padStart(3, '0')}`
+}

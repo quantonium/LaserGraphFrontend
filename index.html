@@ -99,6 +99,29 @@
 			<br>
 			<h5 id="timer"></h5>
 		</div>
+		<div>
+		<!--h2>Hit Timeline</h2-->
+		<div id="timelineChart"></div>
+			<div class="noprint" id="timelineRange">
+				<input type="range" min="0" max="100" value="0" id="timelineRangeSlider" style="display: none">
+				
+			</div>
+			<div class="timeline-controls">
+				<div class="noprint">
+					<label for="startTime">Start:</label>
+					<input type="number" id="startTime" min="0" step="0.1" placeholder="0" style="width:60px;" />
+					<label for="endTime">End:</label>
+					<input type="number" id="endTime" min="0" step="0.1" placeholder="Auto" style="width:60px;" />
+					<button id="applyTimeRange">Apply</button>
+					<button id="resetTimeRange">Reset</button>
+				</div>
+				<p id="timelineRangeDisplay">Full
+					timeline</p>
+				<p id="timelineHitCount">0 Hits</p>
+				<button class="noprint" id="timelineRangeBtn">🔍View Detailed Analysis</button>
+			</div>
+
+		</div>
 		<div class="dashboard">
 
 			<div class="chart-container">
@@ -119,18 +142,8 @@
 
 			</div>
 			<div class="chart-container">
-				<h2>Hit Timeline</h2>
-				<div class="timeline-controls">
-					<label for="startTime">Start:</label>
-					<input type="number" id="startTime" min="0" step="0.1" placeholder="0" style="width:60px;" />
-					<label for="endTime">End:</label>
-					<input type="number" id="endTime" min="0" step="0.1" placeholder="Auto" style="width:60px;" />
-					<button id="applyTimeRange">Apply</button>
-					<button id="resetTimeRange">Reset</button>
-					<span id="timelineRangeDisplay" style="margin-left:10px;font-size:12px;color:#666;">Full
-						timeline</span>
-				</div>
-				<div id="timelineChart"></div>
+				<h2>Score Progression</h2>
+				<div id="scoreChart"></div>
 			</div>
 			<!-- Hexagon Radar Chart -->
 			<div class="chart-container">
@@ -184,10 +197,7 @@
 				</div>
 				<div id="nodeGraph"></div>
 			</div>
-			<div class="chart-container">
-				<h2>Score Progression</h2>
-				<div id="scoreChart"></div>
-			</div>
+
 
 			<div class="chart-container">
 				<h2>Target Distribution</h2>

@@ -1,8 +1,28 @@
 class LaserTagHitTimeline extends LaserTagVisualizations {
+	centerPos = 0
+	initWidth = 0
+	timeEnd = 0
+
+	// Set up dimensions for responsive timeline
+	margin = { top: 10, right: 10, bottom: 25, left: 5 };
+
+	constructor(target) {
+		super(target)
+		window.addEventListener("resize", (e) => {
+			this.onWindowResize(e)
+		})
+
+		document.getElementById("timelineRangeSlider").addEventListener("change", (e) => {
+			this.onTimeZoom(e)
+		})
+	}
+
 	/**
 	 * Create fullscreen timeline chart with enhanced details
 	 */
 	createFullscreen(hits, container, detailsContainer) {
+
+		// Set up dimensions for responsive timeline
 		const margin = { top: 40, right: 60, bottom: 80, left: 80 };
 		const containerWidth = container.clientWidth || 400;
 		const width = Math.max(300, containerWidth - margin.left - margin.right - 40);
@@ -17,19 +37,7 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 			.attr('transform', `translate(${margin.left},${margin.top})`);
 
 		// Prepare enhanced timeline data
-		const timelineData = hits.map((hit, index) => ({
-			time: hit.hitMatchState?.gameTime || 0,
-			points: (hit.basePointValue || 0) * (hit.pointMultiplier || 1),
-			index: index,
-			component: hit.hitComponent || 'Unknown',
-			range: hit.hitRange || 0,
-			multiplier: hit.pointMultiplier || 1,
-			shooterId: hit.instigatorStateId?.index,
-			targetId: hit.hitStateId?.index,
-			hitFriendlyName: hit.hitFriendlyName || 'Unknown Target',
-			hitAbbreviation: hit.hitAbbreviation || 'UNK',
-			basePoints: hit.basePointValue || 0
-		})).sort((a, b) => a.time - b.time);
+		const timelineData = hits;
 
 		// Create scales
 		const xScale = d3.scaleLinear()
@@ -47,7 +55,7 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 			.append('text')
 			.attr('x', width / 2)
 			.attr('y', 50)
-			.attr('fill', '#2c3e50')
+			.attr('fill', '#888')
 			.style('text-anchor', 'middle')
 			.style('font-size', '14px')
 			.text('Game Time (seconds)');
@@ -58,7 +66,7 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 			.attr('transform', 'rotate(-90)')
 			.attr('y', -50)
 			.attr('x', -height / 2)
-			.attr('fill', '#2c3e50')
+			.attr('fill', '#888')
 			.style('text-anchor', 'middle')
 			.style('font-size', '14px')
 			.text('Points Earned');
@@ -98,16 +106,16 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 			.attr('stroke', '#fff')
 			.attr('stroke-width', 2)
 			.style('cursor', 'pointer')
-			.on('mouseover', function(event, d) {
+			.on('mouseover', function (event, d) {
 				d3.select(this).attr('stroke-width', 4).attr('r', d => (3 + d.multiplier) * 1.2);
-				
+
 				// Get player names from global processor
 				const processor = window.laserTagApp?.processor;
-				const shooterName = processor && processor.playerData && d.shooterId ? 
+				const shooterName = processor && processor.playerData && d.shooterId ?
 					(processor.playerData[d.shooterId.toString()]?.playerName || `Player ${d.shooterId}`) : 'Unknown';
-				const targetName = processor && processor.playerData && d.targetId ? 
+				const targetName = processor && processor.playerData && d.targetId ?
 					(processor.playerData[d.targetId.toString()]?.playerName || `Player ${d.targetId}`) : 'Unknown';
-				
+
 				// Create enhanced tooltip
 				const tooltip = d3.select('body').append('div')
 					.attr('class', 'fullscreen-tooltip')
@@ -144,7 +152,7 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 
 				tooltip.style('left', (event.pageX + 10) + 'px').style('top', (event.pageY - 10) + 'px');
 			})
-			.on('mouseout', function(event, d) {
+			.on('mouseout', function (event, d) {
 				d3.select(this).attr('stroke-width', 2).attr('r', 3 + d.multiplier);
 				d3.selectAll('.fullscreen-tooltip').remove();
 			});
@@ -157,7 +165,9 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 	 * Highlight time range on the timeline based on external scroll input
 	 */
 	highlightTimeRange(startTime, endTime) {
+		this.currentTimeRange = { startTime, endTime };
 		let centerTime = (startTime + endTime) / 2
+		this.centerPos = centerTime
 		if (!this.currentTimelineData || !this.currentSvg) {
 			return;
 		}
@@ -166,7 +176,7 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 		this.currentSvg.selectAll('.time-range-highlight').remove();
 
 		// Filter hits within the time range
-		const hitsInRange = this.currentTimelineData.filter(d => 
+		const hitsInRange = this.currentTimelineData.filter(d =>
 			d.time >= startTime && d.time <= endTime
 		);
 
@@ -211,6 +221,7 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 
 			// Update legend
 			this.updateTimeRangeLegend(startTime, endTime, centerTime, hitsInRange.length);
+			this.createScrollableTimeline(hitsInRange);
 		}
 	}
 
@@ -220,58 +231,11 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 	updateTimeRangeLegend(startTime, endTime, centerTime, hitCount) {
 		if (!this.currentSvg) return;
 
-		// Remove existing legend
-		this.currentSvg.selectAll('.time-range-legend').remove();
+		document.getElementById("timelineRangeDisplay").innerText = `${secondsToTimeString(startTime)} - ${secondsToTimeString(endTime)}`
+		document.getElementById("timelineHitCount").innerText = `${hitCount} Hits`
 
-		// Create legend group
-		const legend = this.currentSvg.append('g')
-			.attr('class', 'time-range-legend')
-			.attr('transform', 'translate(20, 20)');
-
-		// Background
-		legend.append('rect')
-			.attr('x', -10)
-			.attr('y', -10)
-			.attr('width', 250)
-			.attr('height', 60)
-			.attr('fill', 'rgba(255, 255, 255, 0.9)')
-			.attr('stroke', '#3498db')
-			.attr('stroke-width', 1)
-			.attr('rx', 5);
-
-		// Title
-		legend.append('text')
-			.attr('x', 0)
-			.attr('y', 0)
-			.style('font-size', '12px')
-			.style('font-weight', 'bold')
-			.style('fill', '#2c3e50')
-			.text('📍 Focused Time Range');
-
-		// Time info
-		legend.append('text')
-			.attr('x', 0)
-			.attr('y', 15)
-			.style('font-size', '10px')
-			.style('fill', '#7f8c8d')
-			.text(`⏱️ ${startTime.toFixed(1)}s - ${endTime.toFixed(1)}s (center: ${centerTime.toFixed(1)}s)`);
-
-		// Hit count
-		legend.append('text')
-			.attr('x', 0)
-			.attr('y', 30)
-			.style('font-size', '10px')
-			.style('fill', '#27ae60')
-			.text(`🎯 ${hitCount} hits in focus range`);
-
-		// Sync indicator
-		legend.append('text')
-			.attr('x', 0)
-			.attr('y', 45)
-			.style('font-size', '9px')
-			.style('fill', '#9b59b6')
-			.style('font-style', 'italic')
-			.text('🔄 Synced with Score Progression scroll');
+		document.getElementById('startTime').value = Math.round(startTime*10)/10;
+		document.getElementById('endTime').value = Math.round(endTime*10)/10;
 	}
 
 	/**
@@ -293,17 +257,35 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 		this.currentHeight = null;
 		this.currentTimeRange = null;
 
+		// Prepare data
+		const timelineData = hits.map((hit, index) => ({
+			time: hit.hitMatchState?.gameTime || 0,
+			points: this.processor.getPointInfoForHit(index).playerFinal.get(hit.instigatorStateId.index),
+			multiplier: hit.pointMultiplier || 1,
+			component: hit.hitComponent || 'Unknown',
+			index: index,
+			shooterId: hit.instigatorStateId?.index,
+			targetId: hit.hitStateId?.index,
+			hitFriendlyName: hit.hitFriendlyName || 'Unknown Target',
+			hitAbbreviation: hit.hitAbbreviation || 'UNK',
+			basePoints: hit.basePointValue || 0
+		})).sort((a, b) => a.time - b.time);
+
+		this.currentTimelineData = timelineData
+
+		this.timeEnd = processor.data.SessionInfo.serverTime
+
 		// Set up time range controls
-		this.setupTimeRangeControls();
+		this.setupTimeRangeControls(this.timeEnd);
 
 		// Create scrollable timeline
-		this.createScrollableTimeline(hits);
+		this.createScrollableTimeline(timelineData);
 	}
 
 	/**
 	 * Set up time range input controls
 	 */
-	setupTimeRangeControls() {
+	setupTimeRangeControls(maxTime) {
 		const startTimeInput = document.getElementById('startTime');
 		const endTimeInput = document.getElementById('endTime');
 		const applyButton = document.getElementById('applyTimeRange');
@@ -313,7 +295,7 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 		if (!this.allHits || this.allHits.length === 0) return;
 
 		// Set max values based on game data
-		const maxTime = Math.max(...this.allHits.map(hit => hit.hitMatchState?.gameTime || 0));
+		//const maxTime = Math.max(...this.allHits.map(hit => hit.hitMatchState?.gameTime || 0));
 		endTimeInput.max = maxTime;
 		startTimeInput.max = maxTime;
 		endTimeInput.placeholder = maxTime.toFixed(1);
@@ -321,7 +303,7 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 		applyButton.addEventListener('click', () => {
 			const startTime = parseFloat(startTimeInput.value) || 0;
 			const endTime = parseFloat(endTimeInput.value) || maxTime;
-			
+
 			if (startTime >= endTime) {
 				//alert('Start time must be less than end time');
 				return;
@@ -335,7 +317,6 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 			startTimeInput.value = '';
 			endTimeInput.value = '';
 			this.resetTimeRange();
-			rangeDisplay.textContent = 'Showing full timeline';
 		});
 	}
 
@@ -343,13 +324,7 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 	 * Apply time range filter and update visualization
 	 */
 	applyTimeRange(startTime, endTime) {
-		const filteredHits = this.allHits.filter(hit => {
-			const hitTime = hit.hitMatchState?.gameTime || 0;
-			return hitTime >= startTime && hitTime <= endTime;
-		});
-
-		this.currentTimeRange = { startTime, endTime };
-		this.createScrollableTimeline(filteredHits);
+		this.highlightTimeRange(startTime, endTime)
 	}
 
 	/**
@@ -357,60 +332,49 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 	 */
 	resetTimeRange() {
 		this.currentTimeRange = null;
-		this.createScrollableTimeline(this.allHits);
+		//this.createScrollableTimeline(this.allHits);
 	}
 
 	/**
 	 * Create scrollable timeline visualization
 	 */
-	createScrollableTimeline(hits) {
+	createScrollableTimeline() {
 		const container = this.getContainer();
+		container.innerHTML = "";
+		
+		const hits = this.currentTimelineData
 
-		// Set up dimensions for responsive timeline
-		const margin = { top: 20, right: 20, bottom: 40, left: 40 };
 		// Use actual container width, don't force minimum
-		const containerWidth = container.offsetWidth || 300;
-		const width = containerWidth - margin.left - margin.right - 20;
-		const height = 200 - margin.top - margin.bottom;
+		const containerWidth = document.body.clientWidth || 300;
+		const width = Math.max(containerWidth, 1000) - this.margin.left - this.margin.right;
+		const containerHeight = 50
+		const height = containerHeight - this.margin.top - this.margin.bottom;
+
+		this.initWidth = width
 
 		const svg = d3.select('#timelineChart')
 			.append('svg')
-			.attr('width', width + margin.left + margin.right)
-			.attr('height', height + margin.top + margin.bottom);
+			.attr("viewBox", `0 0 ${containerWidth} ${containerHeight}`)
+			.attr('width', width + this.margin.left + this.margin.right)
+			.attr('height', height + this.margin.top + this.margin.bottom)
+		//.style("width", "100%");
 
 		// Store for highlighting
 		this.currentSvg = svg;
 		this.currentHeight = height;
 
 		const g = svg.append('g')
-			.attr('transform', `translate(${margin.left},${margin.top})`);
+			.attr('transform', `translate(${this.margin.left},${this.margin.top})`);
 
-		// Prepare data
-		const timelineData = hits.map((hit, index) => ({
-			time: hit.hitMatchState?.gameTime || 0,
-			points: (hit.basePointValue || 0) * (hit.pointMultiplier || 1),
-			multiplier: hit.pointMultiplier || 1,
-			component: hit.hitComponent || 'Unknown',
-			index: index,
-			shooterId: hit.instigatorStateId?.index,
-			targetId: hit.hitStateId?.index,
-			hitFriendlyName: hit.hitFriendlyName || 'Unknown Target',
-			hitAbbreviation: hit.hitAbbreviation || 'UNK',
-			basePoints: hit.basePointValue || 0
-		})).sort((a, b) => a.time - b.time);
-
-		// Store data for highlighting
-		this.currentTimelineData = timelineData;
-
-		if (timelineData.length === 0) {
+		if (hits.length === 0) {
 			container.innerHTML = '<p style="text-align:center;color:#7f8c8d;padding:10px;">No hits in selected time range</p>';
 			return;
 		}
 
 		// Scales (x = time). Create multi-row layout for better visibility
-		const timeExtent = d3.extent(timelineData, d => d.time);
-		const xScale = d3.scaleLinear()
-			.domain(timeExtent)
+		const timeExtent = d3.extent(hits, d => d.time);
+		let xScale = d3.scaleLinear()
+			.domain([0, this.timeEnd])
 			.nice()
 			.range([0, width]);
 
@@ -439,9 +403,9 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 		if (this.currentTimeRange) {
 			const { startTime, endTime } = this.currentTimeRange;
 			g.append('rect')
-				.attr('x', 0)
+				.attr('x', xScale(startTime))
 				.attr('y', 0)
-				.attr('width', width)
+				.attr('width', xScale(endTime - startTime))
 				.attr('height', height)
 				.attr('fill', 'rgba(52, 152, 219, 0.1)')
 				.attr('stroke', '#3498db')
@@ -451,37 +415,34 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 		}
 
 		// Draw hits with better distribution across rows
-		const maxPoints = d3.max(timelineData, d => d.points) || 1;
+		const maxPoints = d3.max(hits, d => d.points) || 1;
 		const rScale = d3.scaleSqrt().domain([0, maxPoints]).range([4, 12]);
 		const colorScale = d3.scaleOrdinal().domain([1, 2, 3, 4]).range(['#27ae60', '#f39c12', '#e67e22', '#e74c3c']);
 
-		// Single row positioning
-		timelineData.forEach((d, i) => {
-			d.rowY = rowY;
-		});
+
 
 		const hitNodes = g.selectAll('.hit')
-			.data(timelineData)
+			.data(hits)
 			.enter().append('g')
 			.attr('class', 'hit')
-			.attr('transform', d => `translate(${xScale(d.time)}, ${d.rowY})`)
+			.attr('transform', d => `translate(${xScale(d.time)}, ${rowY})`)
 			.style('cursor', 'pointer');
 
 		hitNodes.append('circle')
-			.attr('r', d => rScale(d.points))
+			.attr('r', d => 5)
 			.attr('fill', d => colorScale(Math.min(4, Math.max(1, Math.round(d.multiplier)))))
-			.attr('stroke', '#fff')
-			.attr('stroke-width', 2)
-			.on('mouseover', function(event, d) {
-				d3.select(this).attr('stroke-width', 3).attr('r', d => rScale(d.points) * 1.2);
-				
+			.attr("opacity", d => this.currentTimeRange ? 
+				(d.time <= this.currentTimeRange.endTime && d.time >= this.currentTimeRange.startTime ? 1 : .5): 1)
+			.on('mouseover', function (event, d) {
+				d3.select(this).attr('stroke-width', 3).attr('r', d => 10);
+
 				// Get player names from global processor
 				const processor = window.laserTagApp?.processor;
-				const shooterName = processor && processor.playerData && d.shooterId ? 
+				const shooterName = processor && processor.playerData && d.shooterId ?
 					(processor.playerData[d.shooterId.toString()]?.playerName || `Player ${d.shooterId}`) : 'Unknown';
-				const targetName = processor && processor.playerData && d.targetId ? 
+				const targetName = processor && processor.playerData && d.targetId ?
 					(processor.playerData[d.targetId.toString()]?.playerName || `Player ${d.targetId}`) : 'Unknown';
-				
+
 				// Create enhanced tooltip
 				const tooltip = d3.select('body').append('div')
 					.attr('class', 'timeline-preview-tooltip')
@@ -518,8 +479,8 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 
 				tooltip.style('left', (event.pageX + 15) + 'px').style('top', (event.pageY - 15) + 'px');
 			})
-			.on('mouseout', function(event, d) {
-				d3.select(this).attr('stroke-width', 2).attr('r', rScale(d.points));
+			.on('mouseout', function (event, d) {
+				d3.select(this).attr('stroke-width', 2).attr('r', 5);
 				d3.selectAll('.timeline-preview-tooltip').remove();
 			});
 
@@ -533,22 +494,12 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 			.attr('stroke-width', 1);
 
 		// Add click handler for fullscreen
-		svg.style('cursor', 'pointer')
-			.on('click', () => {
-				this.openFullscreen('timeline', hits, 'Hit Timeline - Detailed Analysis');
-			});
+		document.getElementById("timelineRangeBtn").addEventListener("click", () => {
+			this.openFullscreen('timeline', hits, 'Hit Timeline - Detailed Analysis');
+		})
 
 		// Add fullscreen indicator
-		svg.append('text')
-			.attr('x', width + margin.left + margin.right - 20)
-			.attr('y', 20)
-			.attr('class', 'fullscreen-indicator')
-			.style('font-size', '16px')
-			.style('fill', '#3498db')
-			.style('cursor', 'pointer')
-			.text('🔍')
-			.append('title')
-			.text('Click to view in fullscreen');
+
 
 		// Timeline is ready
 	}
@@ -563,24 +514,40 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 		detailsDiv.innerHTML = `
 			<h3>Hit Timeline Details (${timelineData.length} hits)</h3>
 			<div class="hit-stats">
-				<div class="stat-card">
-					<h4>Total Points</h4>
-					<span>${timelineData.reduce((sum, hit) => sum + hit.points, 0)}</span>
+				<div class="metric-card">
+					
+					<h2>${timelineData.reduce((sum, hit) => sum + hit.points, 0)}</h2>
+					<h5>Total Points</h5>
 				</div>
-				<div class="stat-card">
-					<h4>Average Points/Hit</h4>
-					<span>${(timelineData.reduce((sum, hit) => sum + hit.points, 0) / timelineData.length).toFixed(1)}</span>
+				<div class="metric-card">
+					
+					<h2>${(timelineData.reduce((sum, hit) => sum + hit.points, 0) / timelineData.length).toFixed(1)}</h2>
+					<h5>Average Points/Hit</h5>
 				</div>
-				<div class="stat-card">
-					<h4>Max Hit Value</h4>
-					<span>${Math.max(...timelineData.map(hit => hit.points))}</span>
+				<div class="metric-card">
+					
+					<h2>${Math.max(...timelineData.map(hit => hit.points))}</h2>
+					<h5>Max Hit Value</h5>
 				</div>
-				<div class="stat-card">
-					<h4>Game Duration</h4>
-					<span>${Math.max(...timelineData.map(hit => hit.time)).toFixed(1)}s</span>
+				<div class="metric-card">
+					
+					<h2>${Math.max(...timelineData.map(hit => hit.time)).toFixed(1)}s</h2>
+					<h5>Game Duration</h5>
 				</div>
 			</div>
 		`;
 		container.appendChild(detailsDiv);
+	}
+
+	onWindowResize(e) {
+		//const width = Math.max(document.body.clientWidth, 1000) - this.margin.left - this.margin.right;
+		//this.initWidth = width
+		this.onTimeZoom()
+	}
+
+	onTimeZoom(e) {
+		let val = document.getElementById("timelineRangeSlider").value / 100
+		let maxScale = this.initWidth * 10
+		//this.getContainerD3().select("svg").attr("width", (val*maxScale + (1-val)*this.initWidth))
 	}
 }

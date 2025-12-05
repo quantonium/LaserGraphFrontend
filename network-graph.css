@@ -47,17 +47,6 @@
     flex: none !important; /* Don't grow to fill space */
 }
 
-.chart-header h2 {
-    margin: 0 !important;
-    border-bottom: 2px double #3498db !important;
-    padding-bottom: 8px !important; /* Reduced from 10px */
-    font-size: 1.5rem !important;
-    color: #2c3e50 !important;
-    text-align: left !important;
-    flex: 1;
-    line-height: 1.2 !important; /* Tighter line height */
-}
-
 /* Override chart-container styles specifically for network graph */
 .network-chart-container {
     min-height: auto !important;
@@ -168,12 +157,12 @@
 }
 
 .fullscreen-content .labels text {
-    fill: #ffffff !important;
+    fill: #ffffff;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .fullscreen-content .legend text {
-    fill: #ffffff !important;
+    fill: #ffffff;
 }
 
 .fullscreen-content .links line {

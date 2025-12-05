@@ -87,7 +87,7 @@ class LaserTagLeaderboard extends LaserTagVisualizations {
 
 	highlightTimeRange(startTime = 0, endTime = -1) {
 		if(endTime >= 0) {
-			document.getElementById("matchTime").innerText = `${Math.round(endTime/60)}:${Math.floor(endTime%60)}.${Math.round((endTime % 1) * 1000)}`
+			document.getElementById("matchTime").innerText = `${secondsToTimeString(endTime)}`
 		}
 
 		if (!this.currentTimelineData || !this.currentPlayerData) {

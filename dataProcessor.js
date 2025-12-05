@@ -44,7 +44,7 @@ class LaserTagDataProcessor {
 	/**
 	 * Calculate player interaction network data for node graph
 	 */
-	calculatePlayerNetwork() {
+	calculatePlayerNetwork(endTime = -1) {
 		// Get player data
 		const playerData = this.data.PlayerData || {};
 		console.log('PlayerData:', playerData);
@@ -54,23 +54,20 @@ class LaserTagDataProcessor {
 		const nodes = Object.entries(playerData).map(([id, data]) => {
 			const playerId = parseInt(id);
 			const teamId = this.getPlayerTeam(playerId);
-			let color = '#3498db'; // default color
+			let color = '#fff'; // default color
+			let bgColor = "#000";
 			
 			console.log(`Player ${id} (${data.playerName}): teamId = ${teamId}`);
 			
-			// Always prioritize team color for team-based games
-			if (teamId > 0 && this.teamData[teamId] && this.teamData[teamId].primaryColor) {
-				const teamColor = this.teamData[teamId].primaryColor;
-				color = `rgb(${Math.floor(teamColor.r * 255)}, ${Math.floor(teamColor.g * 255)}, ${Math.floor(teamColor.b * 255)})`;
-			} else if (data.preferredPrimaryColor) {
-				// Only use individual player color if no team assignment (FFA mode or spectators)
-				color = `rgb(${Math.floor(data.preferredPrimaryColor.r * 255)}, ${Math.floor(data.preferredPrimaryColor.g * 255)}, ${Math.floor(data.preferredPrimaryColor.b * 255)})`;
-			}
-			
+			let colors = this.getColors(playerId, endTime)
+
+			color = `rgb(${Math.floor(colors.primary.r * 255)}, ${Math.floor(colors.primary.g * 255)}, ${Math.floor(colors.primary.b * 255)})`;
+			bgColor = `rgb(${Math.floor(colors.secondary.r * 255)}, ${Math.floor(colors.secondary.g * 255)}, ${Math.floor(colors.secondary.b * 255)})`;
 			return {
 				id: id,
 				name: data.playerName || `Player ${id}`,
 				color: color,
+				background: bgColor,
 				teamId: teamId
 			};
 		});
@@ -536,6 +533,27 @@ class LaserTagDataProcessor {
 		return players;
 	}
 
+	/**
+	 * gets either the team or player preferred primary/secondary colors, depending on FFA and team setting
+	 * @param {*} playerID 
+	 */
+	getColors(playerID, endTime = -1) {
+		let team = this.getPlayerTeam(playerID, endTime)
+		if(this.matchData.bFreeForAll || (team >= 0 && !this.teamData[team].bPreferTeamColors)) {
+			return {primary: this.playerData[playerID].preferredPrimaryColor,
+				secondary: this.playerData[playerID].preferredSecondaryColor
+			}
+		} else {
+			return {primary: this.teamData[team].primaryColor,
+				secondary: this.teamData[team].secondaryColor
+			}
+		}
+	}
+
+	//converts the color of the format from data into a css friendly format
+	static convertColor(color) {
+		return `rgba(${color.r * 255}, ${color.g * 255}, ${color.b * 255}, ${color.a * 255})`
+	}
 	
 }
 
