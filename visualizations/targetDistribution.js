@@ -796,18 +796,15 @@ class LaserTagTargetDistribution extends LaserTagVisualizations {
         });
 
         // Add fullscreen indicator
-        const fullscreenBtn = document.createElement('div');
+        const fullscreenBtn = document.createElement('button');
         fullscreenBtn.innerHTML = '🔍 View Hit Matrix';
         fullscreenBtn.style.cssText = `
             position: absolute;
             top: 10px;
             right: 10px;
-            background: rgba(46, 204, 113, 0.8);
-            color: white;
+            
             padding: 5px 10px;
-            border-radius: 15px;
             cursor: pointer;
-            font-size: 12px;
         `;
         container.style.position = 'relative';
         container.appendChild(fullscreenBtn);

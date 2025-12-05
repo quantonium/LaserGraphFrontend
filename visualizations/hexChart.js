@@ -158,7 +158,7 @@ class LaserTagHexagon extends LaserTagVisualizations {
 		const containerWidth = container.clientWidth || 400;
 		const containerHeight = container.clientHeight || 400;
 		const size = Math.min(containerWidth - 20, containerHeight - 20); // Use almost full container
-		const width = size;
+		const width = size + 20;
 		const height = size;
 		const radius = Math.min(width, height) / 2 - 30; // Reduce margin
 		const centerX = width / 2;
@@ -362,7 +362,7 @@ class LaserTagHexagon extends LaserTagVisualizations {
 				.style('text-anchor', 'middle')
 				.style('font-size', '12px')
 				.style('font-weight', 'bold')
-				.style('fill', '#2c3e50')
+				.style('fill', '#9e9e9eff')
 				.style('opacity', 0)
 				.text(d.name)
 				.transition()

@@ -82,12 +82,12 @@
 		<br>
 		<div id="playerTeamSelect">
 			<div style="display: none">
-			<label for="teamSelect">Choose team: </label><select name="teamSelect" id="teamSelect">
-				<option value="">All Teams</option>
-			</select>
-			<label for="playerSelect">Choose player: </label><select name="playerSelect" id="playerSelect">
-				<option value="">All Players</option>
-			</select>
+				<label for="teamSelect">Choose team: </label><select name="teamSelect" id="teamSelect">
+					<option value="">All Teams</option>
+				</select>
+				<label for="playerSelect">Choose player: </label><select name="playerSelect" id="playerSelect">
+					<option value="">All Players</option>
+				</select>
 			</div>
 		</div>
 		<br>
@@ -119,7 +119,7 @@
 
 			</div>
 			<div class="chart-container">
-				<!--h2>Hit Timeline</h2-->
+				<h2>Hit Timeline</h2>
 				<div class="timeline-controls">
 					<label for="startTime">Start:</label>
 					<input type="number" id="startTime" min="0" step="0.1" placeholder="0" style="width:60px;" />
@@ -127,21 +127,58 @@
 					<input type="number" id="endTime" min="0" step="0.1" placeholder="Auto" style="width:60px;" />
 					<button id="applyTimeRange">Apply</button>
 					<button id="resetTimeRange">Reset</button>
-					<span id="timelineRangeDisplay" style="margin-left:10px;font-size:12px;color:#666;">Full timeline</span>
+					<span id="timelineRangeDisplay" style="margin-left:10px;font-size:12px;color:#666;">Full
+						timeline</span>
 				</div>
 				<div id="timelineChart"></div>
 			</div>
 			<!-- Hexagon Radar Chart -->
 			<div class="chart-container">
-				<!--h2>Player Performance Hexagon</h2-->
+				<h2>Metrics</h2>
 				<div id="hexChart"></div>
+				<!-- Metrics Display -->
+				<div class="metrics-panel">
+					<div class="metrics-grid">
+						<div class="metric-card">
+							<h3>Trickshot</h3>
+							<span id="trickshotValue">-</span>
+							<h6>Bounces per hit / multiplier value</h6>
+						</div>
+						<div class="metric-card">
+							<h3>Stealth</h3>
+							<span id="stealthValue">-</span>
+							<h6>Average time between hits</h6>
+						</div>
+						<div class="metric-card">
+							<h3>Speed</h3>
+							<span id="speedValue">-</span>
+							<h6>Average distance between shot locations</h6>
+						</div>
+						<div class="metric-card">
+							<h3>RPM</h3>
+							<span id="rpmValue">-</span>
+							<h6>Rounds per minute</h6>
+						</div>
+						<div class="metric-card">
+							<h3>Range</h3>
+							<span id="rangeValue">-</span>
+							<h6>Average range value for hits</h6>
+						</div>
+						<div class="metric-card">
+							<h3>Accuracy</h3>
+							<span id="accuracyValue">-</span>
+							<h6>Shots hit / shots fired</h6>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="chart-container network-chart-container">
 				<div class="chart-header">
 					<h2>Player Interaction Network</h2>
 					<button class="fullscreen-btn" onclick="toggleNetworkFullscreen()" title="View in fullscreen">
 						<svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-							<path d="M7 14H5v5h5v-2M5 10h2V5h5V3H5v7zM17 14h2v5h-5v-2M19 10h-2V5h-5V3h7v7z" stroke="currentColor" stroke-width="2" fill="none"/>
+							<path d="M7 14H5v5h5v-2M5 10h2V5h5V3H5v7zM17 14h2v5h-5v-2M19 10h-2V5h-5V3h7v7z"
+								stroke="currentColor" stroke-width="2" fill="none" />
 						</svg>
 					</button>
 				</div>
@@ -155,45 +192,6 @@
 			<div class="chart-container">
 				<h2>Target Distribution</h2>
 				<div id="targetChart"></div>
-			</div>
-
-
-		</div>
-
-		<!-- Metrics Display -->
-		<div class="metrics-panel">
-			<h2>Calculated Metrics</h2>
-			<div class="metrics-grid">
-				<div class="metric-card">
-					<h3>Trickshot</h3>
-					<span id="trickshotValue">-</span>
-					<p>Bounces per hit / multiplier value</p>
-				</div>
-				<div class="metric-card">
-					<h3>Stealth</h3>
-					<span id="stealthValue">-</span>
-					<p>Average time between hits</p>
-				</div>
-				<div class="metric-card">
-					<h3>Speed</h3>
-					<span id="speedValue">-</span>
-					<p>Average distance between shot locations</p>
-				</div>
-				<div class="metric-card">
-					<h3>RPM</h3>
-					<span id="rpmValue">-</span>
-					<p>Rounds per minute</p>
-				</div>
-				<div class="metric-card">
-					<h3>Range</h3>
-					<span id="rangeValue">-</span>
-					<p>Average range value for hits</p>
-				</div>
-				<div class="metric-card">
-					<h3>Accuracy</h3>
-					<span id="accuracyValue">-</span>
-					<p>Shots hit / shots fired</p>
-				</div>
 			</div>
 		</div>
 	</main>
@@ -214,7 +212,7 @@
 			<h2>Player Interaction Network</h2>
 			<button class="close-fullscreen-btn" onclick="closeNetworkFullscreen()" title="Exit fullscreen">
 				<svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-					<path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2"/>
+					<path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" />
 				</svg>
 			</button>
 		</div>

@@ -455,7 +455,7 @@ class LaserTagDataProcessor {
 
 		// Smart team assignment for players without explicit TeamChange events
 		// Skip player 10 (human player) and assign bots to teams alternately
-		if (parseInt(playerId) === 10) {
+		/*if (parseInt(playerId) === 10) {
 			console.log(`Player ${playerId} (human player) -> team 0 (spectator)`);
 			return 0; // Human player as spectator
 		}
@@ -474,7 +474,8 @@ class LaserTagDataProcessor {
 		}
 		
 		console.log(`Player ${playerId} -> team 0 (default)`);
-		return 0; // Default team
+		return 0; // Default team*/
+		return -1; //not in game
 	}
 
 	getPointInfoForHit(hitIndex = -1){

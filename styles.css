@@ -77,7 +77,6 @@
 /* Timeline Controls */
 .timeline-controls {
 	display: flex;
-	align-items: center;
 	gap: 8px;
 	margin-bottom: 5px;
 	padding: 2px 5px;
@@ -94,16 +93,9 @@
 
 .timeline-controls button {
 	padding: 2px 6px;
-	border: 1px solid #ccc;
-	border-radius: 3px;
-	background: #f8f8f8;
 	cursor: pointer;
 	font-size: 10px;
 	height: 18px;
-}
-
-.timeline-controls button:hover {
-	background: #e8e8e8;
 }
 
 .timeline-controls input {
@@ -113,17 +105,7 @@
 }
 
 /* Override chart-container for timeline - make it flex container */
-.chart-container:has(.timeline-controls) {
-	min-height: 250px !important;
-	height: 250px;
-	display: flex;
-	flex-direction: column;
-}
 
-.chart-container:has(.timeline-controls) > div {
-	flex: none;
-	min-height: auto;
-}
 
 #timelineChart {
 	overflow-x: auto;
@@ -131,12 +113,7 @@
 	max-width: 100%;
 	flex: 1;
 	box-sizing: border-box;
-}
-
-#timelineChart svg {
-	width: 100%;
-	height: 100%;
-	max-width: 100%;
+	height: auto;
 }
 
 .score-progression-container {
@@ -255,7 +232,7 @@
 
 .chart-container {
 	padding: 20px;
-	border-radius: 15px;
+	
 	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 	backdrop-filter: blur(10px);
 	min-height: 650px;
@@ -263,11 +240,11 @@
 	overflow: visible;
 	display: flex;
 	flex-direction: column;
+	justify-content: flex-start;
 }
 
 .chart-container > div {
-	flex: 1;
-	min-height: 600px;
+	min-height: auto;
 	overflow: visible;
 	width: 100%;
 }
@@ -280,8 +257,7 @@
 }
 
 .chart-container h2 {
-	font-size: 1.5rem;
-	color: #2c3e50;
+
 	margin-bottom: 20px;
 	text-align: center;
 	border-bottom: 2px double #3498db;
@@ -289,15 +265,8 @@
 }
 
 /* Canvas styling for Chart.js */
-#hexChart {
-	max-width: 100%;
-	height: auto;
-	margin: 0 auto;
-	display: block;
-	color: #000000;
-}
 
-/* Metrics Panel */
+/* Metrics Panel 
 .metrics-panel {
 	background: rgba(255, 255, 255, 0.95);
 	padding: 30px;
@@ -315,17 +284,16 @@
 	border-bottom: 2px double;
 	padding-bottom: 10px;
 }
-
+*/
 .metrics-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-	gap: 20px;
+	grid-template-columns: 1fr 1fr 1fr;
+	gap: 5px;
+	margin: 5px;
 }
 
 .metric-card {
-	background: linear-gradient(135deg, #000000, #303030);
-	padding: 20px;
-	border-radius: 12px;
+	
 	text-align: center;
 	border: 2px solid transparent;
 	transition: all 0.3s ease;
@@ -355,14 +323,11 @@
 	opacity: 1;
 }
 
-.metric-card h3 {
-	font-size: 1.2rem;
-	color: #2c3e50;
-	margin-bottom: 10px;
-	font-weight: 600;
+.metric-card h6, .metric-card h3 {
+	margin: 0;
 }
 
-.metric-card span {
+/*.metric-card span {
 	font-size: 2rem;
 	font-weight: bold;
 	color: #3498db;
@@ -374,7 +339,7 @@
 	font-size: 0.9rem;
 	color: #7f8c8d;
 	line-height: 1.4;
-}
+}*/
 
 #scoreChartTemplate {
 	display: flex;
@@ -440,16 +405,6 @@
 	margin-bottom: 40px;
 }*/
 
-.chart-container {
-	background: rgba(96, 96, 96, 0.95).95;
-	padding: 25px;
-	border-radius: 15px;
-	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-	backdrop-filter: blur(10px);
-	border: 1px solid rgba(255, 255, 255, 0.2);
-	transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
 .chart-container:hover {
 	transform: translateY(-5px);
 	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
@@ -469,13 +424,12 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 100%;
-	height: 100%;
+	max-width: 100%;
+	height: inherit;
 }
 
 #hexChart svg {
-	max-width: 100%;
-	height: auto;
+	margin: auto;
 }
 
 /* D3 hexagon chart specific styles */
@@ -488,7 +442,6 @@
 .hexagon-chart .grid-label {
 	font-size: 10px;
 	fill: #7f8c8d;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .hexagon-chart .axis-line {
@@ -517,8 +470,7 @@
 	text-anchor: middle;
 	font-size: 12px;
 	font-weight: bold;
-	fill: #2c3e50;
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	
 }
 
 .hexagon-chart .chart-title {
@@ -776,84 +728,6 @@
 	}
 }
 
-/* Metrics Panel */
-.metrics-panel {
-	background: rgba(255, 255, 255, 0.95);
-	padding: 30px;
-	border-radius: 15px;
-	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-	backdrop-filter: blur(10px);
-	border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.metrics-panel h2 {
-	font-size: 1.8rem;
-	color: #2c3e50;
-	margin-bottom: 25px;
-	text-align: center;
-	border-bottom: 2px solid #e74c3c;
-	padding-bottom: 10px;
-}
-
-.metrics-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-	gap: 20px;
-}
-
-.metric-card {
-	background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-	padding: 20px;
-	border-radius: 12px;
-	text-align: center;
-	border: 2px solid transparent;
-	transition: all 0.3s ease;
-	position: relative;
-	overflow: hidden;
-}
-
-.metric-card::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	height: 4px;
-	background: linear-gradient(90deg, #3498db, #9b59b6, #e74c3c, #f39c12, #2ecc71, #1abc9c);
-	opacity: 0;
-	transition: opacity 0.3s ease;
-}
-
-.metric-card:hover {
-	transform: translateY(-3px);
-	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-	border-color: #3498db;
-}
-
-.metric-card:hover::before {
-	opacity: 1;
-}
-
-.metric-card h3 {
-	font-size: 1.2rem;
-	color: #2c3e50;
-	margin-bottom: 10px;
-	font-weight: 600;
-}
-
-.metric-card span {
-	font-size: 2rem;
-	font-weight: bold;
-	color: #3498db;
-	display: block;
-	margin-bottom: 8px;
-}
-
-.metric-card p {
-	font-size: 0.9rem;
-	color: #7f8c8d;
-	line-height: 1.4;
-}
 
 /* Specific metric colors */
 .metric-card:nth-child(1) span { color: #e74c3c; } /* Trickshot */

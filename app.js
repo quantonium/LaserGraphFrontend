@@ -36,6 +36,28 @@ class LaserTagApp {
 
 		teamElement.addEventListener("onchange", (e) => {this.onTeamSelect(e)})
 		playerElement.addEventListener("onchange", (e) => {this.onTeamSelect(e)})
+
+		const applyButton = document.getElementById('applyTimeRange');
+		const resetButton = document.getElementById('resetTimeRange');
+		const startTimeInput = document.getElementById('startTime');
+		const endTimeInput = document.getElementById('endTime');
+
+		applyButton.addEventListener("click", (e) => {
+			const startTime = parseFloat(startTimeInput.value) || 0;
+			const endTime = parseFloat(endTimeInput.value) || this.data.SessionInfo.serverTime;
+			if (startTime >= endTime) {
+				alert('Start time must be less than end time');
+				return;
+			}
+
+			this.updateTimeRange(startTime, endTime)
+		})
+
+		resetButton.addEventListener("click", (e) => {
+			this.updateTimeRange(0, -1);
+			startTimeInput.value = 0;
+			endTimeInput.value = this.data.SessionInfo.serverTime
+		})
 	}
 
 	/**

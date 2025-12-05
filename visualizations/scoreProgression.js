@@ -369,10 +369,10 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 		progressionContainer.className = 'score-progression-container';
 		progressionContainer.style.cssText = 'height: 550px; overflow-y: auto; padding: 15px;';
 
-		const title = document.createElement('h3');
-		title.textContent = `Score Progression (${scoreEvents.length} events)`;
-		title.style.cssText = 'margin: 0 0 15px 0; color: #2c3e50; text-align: center;';
-		progressionContainer.appendChild(title);
+		/**const title = document.createElement('h3');
+		title.textContent = `${scoreEvents.length} events`;
+		title.style.cssText = 'margin: 0 0 15px 0; text-align: center;';
+		container.appendChild(title);**/
 
 		scoreEvents.forEach((event, index) => {
 			const eventItem = document.createElement('div');
@@ -402,7 +402,7 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 			const matchState = event.matchState || {};
 			
 			// Extract player info
-			const playerId = eventData.ID || 'Unknown';
+			const playerId = eventData.ID;
 			const oldScore = eventData.oldScore || 0;
 			const newScore = eventData.newScore || 0;
 			const scoreDiff = newScore - oldScore;
@@ -415,7 +415,7 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 			eventHeader.style.cssText = 'display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;';
 
 			const playerInfo = document.createElement('span');
-			playerInfo.textContent = `Player ${playerId}`;
+			playerInfo.textContent = `${processor.playerData[playerId].playerName}`;
 			playerInfo.style.cssText = 'font-weight: bold; color: #2c3e50; font-size: 1.1em;';
 
 			const timeInfo = document.createElement('span');
@@ -462,30 +462,25 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 
 			progressionContainer.appendChild(eventItem);
 		});
-
-		// Add summary at the bottom
-		const summary = document.createElement('div');
-		summary.style.cssText = `
+		// Add summary at the top
+		const summary = document.createElement('p');
+		summary.style.textAlign = "center";
+		/*summary.style.cssText = `
 			background: rgba(52, 152, 219, 0.1);
 			border-radius: 8px;
 			padding: 12px;
 			margin-top: 15px;
 			text-align: center;
 			border: 1px solid rgba(52, 152, 219, 0.3);
-		`;
+		`;*/
 
 		const uniquePlayers = [...new Set(scoreEvents.map(e => e.data?.ID))].filter(id => id !== undefined);
 		const totalScoreChanges = scoreEvents.reduce((sum, e) => sum + Math.abs((e.data?.newScore || 0) - (e.data?.oldScore || 0)), 0);
 		
-		summary.innerHTML = `
-			<strong style="color: #2c3e50;">Summary:</strong><br>
-			<span style="color: #7f8c8d;">
-				${uniquePlayers.length} players • ${scoreEvents.length} score events • ${totalScoreChanges} total points awarded
-			</span>
-		`;
+		summary.innerText = `${uniquePlayers.length} players • ${scoreEvents.length} score events • ${totalScoreChanges} total points awarded`;
 
-		progressionContainer.appendChild(summary);
-		container.appendChild(progressionContainer);
+		container.appendChild(summary);
+		
 
 		// Add scroll synchronization with hit timeline
 		this.setupTimelineSync(progressionContainer, scoreEvents);
@@ -497,21 +492,11 @@ class LaserTagScoreProgression extends LaserTagVisualizations {
 		});
 
 		// Add fullscreen indicator
-		const fullscreenBtn = document.createElement('div');
-		fullscreenBtn.innerHTML = '🔍 View Details';
-		fullscreenBtn.style.cssText = `
-			position: absolute;
-			top: 10px;
-			right: 10px;
-			background: rgba(52, 152, 219, 0.8);
-			color: white;
-			padding: 5px 10px;
-			border-radius: 15px;
-			cursor: pointer;
-			font-size: 12px;
-		`;
+		const fullscreenBtn = document.createElement('button');
+		fullscreenBtn.innerText = '🔍 View Details';
 		container.style.position = 'relative';
 		container.appendChild(fullscreenBtn);
+		container.appendChild(progressionContainer);
 	}
 
 	/**

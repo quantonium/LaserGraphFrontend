@@ -323,7 +323,7 @@ class LaserTagHitTimeline extends LaserTagVisualizations {
 			const endTime = parseFloat(endTimeInput.value) || maxTime;
 			
 			if (startTime >= endTime) {
-				alert('Start time must be less than end time');
+				//alert('Start time must be less than end time');
 				return;
 			}
 

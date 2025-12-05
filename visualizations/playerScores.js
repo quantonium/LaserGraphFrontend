@@ -1,10 +1,11 @@
 class LaserTagLeaderboard extends LaserTagVisualizations {
 
-	static updatePlayerData(playerData, scores = Map()) {
+	static updatePlayerData(playerData, scores = Map(), teams = Map()) {
 		for(let player of playerData) {
 			if(scores.has(player.id)) {
 				player.score = scores.get(player.id)
 			}
+			player.team = teams.get(player.id)
 		}
 		return playerData.sort((a,b) => b.score - a.score)
 	}
@@ -34,7 +35,7 @@ class LaserTagLeaderboard extends LaserTagVisualizations {
 		const playerData = Object.entries(processor.playerData).map((player, index) => ({
 			id: index,
 			name: player[1].playerName,
-			team: processor.teamData[processor.getPlayerTeam(index)],
+			team: processor.getPlayerTeam(index) == -1 ? null : processor.teamData[processor.getPlayerTeam(index)],
 			score: 0
 		})).sort((a, b) => b.score - a.score)
 
@@ -43,6 +44,8 @@ class LaserTagLeaderboard extends LaserTagVisualizations {
 		const resetEvents = processor.events.filter((event) => event.eventName == "PlayerDataReset")
 
 		this.scoreResetData = resetEvents
+
+		this.processor = processor
 
 		this.updateElement()
 	}
@@ -67,7 +70,7 @@ class LaserTagLeaderboard extends LaserTagVisualizations {
 			r.appendChild(name)
 
 			let team = document.createElement("td")
-			team.innerText = data.team.teamName
+			team.innerText = data.team == null ? "" : data.team.teamName
 			r.appendChild(team)
 
 			let score = document.createElement("td")
@@ -114,7 +117,16 @@ class LaserTagLeaderboard extends LaserTagVisualizations {
 			}
 		}
 
-		this.currentPlayerData = LaserTagLeaderboard.updatePlayerData(this.currentPlayerData, playerScores)
+		const playerTeams = new Map()
+
+		for(let p of this.currentPlayerData) {
+			let team = this.processor.getPlayerTeam(p.id, endTime)
+			if(team != -1)
+				playerTeams.set(p.id, this.processor.teamData[team])
+			else playerTeams.set(p.id, null)
+		}
+
+		this.currentPlayerData = LaserTagLeaderboard.updatePlayerData(this.currentPlayerData, playerScores, playerTeams)
 
 		this.updateElement()
 	}
